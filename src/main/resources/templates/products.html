@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products Catalog</title>
+    <link rel="stylesheet" th:href="@{/menu.css}">
+    <style>
+
+        <!--
+        BUTTON
+
+        -->
+
+        /*BUTTON END*/
+        /*#header {*/
+        /*    display: flex; !* Enable flexbox layout *!*/
+        /*    justify-content: flex-start; !* Align items to the start (left) *!*/
+        /*    align-items: first baseline; !* Align items vertically by their first baselines *!*/
+        /*    padding: 25px;*/
+        /*    background-color: #ff4e5b;*/
+        /*    border-bottom: 1px solid #ff4e5b;*/
+        /*    height: 90px;*/
+        /*}*/
+
+        .hDiv {
+            padding-top: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px;
+            width: 200px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .product:hover {
+            box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: auto;
+        }
+
+        .product-info h2 {
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+        }
+
+        .product-info p {
+            font-size: 14px;
+            color: #777;
+            margin: 0;
+        }
+
+        .product-action {
+            margin-top: auto;
+        }
+
+        .product-action button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #f0c14b;
+            border: 1px solid #a88734;
+            color: #111;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .product-action button:hover {
+            background-color: #f5d078;
+            border: 1px solid #a88734;
+        }
+
+        footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            /* остальные стили */
+        }
+
+        .copyright {
+            width: 100%;
+            float: left;
+            font-size: 12pt;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0px;
+            background-color: #ff4e5b;
+            font-family: Poppins;
+        }
+
+    </style>
+</head>
+<body>
+<!--&lt;!&ndash; MENU &ndash;&gt;-->
+<!--<input type="checkbox" id="active">-->
+<!--<label for="active" class="menu-btn">MENU<i class="fas fa-bars"></i></label>-->
+<!--<div class="wrapper">-->
+<!--    <ul>-->
+<!--        <li><a href="#">Home</a></li>-->
+<!--        <li><a href="#">Products</a></li>-->
+<!--        <li><a href="#">Services</a></li>-->
+<!--        <li><a href="#">Gallery</a></li>-->
+<!--        <li><a href="#">Feedback</a></li>-->
+<!--    </ul>-->
+<!--</div>-->
+<header style="background-color: #ff4e5b;height: 90px" id="header">
+
+<span th:replace="menu :: site-menu">
+
+</span>
+    <!-- Повторяйте блоки для каждого товара до 20 -->
+    <!--    <div class="hDiv" th:if="${!(isAuthenticated)}">-->
+    <!--        <button type="button">-->
+    <!--            <a href="/login">LogIn</a>-->
+    <!--        </button>-->
+    <!--        <button type="button">-->
+    <!--            <a href="/users/create">SIGN UP</a>-->
+    <!--        </button>-->
+    <!--    </div>-->
+    <!--    <div class="hDiv" th:if="${isAuthenticated}">-->
+    <!--        <button type="button">-->
+    <!--            <a href="/logout">LogOut</a>-->
+    <!--        </button>-->
+    <!--    </div>-->
+    <div class="hDiv" th:if="${isAuthenticated != null && !(isAuthenticated)}">
+        <button type="button">
+            <a href="/login">LogIn</a>
+        </button>
+        <button type="button">
+            <a href="/users/create">SIGN UP</a>
+        </button>
+    </div>
+    <div class="hDiv" th:if="${isAuthenticated != null && isAuthenticated}">
+        <button type="button">
+            <a href="/logout">LogOut</a>
+        </button>
+    </div>
+
+    <div class="hDiv" th:if="${isAdmin}">
+        <button type="button">
+            <a href="/users/show">≈ADMIN PANEL≈</a>
+        </button>
+
+        <button type="button">
+            <a href="/category/create">CREATE PRODUCTS AND Categories</a>
+        </button>
+    </div>
+
+    <div th:if="${isAuthenticated}">
+        <button onclick="window.location.href='/orders/'">MY ORDERS</button>
+    </div>
+    <div><a href="/cart">
+        <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"
+             th:src="@{/images/1.png}"
+             alt="">
+
+    </a>
+
+    </div>
+
+</header>
+
+<main class="container">
+    <div th:each="product : ${products}" class="product">
+        <div class="product-image">
+            <img th:src="${product.image}" alt="Product Image">
+        </div>
+        <div class="product-info">
+            <h2 th:text="${product.name}">Product Title</h2>
+            <p th:text="${product.description}">Product Description</p>
+            <div class="product-price" th:text="${product.price}">Product Price</div>
+            <div class="product-quantity" th:text="${product.maxQuantity}">Product Quantity</div>
+            <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                <p>Количество:
+                    <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
+                </p>
+                <button style="background-color: #f0c14b" type="submit">ADD TO CART</button>
+
+            </form>
+
+            <div th:if="${isAdmin}">
+                <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+
+
+            <!--            <a th:href="@{/cart/add/{id}(id=${product.id})}">-->
+            <!--                <button type="button">ADD TO CART</button>-->
+            <!--            </a>-->
+
+        </div>
+        <!--        <div class="product-action">-->
+        <!--            <button type="button">Buy Now</button>-->
+        <!--        </div>-->
+    </div>
+    <!--        private String name;+-->
+    <!--        private String description;+-->
+    <!--        private String colour;+-->
+    <!--        private String brand;+-->
+    <!--        private String image;+-->
+    <!--        private double price;+-->
+    <!--        private int quantity;+-->
+
+
+
+</main>
+<footer>
+    <div class="copyright">2024 All Rights Reserved.</div>
+</footer>
+</body>
+</html>

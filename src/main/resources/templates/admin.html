@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Admin</h1>
+
+    <p>Welcome to the admin page, <?php echo $_SESSION['username']; ?></p>
+    <p>Here you can do anything you want</p>
+    <h1>Users</h1>
+    <!--покажи список всех Users-->
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Roles</th>
+        </tr>
+        <tr th:each="admin : ${admin}">
+            <td th:text="${admin.id}"></td>
+            <td th:text="${admin.email}"></td>
+            <td th:text="${admin.password}"></td>
+            <td th:text="${admin.role}"></td>
+        </tr>
+        <a href="/users/show">Users All</a>
+        <a href="/logout">Logout</a>
+    </table>
+
+</body>
+</html>

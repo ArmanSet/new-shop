@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Users</h1>
+<!--покажи список всех Users-->
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Roles</th>
+    </tr>
+    <tr th:each="user : ${user}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.getEmail}"></td>
+        <td th:text="${user.password}"></td>
+        <td th:text="${user.role}"></td>
+        <td><form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
+            <button type="submit">Delete</button></form></td>
+
+    </tr>
+
+    <!--покажи список всех Users <tr th:each="user : ${user}">
+        <a th:if="${user.role != 'USER'}" href="/create/list">Admin Panel</a>
+        <a th:if="${user.role != 'USER'}" href="/create/admin">Admin Creation</a>
+    </tr>
+    -->
+
+    <div th:each="role : ${role}">
+        <div th:if="${role != 'ROLE_USER'}">
+            <a href="/create/list">Admin Panel</a>
+            <a href="/create/admin">Admin Creation</a>
+        </div>
+    </div>
+    <br>
+    <a href="/products/list">Products List</a>
+    <br>
+    <a href="/logout">Logout</a>
+</table>
+</body>
+</html>

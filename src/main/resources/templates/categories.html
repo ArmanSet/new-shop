@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+    <link rel="stylesheet" th:href="@{/menu.css}">
+    <style>
+        /* Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5; /* Light gray background */
+        }
+
+        /* Container Styles */
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* Title Styles */
+        .title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333; /* Dark gray */
+        }
+
+        /* Product List Styles */
+        .product-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        /* Product Card Styles */
+        .product-card {
+            width: 300px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin: 10px;
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+        }
+
+        /* Product Image Styles */
+        .product-image {
+            display: block;
+            width: 100%;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover; /* Maintain aspect ratio and crop if necessary */
+        }
+
+        /* Product Info Styles */
+        .product-info {
+            padding: 20px;
+            color: #333; /* Dark gray text */
+        }
+
+        .product-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .product-info p {
+            margin-bottom: 10px;
+        }
+
+        /* Product Price Styles */
+        .product-price {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* Product Reach Button Styles */
+        .product-reach-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #222; /* Dark gray button */
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .product-reach-btn:hover {
+            background-color: #111; }/* Even darker gray on
+
+        /* Body Styles */
+        /*body {*/
+        /*    font-family: Arial, sans-serif;*/
+        /*    margin: 0;*/
+        /*    padding: 0;*/
+        /*}*/
+
+        /*!* Container Styles *!*/
+        /*.container {*/
+        /*    text-align: center;*/
+        /*    padding: 40px;*/
+        /*}*/
+
+        /*!* Title Styles *!*/
+        /*.title {*/
+        /*    font-size: 2em;*/
+        /*    margin-bottom: 20px;*/
+        /*}*/
+
+        /*!* Product List Styles *!*/
+        /*.product-list {*/
+        /*    list-style: none;*/
+        /*    padding: 0;*/
+        /*    margin: 0;*/
+        /*    display: flex;*/
+        /*    flex-wrap: wrap;*/
+        /*    justify-content: space-around;*/
+        /*}*/
+
+        /*!* Product Card Styles *!*/
+        /*.product-card {*/
+        /*    width: 300px;*/
+        /*    background-color: #fff;*/
+        /*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+        /*    border-radius: 5px;*/
+        /*    margin: 10px;*/
+        /*    overflow: hidden;*/
+        /*    transition: transform 0.2s ease-in-out;*/
+        /*}*/
+
+        /*.product-card:hover {*/
+        /*    transform: scale(1.05);*/
+        /*}*/
+
+        /*!* Product Image Styles *!*/
+        /*.product-image {*/
+        /*    display: block;*/
+        /*    width: 100%;*/
+        /*}*/
+
+        /*.product-image img {*/
+        /*    width: 100%;*/
+        /*    height: 200px;*/
+        /*    object-fit: cover; !* Maintain aspect ratio and crop if necessary *!*/
+        /*}*/
+
+        /*!* Product Info Styles *!*/
+        /*.product-info {*/
+        /*    padding: 20px;*/
+        /*}*/
+
+        /*.product-info h3 {*/
+        /*    font-size: 18px;*/
+        /*    margin-bottom: 5px;*/
+        /*}*/
+
+        /*.product-info p {*/
+        /*    margin-bottom: 10px;*/
+        /*    color: #333;*/
+        /*}*/
+
+        /*!* Product Price Styles *!*/
+        /*.product-price {*/
+        /*    margin-bottom: 15px;*/
+        /*    font-weight: bold;*/
+        /*}*/
+
+        /*!* Product Reach Button Styles *!*/
+        /*.product-reach-btn {*/
+        /*    display: inline-block;*/
+        /*    padding: 10px 20px;*/
+        /*    background-color: #3498db; !* Blue button *!*/
+        /*    color: #fff;*/
+        /*    border: none;*/
+        /*    border-radius: 3px;*/
+        /*    cursor: pointer;*/
+        /*    transition: background-color 0.2s ease-in-out;*/
+        /*}*/
+
+        /*.product-reach-btn:hover {*/
+        /*    background-color: #2980b9; !* Darker blue on hover *!*/
+        /*}*/
+
+
+    </style>
+</head>
+<body>
+<header><div th:replace="menu :: site-menu"></div>
+</header>
+
+<div class="container">
+    <a href="/products/list">All Products</a>
+    <ul class="product-list">
+        <li th:each="category : ${categories}">
+            <div class="product-card">
+<!--                <a href="/products/list" class="product-image">-->
+<!--                    <img th:src="${category.image}" alt="${product.name}">-->
+<!--                </a>-->
+                <form th:action="@{/products/list/{id}(id=${category.id})}" method="post">
+                    <!--                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+                    <!--                        <img th:src="${category.image}" alt="${product.name}">-->
+                    <button type="submit" class="product-image"><img th:src="${category.image}" alt="${product.name}">
+                    </button>
+                </form>
+                <div class="product-info">
+                    <h3 th:text="${category.name}"></h3>
+                    <p th:text="${category.type}"></p>
+                    <div class="product-price">
+                        <span th:text="${category.id}">$${product.price}</span>
+                    </div>
+<!--                    <form th:action="@{/products/list/{id}(id=${category.id})}" method="post">-->
+<!--&lt;!&ndash;                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <img th:src="${category.image}" alt="${product.name}">&ndash;&gt;-->
+<!--                        <button type="submit" class="product-image">Reach Now-->
+<!--                        </button>-->
+<!--                    </form>-->
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<footer>
+
+
+</footer>
+
+<!--    <div class="container">-->
+<!--        <h2 class="title">Featured Products</h2>-->
+<!--        <ul class="product-list">-->
+<!--            <li th:each="category : ${categories}">-->
+<!--                <div class="product-card">-->
+<!--                    <a href="/products/list" class="product-image">-->
+<!--                        <img th:src="${category.image}" alt="${product.name}">-->
+<!--                    </a>-->
+<!--                    <div class="product-info">-->
+<!--                        <h3 th:text="${category.name}"></h3>-->
+<!--                        <p th:text="${category.type}"></p>-->
+<!--                        <div class="product-price">-->
+<!--                            <span th:text="${category.id}"></span>-->
+<!--                        </div>-->
+<!--                        <a href="/products/list" class="product-reach-btn">Reach Now</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+</body>
+</html>

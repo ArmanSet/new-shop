@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Category and Product</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Category and Product</title>
+</head>
+<body>
+<h1>Create Category</h1>
+<form th:action="@{/category/create-category}" th:object="${category}" method="post">
+    <label for="categoryName">Category Name:</label><br>
+    <input type="text" id="categoryName" th:field="*{name}"><br>
+
+    <label for="categoryType">Category TYPE:</label><br>
+    <input type="text" id="categoryType" th:field="*{type}"><br>
+
+    <label for="categoryImage">Category IMAGE:</label><br>
+    <input type="text" id="categoryImage" th:field="*{image}"><br>
+
+
+
+
+    <input type="submit" value="Create Category">
+</form>
+
+<h1>Create Product</h1>
+<form th:action="@{/category/create-products}" th:object="${products}" method="post">
+    <label for="productName">Product Name:</label><br>
+    <input type="text" id="productName" th:field="*{name}"><br>
+
+    <label for="productDescription">Product Description:</label><br>
+    <input type="text" id="productDescription" th:field="*{description}"><br>
+
+    <label for="productColour">Product Colour:</label><br>
+    <input type="text" id="productColour" th:field="*{colour}"><br>
+
+    <label for="productBrand">Product Brand:</label><br>
+    <input type="text" id="productBrand" th:field="*{brand}"><br>
+
+    <label for="productImage">Product Image:</label><br>
+    <input type="text" id="productImage" th:field="*{image}"><br>
+
+    <label for="productPrice">Product Price:</label><br>
+    <input type="text" id="productPrice" th:field="*{price}"><br>
+
+    <label for="productmaxQuantity">Product MaxQuantity:</label><br>
+    <input type="text" id="productmaxQuantity" th:field="*{maxQuantity}"><br>
+
+    <label for="categoryID">Product Category ID:</label><br>
+    <input type="number" id="categoryID" th:field="*{category.id}"><br>
+
+<!-- TODO   private int quantity;-->
+
+<!--    <label for="productCategory">Product Categories:</label><br>-->
+<!--    <select id="productCategory" th:field="*{categories}" multiple="multiple">-->
+<!--        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>-->
+<!--    </select>-->
+    <input type="submit" value="Create Product">
+</form>
+</body>
+</html>
+</body>
+</html>

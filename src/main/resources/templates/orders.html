@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" th:href="@{/menu.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #d3ac05;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /*#tableUser {*/
+        /*    height: 200px;*/
+        /*    width: 200px;*/
+        /*}*/
+
+        /*#tableUser2 {*/
+        /*    height: 200px;*/
+        /*    width: 200px;*/
+        /*}*/
+        /*#tableUser3 {*/
+        /*    height: 50px;*/
+        /*    width: 50px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<main th:replace="menu :: site-menu"></main>
+<div th:if="${orders.isEmpty()}">
+    <h1>Нет заказов</h1>
+</div>
+
+<div th:if="${!orders.isEmpty()}">
+
+<div>
+    <a href="/products/list"> PRODUCT LIST</a>
+
+</div>
+
+<header>
+    <!-- ... -->
+    <h2>Orders</h2>
+    <br>
+<!--    <div th:each="order : ${orders}">-->
+<!--        <h3>Order Info</h3>-->
+<!--        <p th:text="'Buyer Email: ' + ${order.buyerEmail}"></p>-->
+<!--        <p th:text="'Buyer Name: ' + ${order.buyerName}"></p>-->
+<!--        <p th:text="'Buyer Phone: ' + ${order.buyerPhone}"></p>-->
+<!--        <p th:text="'Buyer Address: ' + ${order.buyerAddress}"></p>-->
+<!--       </div>-->
+    <div>
+        <h3>USER INFO</h3>
+        <p th:text="'Buyer Email: ' + ${orders[0].buyerEmail}"></p>
+        <p th:text="'Buyer Name: ' + ${orders[0].buyerName}"></p>
+        <p th:text="'Buyer Phone: ' + ${orders[0].buyerPhone}"></p>
+        <p th:text="'Buyer Address: ' + ${orders[0].buyerAddress}"></p>
+    </div>
+    <br>
+    <div th:each="order : ${orders}">
+        <h3>ORDER INFO</h3>
+        <p th:text="'Order Id: ' + ${order.id}"></p>
+        <p th:text="'Order Date: ' + ${#temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>
+<!--        <p th:text="'Order Amount: ' + ${order.orderAmount}"></p>-->
+
+        <br>
+        <h3>PRODUCTS IN ORDER</h3>
+        <table>
+            <tr>
+                <th>Brand</th>
+                <th>Price</th>
+                <th>Name Product</th>
+                <th>Image</th>
+                <th>Colour</th>
+                <th>Quantity</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>ID</th>
+                <th>TOTAL FOR PRODUCT</th>
+
+            </tr>
+            <tr th:each="product : ${order.products}">
+                <td th:text="${product.brand}">Brand</td>
+                <td th:text="${product.price}">Price</td>
+                <td th:text="${product.name}">Name Product</td>
+                <td><img th:src="@{${product.image}}" alt="Product Image"></td>
+                <td th:text="${product.colour}">Colour</td>
+                <td th:text="${product.quantity}">Quantity</td>
+                <td th:text="${product.description}">Description</td>
+                <td th:text="${product.category.name}">Category</td>
+                <td th:text="${product.id}">ID</td>
+                <td th:text="${product.quantity*product.price}">TOTAL</td>
+
+            </tr>
+            <tr> <th>TOTAL PAYMENT</th></tr>
+            <tr>
+                <td th:text="${order.orderAmount}"></td></tr>
+            <br>
+        </table>
+    </div>
+    <!-- ... -->
+</header>
+</div>
+<!--<footer>-->
+<!--    &lt;!&ndash; ... &ndash;&gt;-->
+<!--</footer>-->
+
+</body>
+</html>

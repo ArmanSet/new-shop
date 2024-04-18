@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <style>
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            float: right;
+        }
+
+        header nav a {
+            color: #fff;
+            /*text-decoration: none;*/
+            margin-right: 10px;
+        }
+
+        header nav a:hover {
+            color: #ddd;
+        }
+
+        main {
+            margin-top: 20px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .cart-items {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cart-item img {
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-info h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info p {
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .cart-item-info input {
+            width: 50px;
+            text-align: center;
+        }
+
+        .cart-total {
+            border-top: 1px solid #ddd;
+            padding: 10px;
+            text-align: right;
+        }
+
+        .cart-total p {
+            margin-bottom: 5px;
+        }
+
+        .cart-total button {
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-total button:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!--<h1>Your Cart</h1>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Product</th>-->
+<!--        <th>Quantity</th>-->
+<!--        <th>Price</th>-->
+<!--        <th>Action</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="product : ${cart.products}">-->
+<!--        <td><img th:src="${product.image}" alt="Product Image"></td>-->
+<!--        <td th:text="${product.name}"></td>-->
+<!--        <td th:text="${product.quantity}"></td>-->
+<!--        <td th:text="${product.price}"></td>-->
+<!--        <td th:text="${product.price * product.quantity}">TOTAL :</td>-->
+<!--        <td  th:text="${product.brand} "    > Brand</td>-->
+<!--        <td  th:text="${product.colour} "    > Colour</td>-->
+<!--        <td>-->
+<!--            <form th:action="@{/cart/increase/{id}(id=${product.id})}" method="post">-->
+<!--                <input type="submit" value="Increase">-->
+<!--            </form>-->
+<!--            <form th:action="@{/cart/decrease/{id}(id=${product.id})}" method="post">-->
+<!--                <input type="submit" value="Decrease">-->
+<!--            </form>-->
+<!--        </td>-->
+
+<!--        <td>-->
+<!--            <form th:action="@{/cart/remove/{id}(id=${product.id})}" method="post">-->
+<!--                <input type="submit" value="Remove">-->
+<!--            </form>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<button id="checkout">Checkout</button>-->
+<header>
+    <h1>Интернет-магазин</h1>
+    <a href="products/list">Главная</a>
+    <a href="products/list">Каталог</a>
+    <a href="#">Контакты</a>
+</header>
+<h2>Корзина</h2>
+<main th:if="${authentication != 'ROLE_ANONYMOUS'}">
+
+    <div class="cart-items">
+        <ul th:if="${#objects.nullSafe(cart, null) != null && !#lists.isEmpty(cart.products)}">
+            <li th:each="product : ${cart.products}">
+                <div class="cart-item">
+                    <img th:src="${product.image}" alt="${product.name}">
+
+                    <div class="cart-item-info">
+                        <h3 th:text="${product.name}"></h3>
+                        <p>Цена: <span th:text="${product.price}">0</span> руб.</p>
+
+                        <form th:action="@{/cart/change/{id}(id=${product.id})}" method="post">
+                            <p>Количество:
+                                <label >
+                                    <input type="number" name="quantity" th:value="${product.quantity}" min="1"
+                                           th:max="${product.maxQuantity}">
+                                </label>
+                            </p>
+                            <button type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>
+                        </form>
+
+
+                        <!--                        <p>Количество: <input type="number" th:value="${product.quantity}" th:min="1" th:max="${product.maxQuantity}"></p>-->
+                        <form th:action="@{/cart/remove/{id}(id=${product.id})}" method="post">
+                            <input type="submit" value="Удалить">
+                        </form>
+
+
+                    </div>
+                </div>
+            </li>
+            <div class="cart-total">
+                <p>Итого: <span th:text="${totalPrice}">0</span> руб.</p>
+                <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">
+                    <input type="submit" value="Оформить заказ">
+                </form>
+                <!--                <button id="checkout">Оформить заказ</button>-->
+            </div>
+
+        </ul>
+
+    </div>
+
+    <div class="cart-total">
+
+    </div>
+</main>
+
+<!--<main th:if="${authentication == 'ROLE_ANONYMOUS'}">-->
+<!--    <h1>Cart is Empty</h1>-->
+<!--</main>-->
+
+<!--<ul th:if="${#objects.nullSafe(cart, null) != null && !(cart.products == null || #lists.isEmpty(cart.products))}">-->
+<!--    <h1>Cart is Empty</h1>-->
+
+<!--</ul>-->
+
+
+<!--<main th:if="${cart == null || cart.products.isEmpty()}">-->
+<!--    <h1>Cart is Empty</h1>-->
+<!--</main>-->
+
+<footer>
+    <p>Copyright &copy; 2024</p>
+</footer>
+
+
+</body>
+</html>
