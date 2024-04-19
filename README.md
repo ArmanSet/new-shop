@@ -1,1 +1,1 @@
-My new Shopgegeg
+My new Shop
