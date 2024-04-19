@@ -72,14 +72,14 @@
 <!--        <p th:text="'Buyer Phone: ' + ${order.buyerPhone}"></p>-->
 <!--        <p th:text="'Buyer Address: ' + ${order.buyerAddress}"></p>-->
 <!--       </div>-->
-    <div>
-        <h3>USER INFO</h3>
-        <p th:text="'Buyer Email: ' + ${orders[0].buyerEmail}"></p>
-        <p th:text="'Buyer Name: ' + ${orders[0].buyerName}"></p>
-        <p th:text="'Buyer Phone: ' + ${orders[0].buyerPhone}"></p>
-        <p th:text="'Buyer Address: ' + ${orders[0].buyerAddress}"></p>
-    </div>
-    <br>
+<!--    <div>-->
+<!--        <h3>USER INFO</h3>-->
+<!--        <p th:text="'Buyer Email: ' + ${orders[0].buyerEmail}"></p>-->
+<!--        <p th:text="'Buyer Name: ' + ${orders[0].buyerName}"></p>-->
+<!--        <p th:text="'Buyer Phone: ' + ${orders[0].buyerPhone}"></p>-->
+<!--        <p th:text="'Buyer Address: ' + ${orders[0].buyerAddress}"></p>-->
+<!--    </div>-->
+<!--    <br>-->
     <div th:each="order : ${orders}">
         <h3>ORDER INFO</h3>
         <p th:text="'Order Id: ' + ${order.id}"></p>

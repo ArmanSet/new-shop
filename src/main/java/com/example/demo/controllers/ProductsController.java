@@ -8,6 +8,7 @@ import com.example.demo.repository.ProductsRepository;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductsService;
 import com.example.demo.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,25 +22,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/products")
 public class ProductsController {
 
-    private ProductsService productService;
-    private UsersService usersService;
+    private final ProductsService productService;
+    private final UsersService usersService;
 
 
-    @Autowired
-    public ProductsController(ProductsService productService, UsersService usersService) {
-        this.productService = productService;
-        this.usersService = usersService;
-
-    }
     @PostMapping("/list/{id}")
     public String filterProductsByCategoryPost(@PathVariable Long id, Model model) {
-            List<Products> products = productService.findByCategoryId(id);
-            model.addAttribute("products", products);
-            return "products";
+        List<Products> products = productService.findByCategoryId(id);
+        model.addAttribute("products", products);
+        return "products";
 
 
     }

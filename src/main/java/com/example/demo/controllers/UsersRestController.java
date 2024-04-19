@@ -26,6 +26,7 @@ public class UsersRestController {
     public Users getUser(@PathVariable("id") int id) {
         return usersService.findById((long) id);
     }
+
     @PostMapping("/users")
     public void postUser(@RequestBody Users users) {
         usersService.userSave(users);
@@ -35,6 +36,7 @@ public class UsersRestController {
     public void putAdmin(@PathVariable("id") int id, @RequestBody Users users) {
         usersService.update((long) id, users);
     }
+
     @DeleteMapping("/users/{id}")
     public void deleteAdmin(@PathVariable("id") int id) {
         usersService.delete((long) id);

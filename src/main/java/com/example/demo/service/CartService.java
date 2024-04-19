@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Service
 public class CartService {
-    CartRepository cartRepository;
+   private CartRepository cartRepository;
 
     @Autowired
     public CartService(CartRepository cartRepository) {

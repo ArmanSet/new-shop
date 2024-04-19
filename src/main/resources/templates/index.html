@@ -1,442 +1,567 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>Pullshoes</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Pullshoes</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<!--	   MENU-->
-	   <link rel="stylesheet" th:href="@{/menu.css}">
-      <!-- bootstrap css -->
-      <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-      <!-- style css -->
-      <link rel="stylesheet" th:href="@{/css/style.css}">
-      <!-- Responsive-->
-      <link rel="stylesheet" th:href="@{/css/responsive.css}">
-      <!-- fevicon -->
-      <link rel="icon" th:href="@{/images/fevicon.png}" type="image/gif" />
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" th:href="@{/css/jquery.mCustomScrollbar.min.css}">
-      <!-- Tweaks for older IEs-->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      <!-- owl stylesheets -->
-      <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
-      <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-      <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-   </head>
-   <!-- body -->
-   <body class="main-layout">
+    <!--	   MENU-->
+    <link rel="stylesheet" th:href="@{/menu.css}">
+    <link rel="stylesheet" th:href="@{/gallery.css}">
 
-   <header>
-       <!--   LOGIN-->
-       <div  class="hDiv" th:if="${isAuthenticated != null && !(isAuthenticated)}">
-           <button type="button">
-               <a href="/login">LogIn</a>
-           </button>
-           <button type="button">
-               <a href="/users/create">SIGN UP</a>
-           </button>
-       </div>
-       <div class="hDiv" th:if="${isAuthenticated != null && isAuthenticated}">
-           <button type="button">
-               <a href="/logout">LogOut</a>
-           </button>
-       </div>
-
-       <div class="hDiv" th:if="${isAdmin}">
-           <button type="button">
-               <a href="/users/show">≈ADMIN PANEL≈</a>
-           </button>
-
-           <button type="button">
-               <a href="/category/create">CREATE PRODUCTS AND Categories</a>
-           </button>
-       </div>
-
-       <div th:if="${isAuthenticated}">
-           <button onclick="window.location.href='/orders/'">MY ORDERS</button>
-       </div>
-       <div><a href="/cart">
-           <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"
-                th:src="@{/images/1.png}"
-                alt="">
-
-       </a>
-
-       </div>
-       <!--   LOGIN END-->
+    <!--	   BUTTON-->
+    <!-- HTML !-->
+    <!--	   <button class="button-27" role="button">Button 27</button>-->
 
 
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+
+        }
+
+        /*.dropdown:hover  {*/
+        /*    background-color: #020206;*/
+        /*}*/
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #020206;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            color: #ffffff;
+        }
+
+        /*.dropdown:hover .dropdown-menu {*/
+        /*    display: block;*/
+        /*}*/
+        .dropdown-menu a {
+            color: #ffffff; /* белый цвет ссылок */
+        }
+
+        /*.dropdown-menu a:hover {*/
+        /*    color: #ffffff; !* белый цвет ссылок при наведении *!*/
+        /*}*/
+        .button-27 {
+            background-color: #1e96c8;
+            border-radius: 15px;
+            height: 50px;
+            width: 50px;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .button-27 {
+            margin-left: 20px;
+            height: 50px;
+            width: 50px;
+            appearance: none;
+            background-color: #020206;
+            border: 2px solid #020206;
+            border-radius: 15px;
+            box-sizing: border-box;
+            color: #f44d59;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 10px;
+            font-weight: 600;
+            line-height: normal;
+            margin-top: 20px;
+
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+
+            will-change: transform;
+        }
+
+        /*.button-27:disabled {*/
+        /*    pointer-events: none;*/
+        /*}*/
+
+        /*.button-27:hover {*/
+        /*    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;*/
+        /*    transform: translateY(-2px);*/
+        /*}*/
+
+        /*.button-27:active {*/
+        /*    box-shadow: none;*/
+        /*    transform: translateY(0);*/
+        /*}*/
+    </style>
+    <!--	   BUTTON END-->
+    <!-- bootstrap css -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <!-- style css -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Responsive-->
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <!-- fevicon -->
+    <link rel="icon" th:href="@{/images/fevicon.png}" type="image/gif"/>
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/jquery.mCustomScrollbar.min.css}">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- owl stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
+          media="screen">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<!-- body -->
+<body class="main-layout">
+
+<header style="background-color: #FF4E5BFF;position: fixed;height: 90px;width: 100%;z-index: 9999; display: flex; justify-content: space-between;">
+    <!--   LOGIN-->
+
+    <div style="display: flex;">
+        <div th:if="${isAuthenticated != null && !(isAuthenticated)}">
+            <button class="button-27" type="button">
+                <a style="color: #ff4e5b" href="/login">LogIn</a>
+            </button>
+            <button class="button-27" type="button">
+                <a style="color: #ff4e5b" href="/users/create">SIGN UP</a>
+            </button>
+        </div>
+        <div th:if="${isAuthenticated != null && isAuthenticated}">
+            <button class="button-27" type="button">
+                <a style="color: #ff4e5b" href="/logout">LogOut</a>
+            </button>
+        </div>
+
+        <div class="dropdown" th:if="${isAdmin}">
+            <button class="button-27 dropdown-toggle" type="button">
+                Admin Menu
+            </button>
+            <div style="background-color: #0a0506" class="dropdown-menu">
+                <a href="/users/show">≈ADMIN PANEL≈</a>
+                <a href="/category/create">Create Products</a>
+            </div>
+        </div>
 
 
+        <div class="dropdown" th:if="${isAuthenticated}">
+            <button class="button-27 dropdown-toggle" type="button">
+                Profile
+            </button>
+            <div style="background-color: #0a0506" class="dropdown-menu">
+                <a href="/profile">Account Information</a><br>
+                <a href="/orders/">Orders</a><br>
+                <a href="/orders/returns">Returns</a>
+            </div>
+        </div>
 
-   <div th:replace="/sections/cartshow :: cartshow"></div>
-   <div th:replace="menu :: site-menu">
 
-   </div>
-   <div th:replace="/sections/header :: header">
-	      </div>
+        <!--        <div  th:if="${isAuthenticated}">-->
+        <!--            <button class="button-27" onclick="window.location.href='/orders/'">MY ORDERS</button>-->
+        <!--        </div>-->
+    </div>
+    <div><a href="/cart">
+        <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"
+             th:src="@{/images/1.png}"
+             alt="">
 
-   </header>
-	<!-- header section start -->
-	<div class="header_section">
+    </a>
+        <div th:replace="/sections/cartshow :: cartshow"></div>
+        <div th:replace="menu :: site-menu"></div>
+    </div>
+</header>
+<!-- header section start -->
+<div class="header_section">
 
 
-<!--		<div class="container">-->
-<!--			<div class="row">-->
-<!--				<div class="col-sm-3">-->
-<!--					<div class="logo"><a href="#"><img th:src="@{/images/logo.png}"></a></div>-->
-<!--				</div>-->
-<!--				<div class="col-sm-9">-->
-<!--					<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--                        <span class="navbar-toggler-icon"></span>-->
-<!--                        </button>-->
-<!--                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">-->
-<!--                        <div class="navbar-nav">-->
-<!--                           <a class="nav-item nav-link" href="index.html">Home</a>-->
-<!--                           <a class="nav-item nav-link" href="collection.html">Collection</a>-->
-<!--                           <a class="nav-item nav-link" href="shoes.html">Shoes</a>-->
-<!--                           <a class="nav-item nav-link" href="racing boots.html">Racing Boots</a>-->
-<!--                           <a class="nav-item nav-link" href="contact.html">Contact</a>-->
-<!--                           <a class="nav-item nav-link last" href="#"><img th:src="@{/images/search_icon.png}"></a>-->
-<!--                           <a class="nav-item nav-link last" href="contact.html"><img th:src="@{/images/shop_icon.png}"></a>-->
+    <!--		<div class="container">-->
+    <!--			<div class="row">-->
+    <!--				<div class="col-sm-3">-->
+    <!--					<div class="logo"><a href="#"><img th:src="@{/images/logo.png}"></a></div>-->
+    <!--				</div>-->
+    <!--				<div class="col-sm-9">-->
+    <!--					<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+    <!--                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">-->
+    <!--                        <span class="navbar-toggler-icon"></span>-->
+    <!--                        </button>-->
+    <!--                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">-->
+    <!--                        <div class="navbar-nav">-->
+    <!--                           <a class="nav-item nav-link" href="index.html">Home</a>-->
+    <!--                           <a class="nav-item nav-link" href="collection.html">Collection</a>-->
+    <!--                           <a class="nav-item nav-link" href="shoes.html">Shoes</a>-->
+    <!--                           <a class="nav-item nav-link" href="racing boots.html">Racing Boots</a>-->
+    <!--                           <a class="nav-item nav-link" href="contact.html">Contact</a>-->
+    <!--                           <a class="nav-item nav-link last" href="#"><img th:src="@{/images/search_icon.png}"></a>-->
+    <!--                           <a class="nav-item nav-link last" href="contact.html"><img th:src="@{/images/shop_icon.png}"></a>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                    </nav>-->
+    <!--				</div>-->
+    <!--			</div>-->
+    <!--		</div>-->
+    <div class="banner_section">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="container-fluid">
+            <section class="slide-wrapper">
+                <div class="container-fluid">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+<!--                        <ol class="carousel-indicators">-->
+<!--                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
+<!--                            <li data-target="#myCarousel" data-slide-to="1"></li>-->
+<!--                            <li data-target="#myCarousel" data-slide-to="2"></li>-->
+<!--                            <li data-target="#myCarousel" data-slide-to="3"></li>-->
+<!--                        </ol>-->
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row">
+<!--                                    <div class="col-sm-2 padding_0">-->
+<!--                                        <p class="mens_taital">Men Shoes</p>-->
+<!--                                        <div class="page_no">0/2</div>-->
+<!--                                        <p class="mens_taital_2">Men Shoes</p>-->
+<!--                                    </div>-->
+                                    <div class="col-sm-5">
+                                        <div class="banner_taital">
+                                            <h1 class="banner_text">New Running Shoes </h1>
+                                            <h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
+                                            <p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                                do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                            <button onclick="location.href='/category/'" class="buy_bt">Buy Now</button>
+
+                                            <button class="more_bt">See More</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+<!--                                    <div class="col-sm-2 padding_0">-->
+<!--                                        <p class="mens_taital">Men Shoes</p>-->
+<!--                                        <div class="page_no">0/2</div>-->
+<!--                                        <p class="mens_taital_2">Men Shoes</p>-->
+<!--                                    </div>-->
+                                    <div class="col-sm-5">
+                                        <div class="banner_taital">
+                                            <h1 class="banner_text">New Running Shoes </h1>
+                                            <h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
+                                            <p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                                do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                            <button class="buy_bt">Buy Now</button>
+                                            <button class="more_bt">See More</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+<!--                                    <div class="col-sm-2 padding_0">-->
+<!--                                        <p class="mens_taital">Men Shoes</p>-->
+<!--                                        <div class="page_no">0/2</div>-->
+<!--                                        <p class="mens_taital_2">Men Shoes</p>-->
+<!--                                    </div>-->
+                                    <div class="col-sm-5">
+                                        <div class="banner_taital">
+                                            <h1 class="banner_text">New Running Shoes </h1>
+                                            <h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
+                                            <p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                                do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                            <button class="buy_bt">Buy Now</button>
+                                            <button class="more_bt">See More</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+<!--                                    <div class="col-sm-2 padding_0">-->
+<!--                                        <p class="mens_taital">Men Shoes</p>-->
+<!--                                        <div class="page_no">0/2</div>-->
+<!--                                        <p class="mens_taital_2"> Jeans</p>-->
+<!--                                    </div>-->
+                                    <div class="col-sm-5">
+                                        <div class="banner_taital">
+                                            <h1 class="banner_text">New Running Shoes </h1>
+                                            <h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
+                                            <p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                                do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                            <button class="buy_bt">Buy Now</button>
+                                            <button class="more_bt">See More</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+        </div>
+    </div>
+</div>
+
+<!-- header section end -->
+<!-- new collection section start -->
+<div class="layout_padding collection_section">
+
+    <div th:replace="/sections/gallery.html :: galleries"></div>
+<!--    <div class="container">-->
+<!--        <h1 class="new_text"><strong>New Collection</strong></h1>-->
+<!--        <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore-->
+<!--            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>-->
+<!--        <div class="collection_section_2">-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-6">-->
+<!--                    <div class="about-img">-->
+<!--                        <button class="new_bt">New</button>-->
+<!--                        <div class="shoes-img"><img th:src="@{/images/shoes-img1.png}"></div>-->
+<!--                        <p class="sport_text">Men Sports</p>-->
+<!--                        <div class="dolar_text">$<strong style="color: #f12a47;">90</strong></div>-->
+<!--                        <div class="star_icon">-->
+<!--                            <ul>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                            </ul>-->
 <!--                        </div>-->
 <!--                    </div>-->
-<!--                    </nav>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-		<div class="banner_section">
-			<div class="container-fluid">
-				<section class="slide-wrapper">
-    <div class="container-fluid">
-	    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#myCarousel" data-slide-to="1"></li>
-                <li data-target="#myCarousel" data-slide-to="2"></li>
-                <li data-target="#myCarousel" data-slide-to="3"></li>
-            </ol>
+<!--                    <button class="seemore_bt">See More</button>-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                    <div class="about-img2">-->
+<!--                        <div class="shoes-img2"><img th:src="@{/images/shoes-img2.png}"></div>-->
+<!--                        <p class="sport_text">Men Sports</p>-->
+<!--                        <div class="dolar_text">$<strong style="color: #f12a47;">90</strong></div>-->
+<!--                        <div class="star_icon">-->
+<!--                            <ul>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
 
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="row">
-					<div class="col-sm-2 padding_0">
-						<p class="mens_taital">Men Shoes</p>
-						<div class="page_no">0/2</div>
-						<p class="mens_taital_2">Men Shoes</p>
-					</div>
-					<div class="col-sm-5">
-						<div class="banner_taital">
-							<h1 class="banner_text">New Running Shoes </h1>
-							<h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
-							<p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							<button onclick="location.href='/category/'" class="buy_bt">Buy Now</button>
-
-							<button class="more_bt">See More</button>
-						</div>
-					</div>
-					<div class="col-sm-5">
-						<div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
-					</div>
-				</div>
+<div class="collection_section">
+    <div class="container">
+        <h1 class="new_text"><strong>Racing Boots</strong></h1>
+        <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+    </div>
+</div>
+<div class="collectipn_section_3 layuot_padding">
+    <div class="container">
+        <div class="racing_shoes">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="shoes-img3"><img th:src="@{/images/shoes-img3.png}"></div>
                 </div>
-                <div class="carousel-item">
-                    <div class="row">
-					<div class="col-sm-2 padding_0">
-						<p class="mens_taital">Men Shoes</p>
-						<div class="page_no">0/2</div>
-						<p class="mens_taital_2">Men Shoes</p>
-					</div>
-					<div class="col-sm-5">
-						<div class="banner_taital">
-							<h1 class="banner_text">New Running Shoes </h1>
-							<h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
-							<p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							<button class="buy_bt">Buy Now</button>
-							<button class="more_bt">See More</button>
-						</div>
-					</div>
-					<div class="col-sm-5">
-						<div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
-					</div>
-				</div>
-                </div>
-                <div class="carousel-item">
-                    <div class="row">
-					<div class="col-sm-2 padding_0">
-						<p class="mens_taital">Men Shoes</p>
-						<div class="page_no">0/2</div>
-						<p class="mens_taital_2">Men Shoes</p>
-					</div>
-					<div class="col-sm-5">
-						<div class="banner_taital">
-							<h1 class="banner_text">New Running Shoes </h1>
-							<h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
-							<p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							<button class="buy_bt">Buy Now</button>
-							<button class="more_bt">See More</button>
-						</div>
-					</div>
-					<div class="col-sm-5">
-						<div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
-					</div>
-				</div>
-                </div>
-                <div class="carousel-item">
-                    <div class="row">
-					<div class="col-sm-2 padding_0">
-						<p class="mens_taital">Men Shoes</p>
-						<div class="page_no">0/2</div>
-						<p class="mens_taital_2">Men Shoes</p>
-					</div>
-					<div class="col-sm-5">
-						<div class="banner_taital">
-							<h1 class="banner_text">New Running Shoes </h1>
-							<h1 class="mens_text"><strong>Men's Like Plex</strong></h1>
-							<p class="lorem_text">ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							<button class="buy_bt">Buy Now</button>
-							<button class="more_bt">See More</button>
-						</div>
-					</div>
-					<div class="col-sm-5">
-						<div class="shoes_img"><img th:src="@{/images/running-shoes.png}"></div>
-					</div>
-				</div>
+                <div class="col-md-4">
+                    <div class="sale_text"><strong>Sale <br><span style="color: #0a0506;">JOGING</span>
+                        <br>SHOES</strong></div>
+                    <div class="number_text"><strong>$ <span style="color: #0a0506">100</span></strong></div>
+                    <button class="seemore">See More</button>
                 </div>
             </div>
         </div>
     </div>
-</section>
-			</div>
-		</div>
-	</div>
-	<!-- header section end -->
-	<!-- new collection section start -->
-    <div class="layout_padding collection_section">
-    	<div class="container">
-    	    <h1 class="new_text"><strong>New  Collection</strong></h1>
-    	    <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
-    	    <div class="collection_section_2">
-    	    	<div class="row">
-    	    		<div class="col-md-6">
-    	    			<div class="about-img">
-    	    				<button class="new_bt">New</button>
-    	    				<div class="shoes-img"><img th:src="@{/images/shoes-img1.png}"></div>
-    	    				<p class="sport_text">Men Sports</p>
-    	    				<div class="dolar_text">$<strong style="color: #f12a47;">90</strong> </div>
-    	    				<div class="star_icon">
-    	    					<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    	    				</div>
-    	    			</div>
-    	    			<button class="seemore_bt">See More</button>
-    	    		</div>
-    	    		<div class="col-md-6">
-    	    			<div class="about-img2">
-    	    				<div class="shoes-img2"><img th:src="@{/images/shoes-img2.png}"></div>
-    	    				<p class="sport_text">Men Sports</p>
-    	    				<div class="dolar_text">$<strong style="color: #f12a47;">90</strong> </div>
-    	    				<div class="star_icon">
-    	    					<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    	    				</div>
-    	    			</div>
-    	    		</div>
-    	    	</div>
-    	    </div>
-    	</div>
+</div>
+<div class="collection_section layout_padding">
+    <div class="container">
+        <h1 class="new_text"><strong>New Arrivals Products</strong></h1>
+        <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
     </div>
-    <div class="collection_section">
-    	<div class="container">
-    		<h1 class="new_text"><strong>Racing Boots</strong></h1>
-    	    <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
-    	</div>
-    </div>
-    <div class="collectipn_section_3 layuot_padding">
-    	<div class="container">
-    		<div class="racing_shoes">
-    			<div class="row">
-    				<div class="col-md-8">
-    					<div class="shoes-img3"><img th:src="@{/images/shoes-img3.png}"></div>
-    				</div>
-    				<div class="col-md-4">
-    					<div class="sale_text"><strong>Sale <br><span style="color: #0a0506;">JOGING</span> <br>SHOES</strong></div>
-    					<div class="number_text"><strong>$ <span style="color: #0a0506">100</span></strong></div>
-    					<button class="seemore">See More</button>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </div>
-    <div class="collection_section layout_padding">
-    	<div class="container">
-    		<h1 class="new_text"><strong>New Arrivals Products</strong></h1>
-    	    <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
-    	</div>
-    </div>
-	<!-- new collection section end -->
-	<!-- New Arrivals section start -->
+</div>
+<!-- new collection section end -->
+<!-- New Arrivals section start -->
 
-    <div class="layout_padding gallery_section">
-    	<div class="container">
-<!--			<img th:src="${product.image}">-->
-    		<div class="row">
-    			<div class="col-sm-4">
-    				<div class="best_shoes">
-    					<p class="best_text">Best Shoes </p>
-    					<div class="shoes_icon"><img th:src="@{/images/shoes-img4.png}"></div>
-    					<div class="star_text">
-    						<div class="left_part">
-    							<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    						</div>
-    						<div class="right_part">
-    							<div class="shoes_price">$ <span style="color: #ff4e5b;">60</span></div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-4">
-    				<div class="best_shoes">
-    					<p class="best_text">Best Shoes </p>
-    					<div class="shoes_icon"><img th:src="@{/images/shoes-img5.png}"></div>
-    					<div class="star_text">
-    						<div class="left_part">
-    							<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    						</div>
-    						<div class="right_part">
-    							<div class="shoes_price">$ <span style="color: #ff4e5b;">400</span></div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-4">
-    				<div class="best_shoes">
-    					<p class="best_text">Best Shoes </p>
-    					<div class="shoes_icon"><img th:src="@{/images/shoes-img6.png}"></div>
-    					<div class="star_text">
-    						<div class="left_part">
-    							<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    						</div>
-    						<div class="right_part">
-    							<div class="shoes_price">$ <span style="color: #ff4e5b;">50</span></div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    		</div>
-    		<div class="row">
-    			<div class="col-sm-4">
-    				<div class="best_shoes">
-    					<p class="best_text">Sports Shoes</p>
-    					<div class="shoes_icon"><img src="images/shoes-img7.png"></div>
-    					<div class="star_text">
-    						<div class="left_part">
-    							<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    						</div>
-    						<div class="right_part">
-    							<div class="shoes_price">$ <span style="color: #ff4e5b;">70</span></div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-4">
-    				<div class="best_shoes">
-    					<p class="best_text">Sports Shoes</p>
-    					<div class="shoes_icon"><img th:src="@{/images/shoes-img8.png}"></div>
-    					<div class="star_text">
-    						<div class="left_part">
-    							<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    						</div>
-    						<div class="right_part">
-    							<div class="shoes_price">$ <span style="color: #ff4e5b;">100</span></div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-4">
-    				<div class="best_shoes">
-    					<p class="best_text">Sports Shoes</p>
-    					<div class="shoes_icon"><img th:src="@{/images/shoes-img9.png}"></div>
-    					<div class="star_text">
-    						<div class="left_part">
-    							<ul>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    						<li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
-    	    					</ul>
-    						</div>
-    						<div class="right_part">
-    							<div class="shoes_price">$ <span style="color: #ff4e5b;">90</span></div>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    		</div>
-    		<div class="buy_now_bt">
-    			<a href="/products/list"><button class="buy_text">BUY</button></a>
-    		</div>
-    	</div>
+<div class="layout_padding gallery_section">
+    <div class="container">
+        <!--			<img th:src="${product.image}">-->
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="best_shoes">
+                    <p class="best_text">Best Shoes </p>
+                    <div class="shoes_icon"><img th:src="@{/images/shoes-img4.png}"></div>
+                    <div class="star_text">
+                        <div class="left_part">
+                            <ul>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                            </ul>
+                        </div>
+                        <div class="right_part">
+                            <div class="shoes_price">$ <span style="color: #ff4e5b;">60</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="best_shoes">
+                    <p class="best_text">Best Shoes </p>
+                    <div class="shoes_icon"><img th:src="@{/images/shoes-img5.png}"></div>
+                    <div class="star_text">
+                        <div class="left_part">
+                            <ul>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                            </ul>
+                        </div>
+                        <div class="right_part">
+                            <div class="shoes_price">$ <span style="color: #ff4e5b;">400</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="best_shoes">
+                    <p class="best_text">Best Shoes </p>
+                    <div class="shoes_icon"><img th:src="@{/images/shoes-img6.png}"></div>
+                    <div class="star_text">
+                        <div class="left_part">
+                            <ul>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                            </ul>
+                        </div>
+                        <div class="right_part">
+                            <div class="shoes_price">$ <span style="color: #ff4e5b;">50</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="best_shoes">
+                    <p class="best_text">Sports Shoes</p>
+                    <div class="shoes_icon"><img src="images/shoes-img7.png"></div>
+                    <div class="star_text">
+                        <div class="left_part">
+                            <ul>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                            </ul>
+                        </div>
+                        <div class="right_part">
+                            <div class="shoes_price">$ <span style="color: #ff4e5b;">70</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="best_shoes">
+                    <p class="best_text">Sports Shoes</p>
+                    <div class="shoes_icon"><img th:src="@{/images/shoes-img8.png}"></div>
+                    <div class="star_text">
+                        <div class="left_part">
+                            <ul>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                            </ul>
+                        </div>
+                        <div class="right_part">
+                            <div class="shoes_price">$ <span style="color: #ff4e5b;">100</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="best_shoes">
+                    <p class="best_text">Sports Shoes</p>
+                    <div class="shoes_icon"><img th:src="@{/images/shoes-img9.png}"></div>
+                    <div class="star_text">
+                        <div class="left_part">
+                            <ul>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                                <li><a href="#"><img th:src="@{/images/star-icon.png}"></a></li>
+                            </ul>
+                        </div>
+                        <div class="right_part">
+                            <div class="shoes_price">$ <span style="color: #ff4e5b;">90</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buy_now_bt">
+            <a href="/products/list">
+                <button class="buy_text">BUY</button>
+            </a>
+        </div>
     </div>
+</div>
 
-   	<!-- New Arrivals section end -->
-   	<!-- contact section start -->
+<!-- New Arrivals section end -->
+<!-- contact section start -->
 <!--    <div class="layout_padding contact_section">-->
 <!--    	<div class="container">-->
 <!--    		<h1 class="new_text"><strong>Contact Now</strong></h1>-->
@@ -480,126 +605,151 @@
 <!--    		</div>-->
 <!--    	</div>-->
 <!--    </div>-->
-   	<!-- contact section end -->
-	<!-- section footer start -->
-    <div class="section_footer">
-    	<div class="container">
-    		<div class="mail_section">
-    			<div class="row">
-    				<div class="col-sm-6 col-lg-2">
-    					<div><a href="#"><img th:src="@{/images/footer-logo.png}"></a></div>
-    				</div>
-    				<div class="col-sm-6 col-lg-2">
-    					<div class="footer-logo"><img th:src="@{/images/phone-icon.png}"><span class="map_text">(71) 1234567890</span></div>
-    				</div>
-    				<div class="col-sm-6 col-lg-3">
-    					<div class="footer-logo"><img th:src="@{/images/email-icon.png}"><span class="map_text">Demo@gmail.com</span></div>
-    				</div>
-    				<div class="col-sm-6 col-lg-3">
-    					<div class="social_icon">
-    						<ul>
-    							<li><a href="#"><img th:src="@{/images/fb-icon.png}"></a></li>
-    							<li><a href="#"><img th:src="@{/images/twitter-icon.png}"></a></li>
-    							<li><a href="#"><img th:src="@{/images/in-icon.png}"></a></li>
-    							<li><a href="#"><img th:src="@{/images/google-icon.png}"></a></li>
-    						</ul>
-    					</div>
-    				</div>
-    				<div class="col-sm-2"></div>
-    			</div>
-    	    </div>
-    	    <div class="footer_section_2">
-		        <div class="row">
-    		        <div class="col-sm-4 col-lg-2">
-    		        	<p class="dummy_text"> ipsum dolor sit amet, consectetur ipsum dolor sit amet, consectetur  ipsum dolor sit amet,</p>
-    		        </div>
-    		        <div class="col-sm-4 col-lg-2">
-    		        	<h2 class="shop_text">Address </h2>
-    		        	<div class="image-icon"><img th:src="@{/images/map-icon.png}"><span class="pet_text">No 40 Baria Sreet 15/2 NewYork City, NY, United States.</span></div>
-    		        </div>
-    		        <div class="col-sm-4 col-md-6 col-lg-3">
-    				    <h2 class="shop_text">Our Company </h2>
-    				    <div class="delivery_text">
-    				    	<ul>
-    				    		<li>Delivery</li>
-    				    		<li>Legal Notice</li>
-    				    		<li>About us</li>
-    				    		<li>Secure payment</li>
-    				    		<li>Contact us</li>
-    				    	</ul>
-    				    </div>
-    		        </div>
-    			<div class="col-sm-6 col-lg-3">
-    				<h2 class="adderess_text">Products</h2>
-    				<div class="delivery_text">
-    				    	<ul>
-    				    		<li>Prices drop</li>
-    				    		<li>New products</li>
-    				    		<li>Best sales</li>
-    				    		<li>Contact us</li>
-    				    		<li>Sitemap</li>
-    				    	</ul>
-    				    </div>
-    			</div>
-    			<div class="col-sm-6 col-lg-2">
-    				<h2 class="adderess_text">Newsletter</h2>
-    				<div class="form-group">
+<!-- contact section end -->
+<!-- section footer start -->
+<div class="section_footer">
+    <div class="container">
+        <div class="mail_section">
+            <div class="row">
+                <div class="col-sm-6 col-lg-2">
+                    <div><a href="#"><img th:src="@{/images/footer-logo.png}"></a></div>
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <div class="footer-logo"><img th:src="@{/images/phone-icon.png}"><span class="map_text">(71) 1234567890</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-logo"><img th:src="@{/images/email-icon.png}"><span class="map_text">Demo@gmail.com</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="social_icon">
+                        <ul>
+                            <li><a href="#"><img th:src="@{/images/fb-icon.png}"></a></li>
+                            <li><a href="#"><img th:src="@{/images/twitter-icon.png}"></a></li>
+                            <li><a href="#"><img th:src="@{/images/in-icon.png}"></a></li>
+                            <li><a href="#"><img th:src="@{/images/google-icon.png}"></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+        <div class="footer_section_2">
+            <div class="row">
+                <div class="col-sm-4 col-lg-2">
+                    <p class="dummy_text"> ipsum dolor sit amet, consectetur ipsum dolor sit amet, consectetur ipsum
+                        dolor sit amet,</p>
+                </div>
+                <div class="col-sm-4 col-lg-2">
+                    <h2 class="shop_text">Address </h2>
+                    <div class="image-icon"><img th:src="@{/images/map-icon.png}"><span class="pet_text">No 40 Baria Sreet 15/2 NewYork City, NY, United States.</span>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-6 col-lg-3">
+                    <h2 class="shop_text">Our Company </h2>
+                    <div class="delivery_text">
+                        <ul>
+                            <li>Delivery</li>
+                            <li>Legal Notice</li>
+                            <li>About us</li>
+                            <li>Secure payment</li>
+                            <li>Contact us</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <h2 class="adderess_text">Products</h2>
+                    <div class="delivery_text">
+                        <ul>
+                            <li>Prices drop</li>
+                            <li>New products</li>
+                            <li>Best sales</li>
+                            <li>Contact us</li>
+                            <li>Sitemap</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <h2 class="adderess_text">Newsletter</h2>
+                    <div class="form-group">
                         <input type="text" class="enter_email" placeholder="Enter Your email" name="Name">
                     </div>
                     <button class="subscribr_bt">Subscribe</button>
-    			</div>
-    			</div>
-    	        </div>
-	        </div>
-    	</div>
+                </div>
+            </div>
+        </div>
     </div>
-	<!-- section footer end -->
-	<div class="copyright">2024 All Rights Reserved.</div>
+</div>
+</div>
+<!-- section footer end -->
+<div class="copyright">2024 All Rights Reserved.</div>
 
 
-      <!-- Javascript files-->
-      <script th:src="@{/js/jquery.min.js}"></script>
-      <script th:src="@{/js/popper.min.js}"></script>
-      <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-      <script th:src="@{/js/jquery-3.0.0.min.js}"></script>
-      <script th:src="@{/js/plugin.js}"></script>
-      <!-- sidebar -->
-      <script th:src="@{/js/jquery.mCustomScrollbar.concat.min.js}"></script>
-      <script th:src="@{/js/custom.js}"></script>
-      <!-- javascript -->
-      <script th:src="@{/js/owl.carousel.js}"></script>
-      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-      <script>
-         $(document).ready(function(){
-         $(".fancybox").fancybox({
-         openEffect: "none",
-         closeEffect: "none"
-         });
+<!-- Javascript files-->
+<!--<script>document.querySelector('.dropdown-toggle').addEventListener('click', function() {-->
+<!--    let menu = document.querySelector('.dropdown-menu');-->
+<!--    if (menu.style.display === 'none' || menu.style.display === '') {-->
+<!--        menu.style.display = 'block';-->
+<!--    } else {-->
+<!--        menu.style.display = 'none';-->
+<!--    }-->
+<!--}); </script>-->
+<script>let toggles = document.querySelectorAll('.dropdown-toggle');
+toggles.forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+        let menu = this.nextElementSibling;
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
+    });
+});
+</script>
+<!--<script th:src="@{/js/jquery.min.js}"></script>-->
+<!--<script th:src="@{/js/popper.min.js}"></script>-->
+<!--<script th:src="@{/js/bootstrap.bundle.min.js}"></script>-->
+<!--<script th:src="@{/js/jquery-3.0.0.min.js}"></script>-->
+<!--<script th:src="@{/js/plugin.js}"></script>-->
+<!--&lt;!&ndash; sidebar &ndash;&gt;-->
+<!--<script th:src="@{/js/jquery.mCustomScrollbar.concat.min.js}"></script>-->
+<!--<script th:src="@{/js/custom.js}"></script>-->
+<!--&lt;!&ndash; javascript &ndash;&gt;-->
+<!--<script th:src="@{/js/owl.carousel.js}"></script>-->
+<!--<script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>-->
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $(".fancybox").fancybox({-->
+<!--            openEffect: "none",-->
+<!--            closeEffect: "none"-->
+<!--        });-->
 
 
-$('#myCarousel').carousel({
-            interval: false
-        });
+<!--        $('#myCarousel').carousel({-->
+<!--            interval: false-->
+<!--        });-->
 
-        //scroll slides on swipe for touch enabled devices
+<!--        //scroll slides on swipe for touch enabled devices-->
 
-        $("#myCarousel").on("touchstart", function(event){
+<!--        $("#myCarousel").on("touchstart", function (event) {-->
 
-            var yClick = event.originalEvent.touches[0].pageY;
-            $(this).one("touchmove", function(event){
+<!--            var yClick = event.originalEvent.touches[0].pageY;-->
+<!--            $(this).one("touchmove", function (event) {-->
 
-                var yMove = event.originalEvent.touches[0].pageY;
-                if( Math.floor(yClick - yMove) > 1 ){
-                    $(".carousel").carousel('next');
-                }
-                else if( Math.floor(yClick - yMove) < -1 ){
-                    $(".carousel").carousel('prev');
-                }
-            });
-            $(".carousel").on("touchend", function(){
-                $(this).off("touchmove");
-            });
-        });});
-      </script>
-   </body>
+<!--                var yMove = event.originalEvent.touches[0].pageY;-->
+<!--                if (Math.floor(yClick - yMove) > 1) {-->
+<!--                    $(".carousel").carousel('next');-->
+<!--                } else if (Math.floor(yClick - yMove) < -1) {-->
+<!--                    $(".carousel").carousel('prev');-->
+<!--                }-->
+<!--            });-->
+<!--            $(".carousel").on("touchend", function () {-->
+<!--                $(this).off("touchmove");-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+
+<!--</script>-->
+</body>
 </html>

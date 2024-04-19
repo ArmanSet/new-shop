@@ -369,7 +369,7 @@ body{
 
 }
 
-.collection_section{ width: 100%; float: left; padding-bottom: 0px; }
+.collection_section{ width: 100%; float: left; padding-bottom: 0px;padding-top: 0; }
 .new_text{
 	width: 100%;
 	float: left;

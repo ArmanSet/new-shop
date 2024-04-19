@@ -54,10 +54,10 @@ public class SecurityConfig {
                             .loginPage("/login")
                             .permitAll()
                             .loginProcessingUrl("/login")
-                            .successForwardUrl("/category/")
+                            .successForwardUrl("/")
 //                            .successForwardUrl("/admin")
                             .failureUrl("/login?error=true")
-                            .defaultSuccessUrl("/category/", true);
+                            .defaultSuccessUrl("/", true);
 
                 })
                 .logout(logout -> {
