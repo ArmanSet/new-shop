@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -30,6 +31,12 @@ public class ProductsController {
     private final ProductsService productService;
     private final UsersService usersService;
 
+    @GetMapping("/list/{id}")
+    public String getProduct(@PathVariable Long id, Model model) {
+        List<Products> products = productService.findByCategoryId(id);
+        model.addAttribute("products", products);
+        return "products";
+    }
 
     @PostMapping("/list/{id}")
     public String filterProductsByCategoryPost(@PathVariable Long id, Model model) {
@@ -93,18 +100,6 @@ public class ProductsController {
 
         return "products";
     }
-//    @GetMapping("/products/category/{id}")
-//    public String getProductsByCategory(@PathVariable("id") Long categoryId, Model model) {
-//        List<Products> products = productService.findByCategoryId(categoryId);
-//        model.addAttribute("products", products);
-//        return "products"; // the name of your Thymeleaf template
-//    }
-//@GetMapping("/list/{id}")
-//public String filterProductsByCategory(@PathVariable Long id, Model model) {
-//    List<Products> products = productService.findByCategory(id);
-//    model.addAttribute("products", products);
-//    return "redirect:/products/list";
-//}
 
 
     @PostMapping("/delete/{id}")

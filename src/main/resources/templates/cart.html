@@ -117,44 +117,6 @@
     </style>
 </head>
 <body>
-
-<!--<h1>Your Cart</h1>-->
-<!--<table>-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th>Product</th>-->
-<!--        <th>Quantity</th>-->
-<!--        <th>Price</th>-->
-<!--        <th>Action</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    <tr th:each="product : ${cart.products}">-->
-<!--        <td><img th:src="${product.image}" alt="Product Image"></td>-->
-<!--        <td th:text="${product.name}"></td>-->
-<!--        <td th:text="${product.quantity}"></td>-->
-<!--        <td th:text="${product.price}"></td>-->
-<!--        <td th:text="${product.price * product.quantity}">TOTAL :</td>-->
-<!--        <td  th:text="${product.brand} "    > Brand</td>-->
-<!--        <td  th:text="${product.colour} "    > Colour</td>-->
-<!--        <td>-->
-<!--            <form th:action="@{/cart/increase/{id}(id=${product.id})}" method="post">-->
-<!--                <input type="submit" value="Increase">-->
-<!--            </form>-->
-<!--            <form th:action="@{/cart/decrease/{id}(id=${product.id})}" method="post">-->
-<!--                <input type="submit" value="Decrease">-->
-<!--            </form>-->
-<!--        </td>-->
-
-<!--        <td>-->
-<!--            <form th:action="@{/cart/remove/{id}(id=${product.id})}" method="post">-->
-<!--                <input type="submit" value="Remove">-->
-<!--            </form>-->
-<!--        </td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--</table>-->
-<!--<button id="checkout">Checkout</button>-->
 <header>
     <h1>Интернет-магазин</h1>
     <a href="products/list">Главная</a>
@@ -210,20 +172,6 @@
 
     </div>
 </main>
-
-<!--<main th:if="${authentication == 'ROLE_ANONYMOUS'}">-->
-<!--    <h1>Cart is Empty</h1>-->
-<!--</main>-->
-
-<!--<ul th:if="${#objects.nullSafe(cart, null) != null && !(cart.products == null || #lists.isEmpty(cart.products))}">-->
-<!--    <h1>Cart is Empty</h1>-->
-
-<!--</ul>-->
-
-
-<!--<main th:if="${cart == null || cart.products.isEmpty()}">-->
-<!--    <h1>Cart is Empty</h1>-->
-<!--</main>-->
 
 <footer>
     <p>Copyright &copy; 2024</p>

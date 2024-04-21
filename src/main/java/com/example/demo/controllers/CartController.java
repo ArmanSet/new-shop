@@ -7,6 +7,8 @@ import com.example.demo.entity.Users;
 import com.example.demo.repository.ProductsRepository;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.CartService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,130 +27,145 @@ public class CartController {
     private ProductsRepository productsRepository;
     private CartService cartService;
     private UsersRepository usersRepository;
+    private HttpSession session;
+    private static  String JSESSIONID= null;
 
 
     @Autowired
-    public CartController(CartService cartService, ProductsRepository productsRepository, UsersRepository usersRepository) {
+    public CartController(HttpSession session, CartService cartService, ProductsRepository productsRepository, UsersRepository usersRepository) {
         this.productsRepository = productsRepository;
         this.cartService = cartService;
         this.usersRepository = usersRepository;
+        this.session = session;
     }
 
-//    @GetMapping
-//    public String showCart(Model model) {
-//        Users user = (Users) getCurrentUser();
-//        if (user==null) {
-//            model.addAttribute("authentication", "ROLE_ANONYMOUS");
-//            return "cart";
-//        }
-//        Optional<Cart> cartOptional = cartService.findById(user.getCart().getId());
-////        if (!cartOptional.isPresent() || user.getId() == null) {
-////            model.addAttribute("empty", true);
-////        }
-//
-//        if (user.getRole()=="ROLE_ADMIN" || user.getRole()=="ROLE_USER" && user.getCart().getProducts().isEmpty()) {
-//            model.addAttribute("emptyCart", true);
-//        }
-//
-//        Long id = user.getCart().getId();
-//
-//        Cart cart = cartService.findById(id).get();
-//        model.addAttribute("cart", cart);
-//        double totalPrice = calculateTotalPrice(cart);
-//        model.addAttribute("authentication", user.getRole());
-//        model.addAttribute("totalPrice", totalPrice);
-//
-//        return "cart";
-//    }
-@GetMapping
-public String showCart(Model model) {
-    Users user = (Users) getCurrentUser();
-    if (user==null) {
-        model.addAttribute("authentication", "ROLE_ANONYMOUS");
-        return "cart";
-    }
 
-    if (user.getCart() != null) {
-        Optional<Cart> cartOptional = cartService.findById(user.getCart().getId());
+    @GetMapping
+    public String showCart(Model model) {
+        if (JSESSIONID== null) {
+            JSESSIONID = session.getId();
+        }
 
-        if ("ROLE_ADMIN".equals(user.getRole()) || ("ROLE_USER".equals(user.getRole()) && user.getCart().getProducts().isEmpty())) {
+
+
+        Users user = (Users) getCurrentUser();
+        if (user == null) {
+            Cart cart = cartService.findByName(session.getId());
+            model.addAttribute("cart", cart);
+            model.addAttribute("authentication", "ROLE_SESSIONUSER");
+            System.out.println(session.getId());
+            return "cart";
+        }
+
+
+        if (isUserAuthenticated()) {
+            if (user.getCart() == null) {
+                Users checkUsers = checkUserAndCart(JSESSIONID);
+                if (checkUsers.getCart() != null) {
+                    model.addAttribute("cart", checkUsers.getCart());
+                    double totalPrice = calculateTotalPrice(checkUsers.getCart());
+                    model.addAttribute("authentication", user.getRole());
+                    model.addAttribute("totalPrice", totalPrice);
+
+                }
+            }
+
+
+            Optional<Cart> cartOptional = cartService.findById(user.getCart().getId());
+
+            if ("ROLE_ADMIN".equals(user.getRole()) || ("ROLE_USER".equals(user.getRole()) && user.getCart().getProducts().isEmpty())) {
+                model.addAttribute("emptyCart", true);
+            }
+
+            Cart cart = cartOptional.orElse(null);
+
+
+            if (cart != null) {
+                model.addAttribute("cart", cart);
+                double totalPrice = calculateTotalPrice(cart);
+                model.addAttribute("authentication", user.getRole());
+                model.addAttribute("totalPrice", totalPrice);
+            }
+        } else {
             model.addAttribute("emptyCart", true);
         }
 
-        Cart cart = cartOptional.orElse(null);
-
-        if (cart != null) {
-            model.addAttribute("cart", cart);
-            double totalPrice = calculateTotalPrice(cart);
-            model.addAttribute("authentication", user.getRole());
-            model.addAttribute("totalPrice", totalPrice);
-        }
-    } else {
-        model.addAttribute("emptyCart", true);
+        System.out.println(session.getId());
+        return "cart";
     }
 
-    return "cart";
-}
-
-//    @GetMapping("/add/{id}")
-//    public String addToCart(@PathVariable Long id) {
-//        // Here, you can use the product ID to find the product and add it to the cart.
-//        // After that, you can redirect the user to the cart page or wherever you want.
-//        List<Products> productList = new ArrayList<>();
-//        Optional<Products> productOptional = productsRepository.findById(id);
-//        if (!productOptional.isPresent()) {
-//            return "redirect:/";
-//        }
-//        Products products = productOptional.get();
-//
-//        Cart cart;
-//        Users user = (Users) getCurrentUser();
-//
-//        if (user.getCart() != null) {
-//            cart = user.getCart();
-//        } else {
-//            cart = new Cart();
-//
-//
-//        }
-//        productList.add(products);
-//
-//        cart.setProducts(productList);
-//        cart.setName(user.getEmail());
-//        cart.setPhone(user.getPhone());
-//        cart.setEmail(user.getEmail());
-//
-//        cart.setUsers(user);
-//        cartService.save(cart);
-//        user.setCart(cart);
-//        usersRepository.save(user);
-//        return "redirect:/";
-//    }
 
     // В вашем контроллере
     @PostMapping("/add/{id}")
-    public String addToCart(@PathVariable Long id, @RequestParam("quantity") int quantity) {
+    public String addToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         Optional<Products> productOptional = productsRepository.findById(id);
+
         if (!productOptional.isPresent()) {
             return "redirect:/";
         }
         Products product = productOptional.get();
 
         Users user = (Users) getCurrentUser();
-        Cart cart;
-        if (user.getCart() != null) {
-            cart = user.getCart();
-        } else {
-            cart = new Cart();
-            cart.setName(user.getEmail());
-            cart.setPhone(user.getPhone());
-            cart.setUsers(user);
-//            cart.setProducts(user.getCart().getProducts());
-            cartService.save(cart);
-            user.setCart(cart);
-            usersRepository.save(user);
-        }
+        Cart cart = null;
 
+        // Если пользователь не авторизован, то создаем корзину на основе сессии.
+        //СОВСЕМ 0
+        if (user == null && cartService.findByName(session.getId()) == null) {
+            String sessionId = session.getId();
+            cart = new Cart();
+            cart.setName(sessionId);
+            Users usersSession = new Users();
+            usersSession.setEmail(sessionId);
+            cart.setUsers(usersSession);
+            List<Products> products = new ArrayList<>();
+            products.add(product);
+            cart.setProducts(products);
+            usersRepository.save(usersSession);
+            cartService.save(cart);
+            usersSession.setCart(cart);
+
+            return "redirect:" + referer;
+        }
+        // Если у пользователя уже есть корзина, то используем ее
+        // Иначе создаем новую корзину
+        if (user == null && cartService.findByName(session.getId()) != null) {
+            Cart cartSessionWithProducts = cartService.findByName(session.getId());
+            List<Products> products = cartSessionWithProducts.getProducts();
+
+            if (products.contains(product)) {
+                for (Products p : products) {
+                    if (p.getId().equals(product.getId())) {
+                        p.setQuantity(p.getQuantity() + quantity);
+                    }
+                }
+            } else {
+                product.setQuantity(quantity);
+                products.add(product);
+            }
+            cartSessionWithProducts.setProducts(products);
+
+            // Сохраняем корзину
+            cartService.save(cartSessionWithProducts);
+
+            return "redirect:" + referer;
+        }
+        if (isUserAuthenticated()) {
+            if (user.getCart() != null) {
+                cart = user.getCart();
+            } else {
+                cart = new Cart();
+                cart.setName(user.getEmail());
+                cart.setPhone(user.getPhone());
+                cart.setUsers(user);
+//            cart.setProducts(user.getCart().getProducts());
+                // Save the user before saving the cart
+                usersRepository.save(user);
+                cartService.save(cart);
+                user.setCart(cart);
+                usersRepository.save(user);
+            }
+        }
         // Добавляем продукт в список продуктов корзины
         List<Products> productList = cart.getProducts();
         if (productList == null) {
@@ -175,7 +192,8 @@ public String showCart(Model model) {
         // Сохраняем корзину
         cartService.save(cart);
 
-        return "redirect:/";
+
+        return "redirect:" + referer;
     }
 
     @PostMapping("/change/{id}")
@@ -242,6 +260,10 @@ public String showCart(Model model) {
         return "redirect:/cart";
     }
 
+    public boolean isUserAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.isAuthenticated();
+    }
 
     public Users getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -265,17 +287,24 @@ public String showCart(Model model) {
         return totalPrice;
     }
 
-//        @GetMapping("/delete/{id}")
-//        public String deleteProductFromCart(@PathVariable Long id) {
-//            Users user = (Users) getCurrentUser();
-//            Long cartId = user.getCart().getId();
-//            Cart cart = cartService.findById(cartId).get();
-//            List<Products> products = cart.getProducts();
-//            products.removeIf(product -> product.getId().equals(id));
-//            cart.setProducts(products);
-//            cartService.save(cart);
-//            return "redirect:/cart";
+    public Users checkUserAndCart( String JSESSIONID) {
+        Users userCurrent = (Users) getCurrentUser();
+//        if (userCurrent == null) {
+//            return null;
 //        }
+        Users userFromDB = usersRepository.findUsersByEmail(userCurrent.getEmail());
+        if (userFromDB.getCart() == null) {
+//            Cart cart = new Cart();
+//            cart.setUsers(userFromDB);
+//            cartService.save(cart);
+            Cart cartFromSession = cartService.findByName(JSESSIONID);
+            userFromDB.setCart(cartFromSession);
+            usersRepository.save(userFromDB);
+            return userFromDB;
+        }
+
+        return userFromDB;
+    }
 
 
 }

@@ -33,14 +33,6 @@ public class OrderController {
         this.orderService = orderService;
         this.usersService = usersService;
     }
-
-//    @GetMapping("/")
-//    public String showOrder(Model model) {
-//
-//
-//
-//        return "orders";
-//    }
 @GetMapping("/")
 public String showOrderForCurrentUser(Model model) {
     Users users = getCurrentUser();
@@ -51,6 +43,10 @@ public String showOrderForCurrentUser(Model model) {
 
     @PostMapping("/{id}")
     public String showOrders(@PathVariable Long id, Model model) {
+        Users userAuth = getCurrentUser();
+        if (userAuth == null) {
+            return "redirect:/login";
+        }
         Cart cart = cartService.findById(id).get();
         Users users = cart.getUsers();
         System.out.println(users.getEmail());

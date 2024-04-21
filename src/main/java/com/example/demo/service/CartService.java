@@ -49,4 +49,7 @@ public class CartService {
     }
 
 
+    public Cart findByName(String id) {
+        return cartRepository.findByName(id);
+    }
 }
