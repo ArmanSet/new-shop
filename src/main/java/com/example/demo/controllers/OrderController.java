@@ -8,6 +8,7 @@ import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.CartService;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,17 +23,12 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Controller
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
-    private CartService cartService;
-    private OrderService orderService;
-    private UsersService usersService;
+    private final CartService cartService;
+    private final OrderService orderService;
+    private final UsersService usersService;
 
-    @Autowired
-    public OrderController(CartService cartService, OrderService orderService, UsersService usersService) {
-        this.cartService = cartService;
-        this.orderService = orderService;
-        this.usersService = usersService;
-    }
 @GetMapping("/")
 public String showOrderForCurrentUser(Model model) {
     Users users = getCurrentUser();
@@ -66,9 +62,6 @@ public String showOrderForCurrentUser(Model model) {
 
         return "orders";
     }
-
-
-
     public Users getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

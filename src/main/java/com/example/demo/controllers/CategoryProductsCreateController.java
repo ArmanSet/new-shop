@@ -4,6 +4,7 @@ import com.example.demo.entity.Category;
 import com.example.demo.entity.Products;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +18,10 @@ import java.util.List;
 
 @RequestMapping("/category")
 @Controller
+@RequiredArgsConstructor
 public class CategoryProductsCreateController {
-    CategoryService categoryService;
-    ProductsService productsService;
-
-    @Autowired
-    public CategoryProductsCreateController(CategoryService categoryService, ProductsService productsService) {
-        this.productsService = productsService;
-        this.categoryService = categoryService;
-    }
+    private final  CategoryService categoryService;
+    private final  ProductsService productsService;
 
     @GetMapping("/create")
     public String getCategory(Model model) {

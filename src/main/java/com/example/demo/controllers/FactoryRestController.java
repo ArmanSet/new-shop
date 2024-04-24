@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.entity.Factory;
 import com.example.demo.service.FactoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,15 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/factory")
 @PreAuthorize("hasRole('ADMIN')")
-
+@RequiredArgsConstructor
 public class FactoryRestController {
 
-  private  FactoryService factoryService;
-
-    @Autowired
-    public FactoryRestController(FactoryService factoryService) {
-        this.factoryService = factoryService;
-    }
+    private final  FactoryService factoryService;
 
     @GetMapping("/")
     public List<Factory> getAllFactories() {
@@ -34,9 +30,4 @@ public class FactoryRestController {
         factoryService.save(factory);
         return "Factory";
     }
-
-//    public ResponseEntity<Factory> createFactories(@RequestBody Factory factory) {
-//        factoryService.save(factory);
-//        return ResponseEntity.ok(factory);
-//    }
 }

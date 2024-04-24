@@ -2,19 +2,17 @@ package com.example.demo.controllers;
 
 import com.example.demo.entity.Users;
 import com.example.demo.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class UsersRestController {
-    UsersService usersService;
+    private final  UsersService usersService;
 
-    @Autowired
-    public UsersRestController(UsersService usersService) {
-        this.usersService = usersService;
-    }
 
 
     @GetMapping("/users")
@@ -41,17 +39,5 @@ public class UsersRestController {
     public void deleteAdmin(@PathVariable("id") int id) {
         usersService.delete((long) id);
     }
-
-//    @PostMapping("/post/users/{username}/{password}/{role}/")
-//    public void postUsers(@PathVariable("username") String username,
-//                          @PathVariable("password") String password,
-//                          @PathVariable("role") String role) {
-//        System.out.println(username);
-//        Users users = new Users();
-//        users.setEmail(username);
-//        users.setPassword(password);
-//        users.setRole(role);
-//        usersService.save(users);
-//    }
 
 }

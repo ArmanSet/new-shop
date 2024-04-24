@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.entity.Users;
 import com.example.demo.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,15 +19,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class UsersShowController {
-    @Autowired
-    UsersService usersService;
+    private final UsersService usersService;
 
-
-    //    @PostMapping("/users/show")
-//    public String showUsers() {
-//        return "users";
-//    }
     @GetMapping("/users/show")
     public String showUsersGet(Model model) {
         List<Users> users = usersService.findAll();
@@ -36,9 +32,7 @@ public class UsersShowController {
         String role = null;
         for (GrantedAuthority grantedAuthority : roles) {
              role = grantedAuthority.getAuthority();
-         //   System.out.println(grantedAuthority.getAuthority());
         }
-       // System.out.println(role);
         model.addAttribute("role",role);
 
         return "users";

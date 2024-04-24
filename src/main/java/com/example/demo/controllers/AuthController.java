@@ -7,6 +7,7 @@ import com.example.demo.service.AuthService;
 import com.example.demo.service.UsersService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -20,33 +21,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
-    UsersService usersService;
-    AuthService authService;
-    private AuthenticationManager authenticationManager;
+    private final UsersService usersService;
+    private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
-
-    PasswordEncoder passwordEncoder;
-
-
-    @Autowired
-    public AuthController(AuthenticationManager authenticationManager,UsersService usersService, AuthService authService, PasswordEncoder passwordEncoder) {
-        this.usersService = usersService;
-        this.authService = authService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-    }
 
     @GetMapping("/login")
     public String login(Model model) {
-        // Создание нового объекта пользователя
         Users users = new Users();
-
-
-        // Добавление объекта пользователя в модель
         model.addAttribute("user", users);
-
-        // Возврат имени представления "login.html"
         return "login";
     }
 
@@ -56,6 +42,7 @@ public class AuthController {
         Users userFromDB = usersService.findUsersByEmail(user.getEmail());
         return "redirect:/users/show";
     }
+
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

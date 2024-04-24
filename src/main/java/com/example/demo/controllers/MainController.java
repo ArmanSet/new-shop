@@ -5,6 +5,7 @@ import com.example.demo.entity.Category;
 import com.example.demo.entity.Products;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,22 +19,17 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller()
+@RequiredArgsConstructor
 public class MainController {
-    private ProductsService productsService;
-    private CategoryService categoryService;
+    private final ProductsService productsService;
+    private final CategoryService categoryService;
 
-    @Autowired
-    public MainController(ProductsService productsService,CategoryService categoryService) {
-        this.productsService = productsService;
-        this.categoryService = categoryService;
-    }
 
     @GetMapping("/")
     public String home(Model model) {
         List<Products> products = productsService.findAll();
 //        model.addAttribute("title", "Home");
         model.addAttribute("products", products);
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticated = false;
         if (authentication != null) {

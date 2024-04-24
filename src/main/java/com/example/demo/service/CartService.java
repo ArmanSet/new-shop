@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Cart;
+import com.example.demo.entity.Users;
 import com.example.demo.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,4 +57,6 @@ public class CartService {
     public void delete(Cart cartFromSession) {
         cartRepository.delete(cartFromSession);
     }
+
+
 }
