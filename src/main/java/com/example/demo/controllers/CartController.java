@@ -28,7 +28,7 @@ public class CartController {
     private CartService cartService;
     private UsersRepository usersRepository;
     private HttpSession session;
-    private static  String JSESSIONID= null;
+    private static String JSESSIONID = null;
 
 
     @Autowired
@@ -42,22 +42,30 @@ public class CartController {
 
     @GetMapping
     public String showCart(Model model) {
-        if (JSESSIONID== null) {
+        if (JSESSIONID == null) {
             JSESSIONID = session.getId();
         }
 
 
-
         Users user = (Users) getCurrentUser();
-        if (user == null) {
+        if (user == null && cartService.findByName(session.getId()) != null) {
             Cart cart = cartService.findByName(session.getId());
             model.addAttribute("cart", cart);
             model.addAttribute("authentication", "ROLE_SESSIONUSER");
+            double totalPrice = calculateTotalPrice(cart);
+            model.addAttribute("totalPrice", totalPrice);
             System.out.println(session.getId());
+            return "cart";
+        } else if (user == null && cartService.findByName(session.getId()) == null) {
+            Cart cart = new Cart();
+            cart.setName(session.getId());
+            cartService.save(cart);
+            model.addAttribute("cart", cart);
+            model.addAttribute("authentication", "ROLE_SESSIONUSER");
             return "cart";
         }
 
-
+        //TODO CHECK
         if (isUserAuthenticated()) {
             if (user.getCart() == null) {
                 Users checkUsers = checkUserAndCart(JSESSIONID);
@@ -66,36 +74,59 @@ public class CartController {
                     double totalPrice = calculateTotalPrice(checkUsers.getCart());
                     model.addAttribute("authentication", user.getRole());
                     model.addAttribute("totalPrice", totalPrice);
-
+                     return "cart";
                 }
+                //TODO HERE FIX IMPORTANT
             }
 
 
             Optional<Cart> cartOptional = cartService.findById(user.getCart().getId());
+            // TODO HERE FIX IMPORTANT
+           // if ("ROLE_ADMIN".equals(user.getRole()) || ("ROLE_USER".equals(user.getRole()) && user.getCart().getProducts().isEmpty())) {
 
-            if ("ROLE_ADMIN".equals(user.getRole()) || ("ROLE_USER".equals(user.getRole()) && user.getCart().getProducts().isEmpty())) {
-                model.addAttribute("emptyCart", true);
-            }
+            //}
 
             Cart cart = cartOptional.orElse(null);
 
+            //TODO HERE CHECK
+//            if (cart != null) {
+//                model.addAttribute("cart", cart);
+//                double totalPrice = calculateTotalPrice(cart);
+//                model.addAttribute("authentication", user.getRole());
+//                model.addAttribute("totalPrice", totalPrice);
+//            }
+        if (user.getCart() != null && cartService.findByName(JSESSIONID) != null) {
+             cart = user.getCart();
+            Cart cartFromSession = cartService.findByName(JSESSIONID);
 
-            if (cart != null) {
-                model.addAttribute("cart", cart);
-                double totalPrice = calculateTotalPrice(cart);
-                model.addAttribute("authentication", user.getRole());
-                model.addAttribute("totalPrice", totalPrice);
-            }
+            List<Products> products = cartFromSession.getProducts();
+            List<Products> productsFromDB = cart.getProducts();
+            productsFromDB.addAll(products);
+            cart.setProducts(productsFromDB);
+            cartService.save(cart);
+            session.removeAttribute("cart");
+            model.addAttribute("cart", cart);
+            double totalPrice = calculateTotalPrice(cart);
+            model.addAttribute("authentication", user.getRole());
+            model.addAttribute("totalPrice", totalPrice);
+        } else if (user.getCart() != null && cartService.findByName(JSESSIONID) == null) {
+            cart = user.getCart();
+            model.addAttribute("cart", cart);
+            double totalPrice = calculateTotalPrice(cart);
+            model.addAttribute("authentication", user.getRole());
+            model.addAttribute("totalPrice", totalPrice);
         } else {
             model.addAttribute("emptyCart", true);
         }
+            JSESSIONID = null;
 
         System.out.println(session.getId());
         return "cart";
     }
+        return "cart";
+}
 
-
-    // В вашем контроллере
+// В вашем контроллере
     @PostMapping("/add/{id}")
     public String addToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
@@ -129,6 +160,7 @@ public class CartController {
         }
         // Если у пользователя уже есть корзина, то используем ее
         // Иначе создаем новую корзину
+        //TODO HERE
         if (user == null && cartService.findByName(session.getId()) != null) {
             Cart cartSessionWithProducts = cartService.findByName(session.getId());
             List<Products> products = cartSessionWithProducts.getProducts();
@@ -287,7 +319,7 @@ public class CartController {
         return totalPrice;
     }
 
-    public Users checkUserAndCart( String JSESSIONID) {
+    public Users checkUserAndCart(String JSESSIONID) {
         Users userCurrent = (Users) getCurrentUser();
 //        if (userCurrent == null) {
 //            return null;
@@ -301,6 +333,16 @@ public class CartController {
             userFromDB.setCart(cartFromSession);
             usersRepository.save(userFromDB);
             return userFromDB;
+        } else if (userFromDB.getCart() != null && cartService.findByName(JSESSIONID) != null) {
+            Cart cartFromSession = cartService.findByName(JSESSIONID);
+            List<Products> products = cartFromSession.getProducts();
+            List<Products> productsFromDB = userFromDB.getCart().getProducts();
+            productsFromDB.addAll(products);
+            userFromDB.getCart().setProducts(productsFromDB);
+            usersRepository.save(userFromDB);
+            session.removeAttribute("cart");
+            return userFromDB;
+
         }
 
         return userFromDB;

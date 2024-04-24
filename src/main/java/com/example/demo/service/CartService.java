@@ -52,4 +52,8 @@ public class CartService {
     public Cart findByName(String id) {
         return cartRepository.findByName(id);
     }
+
+    public void delete(Cart cartFromSession) {
+        cartRepository.delete(cartFromSession);
+    }
 }
