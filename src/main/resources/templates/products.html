@@ -5,23 +5,6 @@
     <title>Products Catalog</title>
     <link rel="stylesheet" th:href="@{/menu.css}">
     <style>
-
-        <!--
-        BUTTON
-
-        -->
-
-        /*BUTTON END*/
-        /*#header {*/
-        /*    display: flex; !* Enable flexbox layout *!*/
-        /*    justify-content: flex-start; !* Align items to the start (left) *!*/
-        /*    align-items: first baseline; !* Align items vertically by their first baselines *!*/
-        /*    padding: 25px;*/
-        /*    background-color: #ff4e5b;*/
-        /*    border-bottom: 1px solid #ff4e5b;*/
-        /*    height: 90px;*/
-        /*}*/
-
         .hDiv {
             padding-top: 20px;
         }
@@ -113,37 +96,13 @@
     </style>
 </head>
 <body>
-<!--&lt;!&ndash; MENU &ndash;&gt;-->
-<!--<input type="checkbox" id="active">-->
-<!--<label for="active" class="menu-btn">MENU<i class="fas fa-bars"></i></label>-->
-<!--<div class="wrapper">-->
-<!--    <ul>-->
-<!--        <li><a href="#">Home</a></li>-->
-<!--        <li><a href="#">Products</a></li>-->
-<!--        <li><a href="#">Services</a></li>-->
-<!--        <li><a href="#">Gallery</a></li>-->
-<!--        <li><a href="#">Feedback</a></li>-->
-<!--    </ul>-->
-<!--</div>-->
+
 <header style="background-color: #ff4e5b;height: 90px" id="header">
 
 <span th:replace="menu :: site-menu">
 
 </span>
-    <!-- Повторяйте блоки для каждого товара до 20 -->
-    <!--    <div class="hDiv" th:if="${!(isAuthenticated)}">-->
-    <!--        <button type="button">-->
-    <!--            <a href="/login">LogIn</a>-->
-    <!--        </button>-->
-    <!--        <button type="button">-->
-    <!--            <a href="/users/create">SIGN UP</a>-->
-    <!--        </button>-->
-    <!--    </div>-->
-    <!--    <div class="hDiv" th:if="${isAuthenticated}">-->
-    <!--        <button type="button">-->
-    <!--            <a href="/logout">LogOut</a>-->
-    <!--        </button>-->
-    <!--    </div>-->
+
     <div class="hDiv" th:if="${isAuthenticated != null && !(isAuthenticated)}">
         <button type="button">
             <a href="/login">LogIn</a>
@@ -191,7 +150,7 @@
             <h2 th:text="${product.name}">Product Title</h2>
             <p th:text="${product.description}">Product Description</p>
             <div class="product-price" th:text="${product.price}">Product Price</div>
-            <div class="product-quantity" th:text="${product.maxQuantity}">Product Quantity</div>
+            <div class="product-quantity" th:text="${product.maxQuantity}">Product Max Quantity</div>
             <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
                 <p>Количество:
                     <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">

@@ -7,6 +7,7 @@ import com.example.demo.entity.Users;
 import com.example.demo.repository.ProductsRepository;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.CartService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -29,27 +30,27 @@ public class CartController {
     private final CartService cartService;
     private final UsersRepository usersRepository;
     private final HttpSession session;
-    private  String JSESSIONID;
-
+    private String JSESSIONID;
 
 
     @GetMapping
-    public String showCart(Model model) {
-        if (JSESSIONID == null) {
-            JSESSIONID = session.getId();
-        }
+    public String showCart(Model model, HttpServletRequest request) {
+//        if (JSESSIONID == null) {
+//            JSESSIONID = session.getId();
+//        }
+        String JSESSIONID = cookieInstall(request);
         Users user = (Users) getCurrentUser();
-        if (user == null && cartService.findByName(session.getId()) != null) {
-            Cart cart = cartService.findByName(session.getId());
+        if (user == null && cartService.findByName(JSESSIONID) != null) {
+            Cart cart = cartService.findByName(JSESSIONID);
             model.addAttribute("cart", cart);
             model.addAttribute("authentication", "ROLE_SESSIONUSER");
             double totalPrice = calculateTotalPrice(cart);
             model.addAttribute("totalPrice", totalPrice);
-            System.out.println(session.getId());
+            System.out.println(JSESSIONID);
             return "cart";
-        } else if (user == null && cartService.findByName(session.getId()) == null) {
+        } else if (user == null && cartService.findByName(JSESSIONID) == null) {
             Cart cart = new Cart();
-            cart.setName(session.getId());
+            cart.setName(JSESSIONID);
             cartService.save(cart);
             model.addAttribute("cart", cart);
             model.addAttribute("authentication", "ROLE_SESSIONUSER");
@@ -60,25 +61,47 @@ public class CartController {
             if (user.getCart() == null) {
                 Users checkUsers = checkUserAndCart(JSESSIONID);
                 if (checkUsers.getCart() != null) {
-                    model.addAttribute("cart", checkUsers.getCart());
-                    double totalPrice = calculateTotalPrice(checkUsers.getCart());
-                    model.addAttribute("authentication", user.getRole());
-                    model.addAttribute("totalPrice", totalPrice);
+                    if (checkUsers.getCart().getProducts() != null) {
+                        List<Products> products = checkUsers.getCart().getProducts();
+                        model.addAttribute("cart", checkUsers.getCart());
+                        double totalPrice = calculateTotalPrice(checkUsers.getCart());
+                        model.addAttribute("authentication", user.getRole());
+                        model.addAttribute("totalPrice", totalPrice);
+                    } else {
+                        model.addAttribute("emptyCart", true);
+                    }
                     return "cart";
                 }
 
             }
-
+            //TODO  HERE SEEEEEEEEEEEE
             Optional<Cart> cartOptional = cartService.findById(user.getCart().getId());
             Cart cart = cartOptional.orElse(null);
 
+            //TODO LOGIC FIX HERE
             if (user.getCart() != null && cartService.findByName(JSESSIONID) != null) {
-                cart = user.getCart();
+
                 Cart cartFromSession = cartService.findByName(JSESSIONID);
 
                 List<Products> products = cartFromSession.getProducts();
                 List<Products> productsFromDB = cart.getProducts();
-                productsFromDB.addAll(products);
+                for (Products product : products) {
+                    if (productsFromDB.contains(product)) {
+                        for (Products p : productsFromDB) {
+                            if (p.getId().equals(product.getId())) {
+                                p.setQuantity(p.getQuantity() + product.getQuantity());
+                                p.setMaxQuantity(p.getMaxQuantity() - product.getQuantity());
+                            }
+                        }
+                    } else {
+                        product.setMaxQuantity(product.getMaxQuantity() - product.getQuantity());
+                        productsFromDB.add(product);
+                    }
+//                    Products productFromDB = productsRepository.findById(product.getId()).get();
+//                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() - product.getQuantity());
+//                    productsRepository.save(productFromDB);
+                }
+//                productsFromDB.addAll(products);
                 cart.setProducts(productsFromDB);
                 cartService.save(cart);
                 session.removeAttribute("cart");
@@ -97,15 +120,34 @@ public class CartController {
             }
             JSESSIONID = null;
 
-            System.out.println(session.getId());
+            System.out.println(JSESSIONID);
             return "cart";
         }
         return "cart";
     }
 
-    // В вашем контроллере
+    private String cookieInstall(HttpServletRequest request) {
+        String JSESSIONID = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("uuid")) {
+                    JSESSIONID = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        this.JSESSIONID = JSESSIONID;
+        return JSESSIONID;
+    }
+
+
     @PostMapping("/add/{id}")
     public String addToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
+//        if (JSESSIONID == null) {
+//            JSESSIONID = session.getId();
+//        }
+        String JSESSIONID = cookieInstall(request);
         String referer = request.getHeader("Referer");
         Optional<Products> productOptional = productsRepository.findById(id);
         if (!productOptional.isPresent()) {
@@ -117,14 +159,16 @@ public class CartController {
 
         // Если пользователь не авторизован, то создаем корзину на основе сессии.
         //СОВСЕМ 0
-        if (user == null && cartService.findByName(session.getId()) == null) {
-            String sessionId = session.getId();
+        if (user == null && cartService.findByName(JSESSIONID) == null) {
+
             cart = new Cart();
-            cart.setName(sessionId);
+            cart.setName(JSESSIONID);
             Users usersSession = new Users();
-            usersSession.setEmail(sessionId);
+            usersSession.setEmail(JSESSIONID);
             cart.setUsers(usersSession);
             List<Products> products = new ArrayList<>();
+            product.setQuantity(quantity);
+            product.setMaxQuantity(product.getMaxQuantity() - quantity);
             products.add(product);
             cart.setProducts(products);
             usersRepository.save(usersSession);
@@ -136,43 +180,37 @@ public class CartController {
         // Если у пользователя уже есть корзина, то используем ее
         // Иначе создаем новую корзину
         //TODO HERE
-        if (user == null && cartService.findByName(session.getId()) != null) {
-            Cart cartSessionWithProducts = cartService.findByName(session.getId());
-            List<Products> products = cartSessionWithProducts.getProducts();
-            if (products.contains(product)) {
-                for (Products p : products) {
-                    if (p.getId().equals(product.getId())) {
-                        p.setQuantity(p.getQuantity() + quantity);
-                    }
-                }
-            } else {
-                product.setQuantity(quantity);
-                products.add(product);
-            }
-            cartSessionWithProducts.setProducts(products);
-
-            // Сохраняем корзину
+        if (user == null && cartService.findByName(JSESSIONID) != null) {
+            Cart cartSessionWithProducts = cartService.findByName(JSESSIONID);
             cartService.save(cartSessionWithProducts);
-
+            addProductsToCard(quantity, cartSessionWithProducts, product, referer);
             return "redirect:" + referer;
         }
         if (isUserAuthenticated()) {
-            if (user.getCart() != null) {
-                cart = user.getCart();
+            Cart cartServiceByName = cartService.findByName(user.getCart().getName());
+            if (cartServiceByName != null) {
+                addProductsToCard(quantity, cartServiceByName, product, referer);
+                return "redirect:" + referer;
             } else {
-                cart = new Cart();
-                cart.setName(user.getEmail());
-                cart.setPhone(user.getPhone());
-                cart.setUsers(user);
-//            cart.setProducts(user.getCart().getProducts());
-                // Save the user before saving the cart
+                cartServiceByName = new Cart();
+                cartServiceByName.setName(user.getEmail());
+                cartServiceByName.setPhone(user.getPhone());
+                cartServiceByName.setUsers(user);
                 usersRepository.save(user);
-                cartService.save(cart);
-                user.setCart(cart);
+                cartService.save(cartServiceByName);
+                user.setCart(cartServiceByName);
                 usersRepository.save(user);
+                addProductsToCard(quantity, cartServiceByName, product, referer);
             }
         }
+
         // Добавляем продукт в список продуктов корзины
+        addProductsToCard(quantity, cart, product, referer);
+        return "redirect:" + referer;
+    }
+
+    private String addProductsToCard(int quantity, Cart cart, Products product, String referer) {
+        //TODO HERE
         List<Products> productList = cart.getProducts();
         if (productList == null) {
             productList = new ArrayList<>();
@@ -181,10 +219,12 @@ public class CartController {
             for (Products p : productList) {
                 if (p.getId().equals(product.getId())) {
                     p.setQuantity(p.getQuantity() + quantity);
+                    p.setMaxQuantity(p.getMaxQuantity() - quantity);
                 }
             }
         } else {
             product.setQuantity(quantity);
+            product.setMaxQuantity(product.getMaxQuantity() - quantity);
             productList.add(product);
         }
         cart.setProducts(productList);
@@ -200,39 +240,30 @@ public class CartController {
             return "redirect:/";
         }
         Products product = productOptional.get();
-
         Users user = (Users) getCurrentUser();
-        Cart cart;
-        if (user.getCart() != null) {
-            cart = user.getCart();
-        } else {
-            cart = new Cart();
-            cartService.save(cart);
-            user.setCart(cart);
-            usersRepository.save(user);
-        }
 
-        // Добавляем продукт в список продуктов корзины
-        List<Products> productList = cart.getProducts();
-        if (productList == null) {
-            productList = new ArrayList<>();
-        }
-//        for (int i = 0; i < quantity; i++) {
-//            productList.add(product);
-//        }
-        if (productList.contains(product)) {
-            for (Products p : productList) {
-                if (p.getId().equals(product.getId())) {
-                    p.setQuantity(quantity);
-                }
+        if (user == null && cartService.findByName(JSESSIONID) != null) {
+            Cart cart = cartService.findByName(JSESSIONID);
+            List<Products> productList = cart.getProducts();
+            if (productList == null) {
+                productList = new ArrayList<>();
             }
-        } else {
-            product.setQuantity(quantity);
+            counter(quantity, productList, product);
+            cart.setProducts(productList);
+            cartService.save(cart);
+            return "redirect:/cart";
         }
-        cart.setProducts(productList);
-        // Сохраняем корзину
-        cartService.save(cart);
-
+        if (user != null) {
+            Cart cart = cartService.findByName(user.getCart().getName());
+            List<Products> productList = cart.getProducts();
+            if (productList == null) {
+                productList = new ArrayList<>();
+            }
+            counter(quantity, productList, product);
+            cart.setProducts(productList);
+            cartService.save(cart);
+            return "redirect:/cart";
+        }
         return "redirect:/cart";
     }
 
@@ -244,12 +275,50 @@ public class CartController {
     @PostMapping("/remove/{id}")
     public String removeProductFromCart(@PathVariable Long id) {
         Users user = (Users) getCurrentUser();
-        Long cartId = user.getCart().getId();
-        Cart cart = cartService.findById(cartId).get();
-        List<Products> products = cart.getProducts();
-        products.removeIf(product -> product.getId().equals(id));
-        cart.setProducts(products);
-        cartService.save(cart);
+        if (user == null && cartService.findByName(JSESSIONID) != null) {
+            Cart cart = cartService.findByName(JSESSIONID);
+            List<Products> products = cart.getProducts();
+            //перед удалением продукта из корзины, возвращаем его количество на склад
+            for (Products product : products) {
+                if (product.getId().equals(id)) {
+                    Products productFromDB = productsRepository.findById(id).get();
+                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() + product.getQuantity());
+                    productsRepository.save(productFromDB);
+                }
+            }
+            products.removeIf(product -> product.getId().equals(id));
+            cart.setProducts(products);
+            cartService.save(cart);
+            return "redirect:/cart";
+        }
+        if (user != null) {
+            Long cartId = user.getCart().getId();
+            Cart cart = cartService.findById(cartId).get();
+            List<Products> products = cart.getProducts();
+            //перед удалением продукта из корзины, возвращаем его количество на склад
+            for (Products product : products) {
+                if (product.getId().equals(id)) {
+                    Products productFromDB = productsRepository.findById(id).get();
+                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() + product.getQuantity());
+                    productsRepository.save(productFromDB);
+                }
+            }
+            products.removeIf(product -> product.getId().equals(id));
+//            for (Products product : products) {
+//                if (product.getId().equals(id)) {
+//                    Products productFromDB = productsRepository.findById(id).get();
+//                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() + product.getQuantity());
+//                    productsRepository.save(productFromDB);
+//                }
+//            }
+
+            cart.setProducts(products);
+            cartService.save(cart);
+
+            return "redirect:/cart";
+
+
+        }
         return "redirect:/cart";
     }
 
@@ -283,7 +352,8 @@ public class CartController {
     public Users checkUserAndCart(String JSESSIONID) {
         Users userCurrent = (Users) getCurrentUser();
         Users userFromDB = usersRepository.findUsersByEmail(userCurrent.getEmail());
-        if (userFromDB.getCart() == null) {
+        if (userFromDB.getCart() == null && cartService.findByName(JSESSIONID) != null) {
+            // here 1
             Cart cartFromSession = cartService.findByName(JSESSIONID);
             userFromDB.setCart(cartFromSession);
             usersRepository.save(userFromDB);
@@ -297,9 +367,38 @@ public class CartController {
             usersRepository.save(userFromDB);
             session.removeAttribute("cart");
             return userFromDB;
+        } else if (userFromDB.getCart() == null && cartService.findByName(JSESSIONID) == null) {
+            Cart cart = new Cart();
+            cart.setName(userCurrent.getEmail());
+            cartService.save(cart);
+            userFromDB.setCart(cart);
+            usersRepository.save(userFromDB);
+            return userFromDB;
         }
         return userFromDB;
     }
 
+    private static void counter(int quantity, List<Products> productList, Products product) {
+        if (productList.contains(product)) {
+            for (Products p : productList) {
+                if (p.getId().equals(product.getId())) {
+                    int currentQuantity = p.getQuantity();
+                    if (quantity > currentQuantity) {
+                        int difference = quantity - currentQuantity;
+                        if (p.getMaxQuantity() >= difference) {
+                            p.setMaxQuantity(p.getMaxQuantity() - difference);
+                            p.setQuantity(quantity);
+                        } else {
+                            // Недостаточно товара на складе
+                        }
+                    } else if (quantity < currentQuantity) {
+                        int difference = currentQuantity - quantity;
+                        p.setMaxQuantity(p.getMaxQuantity() + difference);
+                        p.setQuantity(quantity);
+                    }
+                }
+            }
+        }
+    }
 
 }

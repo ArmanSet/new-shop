@@ -25,7 +25,9 @@ public class CategoryProductsCreateController {
 
     @GetMapping("/create")
     public String getCategory(Model model) {
+        List<Category> categoryServiceAll = categoryService.findAll();
         model.addAttribute("category", new Category());
+        model.addAttribute("categories", categoryServiceAll);
         model.addAttribute("products", new Products());
         return "category-products-create";
     }
@@ -50,4 +52,5 @@ public class CategoryProductsCreateController {
         model.addAttribute("categories", categories);
         return "categories";
     }
+
 }

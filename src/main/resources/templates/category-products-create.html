@@ -52,8 +52,13 @@
     <label for="productmaxQuantity">Product MaxQuantity:</label><br>
     <input type="text" id="productmaxQuantity" th:field="*{maxQuantity}"><br>
 
-    <label for="categoryID">Product Category ID:</label><br>
-    <input type="number" id="categoryID" th:field="*{category.id}"><br>
+<!--    <label for="categoryID">Product Category ID:</label><br>-->
+<!--    <input type="number" id="categoryID" th:field="*{category.id}"><br>-->
+
+    <label for="categoryID">Product Category:</label><br>
+    <select id="categoryID" th:field="*{category.id}">
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+    </select><br>
 
 <!-- TODO   private int quantity;-->
 
