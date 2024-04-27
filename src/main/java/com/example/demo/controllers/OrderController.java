@@ -46,14 +46,14 @@ public String showOrderForCurrentUser(Model model) {
         Cart cart = cartService.findById(id).get();
         Users users = cart.getUsers();
         System.out.println(users.getEmail());
-        double totalPrice = orderService.calculateTotalPrice(cart);
-        orderService.saveOrder(cart, users, totalPrice);
+//        double totalPrice = orderService.calculateTotalPrice(cart);
+//        orderService.saveOrder(cart, users, totalPrice);
         List<Order> orders = orderService.getOrders(users.getEmail());
         System.out.println("=====================================");
         System.out.println(orders.get(0).getOrderAmount());
 
         model.addAttribute("orders", orders);
-        model.addAttribute("totalPrice", totalPrice);
+//        model.addAttribute("totalPrice", totalPrice);
 
 //      Users users = getCurrentUser();
 

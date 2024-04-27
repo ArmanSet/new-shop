@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entity.Category;
+import com.example.demo.entity.OrderProducts;
 import com.example.demo.entity.Products;
 import com.example.demo.service.CategoryService;
+import com.example.demo.service.OrderProductsService;
 import com.example.demo.service.ProductsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.List;
 public class CategoryProductsCreateController {
     private final  CategoryService categoryService;
     private final  ProductsService productsService;
+    private final OrderProductsService orderProductsService;
 
     @GetMapping("/create")
     public String getCategory(Model model) {
@@ -39,10 +42,13 @@ public class CategoryProductsCreateController {
     }
     @PostMapping("/create-products")
     public String postProducts(@ModelAttribute Products products) {
-       Long categoryID =  products.getCategory().getId();
+        Long categoryID =  products.getCategory().getId();
         Category category = categoryService.getCategoryById(categoryID);
         products.setCategory(category);
         productsService.save(products);
+
+
+
 
         return "redirect:/products/list";
     }

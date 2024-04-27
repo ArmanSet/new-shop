@@ -117,42 +117,98 @@
     </style>
 </head>
 <body>
+<!--<header>-->
+<!--    <h1>Интернет-магазин</h1>-->
+<!--    <a href="products/list">Главная</a>-->
+<!--    <a href="products/list">Каталог</a>-->
+<!--    <a href="#">Контакты</a>-->
+<!--</header>-->
+<!--<h2>Корзина</h2>-->
+<!--<main th:if="${authentication != 'ROLE_ANONYMOUS'}">-->
+
+<!--    <div class="cart-items">-->
+<!--        <ul th:if="${#objects.nullSafe(cart, null) != null && !#lists.isEmpty(cart.products)}">-->
+<!--            <li th:each="product : ${cart.products}">-->
+<!--                <div class="cart-item">-->
+<!--                    <img th:src="${product.image}" alt="${product.name}">-->
+
+<!--                    <div class="cart-item-info">-->
+<!--                        <h3 th:text="${product.name}"></h3>-->
+<!--                        <p>Цена: <span th:text="${product.price}">0</span> руб.</p>-->
+
+<!--                        <form th:action="@{/cart/change/{id}(id=${product.id})}" method="post">-->
+<!--                            <p>Количество:-->
+<!--                                <label >-->
+<!--                                    <input type="number" name="quantity" th:value="${product.quantity}" min="1"-->
+<!--                                           th:max="${product.maxQuantity}">-->
+<!--                                </label>-->
+<!--                            </p>-->
+<!--                            <button type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>-->
+<!--                        </form>-->
+
+
+<!--                        &lt;!&ndash;                        <p>Количество: <input type="number" th:value="${product.quantity}" th:min="1" th:max="${product.maxQuantity}"></p>&ndash;&gt;-->
+<!--                        <form th:action="@{/cart/remove/{id}(id=${product.id})}" method="post">-->
+<!--                            <input type="submit" value="Удалить">-->
+<!--                        </form>-->
+
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--            <div class="cart-total">-->
+<!--                <p>Итого: <span th:text="${totalPrice}">0</span> руб.</p>-->
+<!--                <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">-->
+<!--                    <input type="submit" value="Оформить заказ">-->
+<!--                </form>-->
+<!--                &lt;!&ndash;                <button id="checkout">Оформить заказ</button>&ndash;&gt;-->
+<!--            </div>-->
+
+<!--        </ul>-->
+
+<!--    </div>-->
+
+<!--    <div class="cart-total">-->
+
+<!--    </div>-->
+<!--</main>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <!-- ... -->
+</head>
+<body>
 <header>
-    <h1>Интернет-магазин</h1>
-    <a href="products/list">Главная</a>
-    <a href="products/list">Каталог</a>
-    <a href="#">Контакты</a>
+    <!-- ... -->
 </header>
 <h2>Корзина</h2>
+<a href="/products/list">TO PRODUCT LIST</a>
+
 <main th:if="${authentication != 'ROLE_ANONYMOUS'}">
 
     <div class="cart-items">
-        <ul th:if="${#objects.nullSafe(cart, null) != null && !#lists.isEmpty(cart.products)}">
-            <li th:each="product : ${cart.products}">
-                <div class="cart-item">
-                    <img th:src="${product.image}" alt="${product.name}">
+        <ul th:if="${#objects.nullSafe(cart, null) != null && !#lists.isEmpty(cart.orderProducts)}">
+            <li th:each="orderProduct : ${orderProducts}">
+                <div class="cart-item" th:each="products : ${orderProduct.products}" >
+                    <img th:src="${products.image}" alt="${orderProduct.product.name}">
 
                     <div class="cart-item-info">
-                        <h3 th:text="${product.name}"></h3>
-                        <p>Цена: <span th:text="${product.price}">0</span> руб.</p>
+                        <h3 th:text="${products.name}"></h3>
+                        <p>Цена: <span th:text="${products.price}">0</span> руб.</p>
 
-                        <form th:action="@{/cart/change/{id}(id=${product.id})}" method="post">
+                        <form th:action="@{/cart/change/{id}(id=${products.id})}" method="post">
                             <p>Количество:
                                 <label >
-                                    <input type="number" name="quantity" th:value="${product.quantity}" min="1"
-                                           th:max="${product.maxQuantity}">
+                                    <input type="number" name="quantity" th:value="${orderProduct.quantity}" min="1"
+                                           th:max="${products.maxQuantity}">
                                 </label>
                             </p>
                             <button type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>
                         </form>
 
-
-                        <!--                        <p>Количество: <input type="number" th:value="${product.quantity}" th:min="1" th:max="${product.maxQuantity}"></p>-->
-                        <form th:action="@{/cart/remove/{id}(id=${product.id})}" method="post">
+                        <form th:action="@{/cart/remove/{id}(id=${products.id})}" method="post">
                             <input type="submit" value="Удалить">
                         </form>
-
-
                     </div>
                 </div>
             </li>
@@ -161,17 +217,16 @@
                 <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">
                     <input type="submit" value="Оформить заказ">
                 </form>
-                <!--                <button id="checkout">Оформить заказ</button>-->
             </div>
-
         </ul>
-
-    </div>
-
-    <div class="cart-total">
-
     </div>
 </main>
+
+<footer>
+    <!-- ... -->
+</footer>
+</body>
+</html>
 
 <footer>
     <p>Copyright &copy; 2024</p>

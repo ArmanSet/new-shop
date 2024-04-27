@@ -27,18 +27,19 @@ public class Cart {
     private String email;
 
 
-
-   @OneToOne(mappedBy = "cart")
+    @OneToOne(mappedBy = "cart")
     private Users users;
 
-   @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-              name = "cart_products",
-              joinColumns = @JoinColumn(name = "cart_id"),
-              inverseJoinColumns = @JoinColumn(name = "products_id")
-    )
-    private List<Products> products;
-//
+    //   @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(
+//              name = "cart_products",
+//              joinColumns = @JoinColumn(name = "cart_id"),
+//              inverseJoinColumns = @JoinColumn(name = "products_id")
+//    )
+//    private List<Products> products;
+    @OneToMany(mappedBy = "cart")
+    private List<OrderProducts> orderProducts;
+
 //   @OneToMany(mappedBy = "cart")
 //    private List<Order> orders;
 

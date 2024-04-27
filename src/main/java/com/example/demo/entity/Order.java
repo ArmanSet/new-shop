@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -48,17 +49,14 @@ public class Order {
     @UpdateTimestamp
     private LocalDateTime updateTime;
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_products",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "products_id")
-    )
-    private List<Products> products;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;
+
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderProducts> orderProducts = new ArrayList<>();
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
