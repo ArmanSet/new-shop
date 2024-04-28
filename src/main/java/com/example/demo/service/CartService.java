@@ -5,21 +5,22 @@ import com.example.demo.entity.OrderProducts;
 import com.example.demo.entity.Products;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.CartRepository;
+import com.example.demo.repository.UsersRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class CartService {
-    private CartRepository cartRepository;
-
-    @Autowired
-    public CartService(CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
-    }
+    private final CartRepository cartRepository;
+    private final OrderProductsService orderProductsService;
+    private final UsersRepository usersRepository;
 
     public void updateCart(Long id, String name, String address, String phone, String email) {
         Cart cart = cartRepository.findById(id).get();
@@ -65,21 +66,26 @@ public class CartService {
 
     public double calculateTotalPrice(Cart cart) {
         return cart.getOrderProducts().stream()
+                .filter(orderProduct -> orderProduct.getProducts() != null)
                 .flatMap(orderProduct -> orderProduct.getProducts().stream()
                         .map(product -> product.getPrice() * orderProduct.getQuantity()))
                 .mapToDouble(Double::doubleValue)
                 .sum();
     }
 
-    // Перетасовка продуктов из множества OrderProducts в один OrderProducts для отображения
+
+    //todo START BEST VERSION
+//     Перетасовка продуктов из множества OrderProducts в один OrderProducts для отображения
     public Cart convertProductsFromManyOrderProductsToOneForShow(Cart cart) {
         Map<Products, Integer> productQuantityMap = new HashMap<>();
         for (OrderProducts orderProduct : cart.getOrderProducts()) {
-            for (Products product : orderProduct.getProducts()) {
-                if (productQuantityMap.containsKey(product)) {
-                    productQuantityMap.put(product, productQuantityMap.get(product) + orderProduct.getQuantity());
-                } else {
-                    productQuantityMap.put(product, orderProduct.getQuantity());
+            if (orderProduct.getProducts() != null) {
+                for (Products product : orderProduct.getProducts()) {
+                    if (productQuantityMap.containsKey(product)) {
+                        productQuantityMap.put(product, productQuantityMap.get(product) + orderProduct.getQuantity());
+                    } else {
+                        productQuantityMap.put(product, orderProduct.getQuantity());
+                    }
                 }
             }
         }
@@ -97,36 +103,53 @@ public class CartService {
         return newCart;
     }
 
+    //todo END
+//    public void convertProductsFromManyOrderProductsToOneForShow(Cart cart) {
+//        Map<Products, Integer> productQuantityMap = new HashMap<>();
+//        for (OrderProducts orderProduct : cart.getOrderProducts()) {
+//            for (Products product : orderProduct.getProducts()) {
+//                if (productQuantityMap.containsKey(product)) {
+//                    productQuantityMap.put(product, productQuantityMap.get(product) + orderProduct.getQuantity());
+//                } else {
+//                    productQuantityMap.put(product, orderProduct.getQuantity());
+//                }
+//            }
+//        }
+//
+//        List<OrderProducts> newOrderProductsList = new ArrayList<>();
+//        for (Map.Entry<Products, Integer> entry : productQuantityMap.entrySet()) {
+//            OrderProducts newOrderProduct = new OrderProducts();
+//            newOrderProduct.setProducts(Collections.singletonList(entry.getKey()));
+//            newOrderProduct.setQuantity(entry.getValue());
+//            newOrderProductsList.add(newOrderProduct);
+//        }
+//
+//        cart.setOrderProducts(newOrderProductsList);
+//    }
+
     public Cart findCartByName(String uuid) {
         return cartRepository.findCartByName(uuid);
     }
     //TODO Переделать метод CRITICAL
     public Cart mergeCarts(Users user, HttpServletRequest request) {
-        if (checkInCockieIfCartExist(request) != null && user.getCart().getOrderProducts().getFirst() != null) {
-            Cart cartFromSession = checkInCockieIfCartExist(request);
-            Cart cartFromDb = user.getCart();
-            cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
-            // todo HERE
-            convertProductsFromManyOrderProductsToOneForShow(cartFromDb);
-//            cartRepository.delete(cartFromSession);
-            cartRepository.save(cartFromDb);
-            return cartFromDb;
-
-        } else if (checkInCockieIfCartExist(request) != null && user.getCart().getOrderProducts().getFirst()==null) {
-            Cart cartFromSession = checkInCockieIfCartExist(request);
-            Cart cartFromDb = user.getCart();
-            cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
-            convertProductsFromManyOrderProductsToOneForShow(cartFromDb);
-//            cartRepository.delete(cartFromSession);
-            cartRepository.save(cartFromDb);
-            return cartFromDb;
-        } else {
-            return user.getCart();
+        Cart cartFromSession = checkInCockieIfCartExist(request);
+        Cart cartFromDb = user.getCart();
+        cartFromDb.setId(user.getCart().getId());
+        if (cartFromDb.getOrderProducts() == null) {
+            cartFromDb.setOrderProducts(new ArrayList<>());
         }
+        cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
+        convertProductsFromManyOrderProductsToOneForShow(cartFromDb);
+        cartRepository.save(cartFromDb);
+        return cartFromDb;
     }
+
 
     public Cart checkInCockieIfCartExist(HttpServletRequest request) {
         String uuid = getCookieValue(request, "uuid");
+        if (uuid == null) {
+            return null;
+        }
         return cartRepository.findCartByName(uuid);
 
     }
@@ -144,6 +167,43 @@ public class CartService {
         }
         return cookieValue;
     }
+
+    public void createCartForUser(Users user) {
+        if (user.getCart() == null) {
+            Cart cart = new Cart();
+            cart.setEmail(user.getEmail());
+            cart.setAddress(user.getAddress());
+            cart.setName(user.getName());
+            cart.setPhone(user.getPhone());
+            cart.setUsers(user);
+            user.setCart(cart);
+            cartRepository.save(cart);
+            usersRepository.save(user);
+            //return "redirect:" + referer;
+        }
+    }
+    public void clearCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void createCartForGuest(String uuid,List<OrderProducts> list) {
+        Cart cart = new Cart();
+        cart.setName(uuid);
+        cart.setOrderProducts(list);
+        cartRepository.save(cart);
+
+    }
+
 
 //    public Cart convertProductsFromManyOrderProductsToOneForShow(Cart cart) {
 //        if (cart == null || cart.getOrderProducts().isEmpty()) {

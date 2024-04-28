@@ -187,7 +187,7 @@
 <main th:if="${authentication != 'ROLE_ANONYMOUS'}">
 
     <div class="cart-items">
-        <ul th:if="${#objects.nullSafe(cart, null) != null && !#lists.isEmpty(cart.orderProducts)}">
+        <ul>
             <li th:each="orderProduct : ${orderProducts}">
                 <div class="cart-item" th:each="products : ${orderProduct.products}" >
                     <img th:src="${products.image}" alt="${orderProduct.product.name}">
