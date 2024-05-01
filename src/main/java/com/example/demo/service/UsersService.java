@@ -1,26 +1,30 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Order;
+import com.example.demo.entity.OrderProducts;
 import com.example.demo.entity.Users;
+import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.FactoryRepository;
 import com.example.demo.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UsersService {
-    UsersRepository usersRepository;
-    FactoryRepository factoryRepository;
+    private final UsersRepository usersRepository;
+    private final FactoryRepository factoryRepository;
+    private final OrderService orderService;
+    private final OrderProductsService orderProductsService;
+    private final CartRepository cartRepository;
 
-    @Autowired
-    public UsersService(UsersRepository usersRepository, FactoryRepository factoryRepository) {
-        this.usersRepository = usersRepository;
-        this.factoryRepository = factoryRepository;
-    }
 
     public List<Users> findAll() {
         List<Users> usersList = usersRepository.findAll();
@@ -121,5 +125,52 @@ public class UsersService {
 //                authorities
 //        );
 //    }
+
+//    public void deleteUser(Long userId) {
+//        Users user = usersRepository.findById(userId).get();
+//        if (user != null) {
+//            List<Order> orders = orderService.findAllOrdersByUsers(user.getEmail());
+//            for (Order order : orders) {
+//                List<OrderProducts> orderProducts = order.getOrderProducts();
+//                for (OrderProducts orderProduct : orderProducts) {
+//                    OrderProducts orderProductToDelete = orderProductsService.findById(orderProduct.getId()).get();
+//                    if (orderProductToDelete != null) {
+//                        orderProductsService.delete(orderProductToDelete);
+//                    }
+//                }
+//                orderService.delete(order.getId());
+//            }
+//            usersService.delete(userId);
+//        }
+//    }
+@Transactional
+public void deleteUser(Long userId) {
+    Users user = usersRepository.findById(userId).orElse(null);
+    if (user != null) {
+        // Удалить OrderProducts, связанные с Order
+        List<Order> orders = orderService.findAllOrdersByUsers(user.getEmail());
+        for (Order order : orders) {
+            List<OrderProducts> orderProducts = order.getOrderProducts();
+            for (OrderProducts orderProduct : orderProducts) {
+                orderProductsService.delete(orderProduct);
+            }
+            orderService.delete(order.getId());
+        }
+
+        // Удалить OrderProducts, связанные с Cart
+        if (user.getCart() != null) {
+            List<OrderProducts> cartOrderProducts = user.getCart().getOrderProducts();
+            for (OrderProducts orderProduct : cartOrderProducts) {
+                orderProductsService.delete(orderProduct);
+            }
+        }
+
+        // Удалить Cart
+        cartRepository.delete(user.getCart());
+
+        // Удалить Users
+        usersRepository.delete(user);
+    }
+}
 }
 

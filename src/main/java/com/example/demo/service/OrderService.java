@@ -4,9 +4,13 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.OrderProductsRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductsRepository;
+import com.example.demo.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -15,19 +19,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
     private final OrderProductsRepository orderProductsRepository;
     private final ProductsRepository productsRepository;
-    private OrderRepository orderRepository;
-    private CartService cartService;
+    private final OrderRepository orderRepository;
+    private final CartService cartService;
+    private final UsersRepository userRepository;
 
-    @Autowired
-    public OrderService(OrderRepository orderRepository, CartService cartService, OrderProductsRepository orderProductsRepository, ProductsRepository productsRepository) {
-        this.orderRepository = orderRepository;
-        this.cartService = cartService;
-        this.orderProductsRepository = orderProductsRepository;
-        this.productsRepository = productsRepository;
-    }
 
 //    public void saveOrder(Cart cart, Users users, double totalPrice) {
 //        Order order = new Order();
@@ -136,4 +135,8 @@ public class OrderService {
         return orderRepository.findAllByUsersEmailWithProducts(email);
     }
 
+
+    public void delete(Long id) {
+        orderRepository.deleteById(id);
+    }
 }

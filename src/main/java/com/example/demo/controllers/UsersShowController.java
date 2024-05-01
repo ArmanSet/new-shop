@@ -1,7 +1,11 @@
 package com.example.demo.controllers;
 
 
+import com.example.demo.entity.Order;
+import com.example.demo.entity.OrderProducts;
 import com.example.demo.entity.Users;
+import com.example.demo.service.OrderProductsService;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersShowController {
     private final UsersService usersService;
+    private final OrderService orderService;
+    private final OrderProductsService orderProductsService;
 
     @GetMapping("/users/show")
     public String showUsersGet(Model model) {
@@ -51,7 +57,9 @@ public class UsersShowController {
 
     @PostMapping("/users/delete/{id}")
     public String deleteUsersPost(@PathVariable Long id) {
-        usersService.delete(id);
+        usersService.deleteUser(id);
         return "redirect:/users/show";
     }
+
+
 }
