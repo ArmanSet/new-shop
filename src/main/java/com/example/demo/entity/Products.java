@@ -45,11 +45,17 @@ public class Products {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private Subcategory subcategory;
+
 
 
 
     @ManyToMany(mappedBy = "products")
     private List<OrderProducts> orderProducts;
+
+
 
 //    @Override
 //    public boolean equals(Object o) {

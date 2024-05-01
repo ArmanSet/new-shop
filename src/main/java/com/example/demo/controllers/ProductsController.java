@@ -33,14 +33,14 @@ public class ProductsController {
 
     @GetMapping("/list/{id}")
     public String getProduct(@PathVariable Long id, Model model) {
-        List<Products> products = productService.findByCategoryId(id);
+        List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";
     }
 
     @PostMapping("/list/{id}")
     public String filterProductsByCategoryPost(@PathVariable Long id, Model model) {
-        List<Products> products = productService.findByCategoryId(id);
+        List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";
 

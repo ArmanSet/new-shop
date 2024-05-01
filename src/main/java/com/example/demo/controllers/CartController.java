@@ -1,385 +1,383 @@
-//package com.example.demo.controllers;
-//
-//import com.example.demo.entity.*;
-//
-//import com.example.demo.repository.ProductsRepository;
-//import com.example.demo.repository.UsersRepository;
-//import com.example.demo.service.CartService;
-//import jakarta.servlet.http.Cookie;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpSession;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Controller
-//@RequestMapping("/cart")
-//@RequiredArgsConstructor
-//public class CartController {
-//    private final ProductsRepository productsRepository;
-//    private final CartService cartService;
-//    private final UsersRepository usersRepository;
-//    private final HttpSession session;
-//    private String JSESSIONID;
-//
-//
-//    @GetMapping
-//    public String showCart(Model model, HttpServletRequest request) {
-////        if (JSESSIONID == null) {
-////            JSESSIONID = session.getId();
-////        }
-//        String JSESSIONID = cookieInstall(request);
-//        Users user = (Users) getCurrentUser();
-//        if (user == null && cartService.findByName(JSESSIONID) != null) {
-//            Cart cart = cartService.findByName(JSESSIONID);
-//            model.addAttribute("cart", cart);
-//            model.addAttribute("authentication", "ROLE_SESSIONUSER");
-//            double totalPrice = calculateTotalPrice(cart);
-//            model.addAttribute("totalPrice", totalPrice);
-//            System.out.println(JSESSIONID);
-//            return "cart";
-//        } else if (user == null && cartService.findByName(JSESSIONID) == null) {
-//            Cart cart = new Cart();
-//            cart.setName(JSESSIONID);
-//            cartService.save(cart);
-//            model.addAttribute("cart", cart);
-//            model.addAttribute("authentication", "ROLE_SESSIONUSER");
-//            return "cart";
-//        }
-//
-//        if (isUserAuthenticated()) {
-//            if (user.getCart() == null) {
-//                Users checkUsers = checkUserAndCart(JSESSIONID);
-//                if (checkUsers.getCart() != null) {
-//                    if (checkUsers.getCart().getProducts() != null) {
-//                        List<Products> products = checkUsers.getCart().getProducts();
-//                        model.addAttribute("cart", checkUsers.getCart());
-//                        double totalPrice = calculateTotalPrice(checkUsers.getCart());
-//                        model.addAttribute("authentication", user.getRole());
-//                        model.addAttribute("totalPrice", totalPrice);
-//                    } else {
-//                        model.addAttribute("emptyCart", true);
-//                    }
-//                    return "cart";
-//                }
-//
-//            }
-//            //TODO  HERE SEEEEEEEEEEEE
-//            Optional<Cart> cartOptional = cartService.findById(user.getCart().getId());
-//            Cart cart = cartOptional.orElse(null);
-//
-//            //TODO LOGIC FIX HERE
-//            if (user.getCart() != null && cartService.findByName(JSESSIONID) != null) {
-//
-//                Cart cartFromSession = cartService.findByName(JSESSIONID);
-//
-//                List<Products> products = cartFromSession.getProducts();
-//                List<Products> productsFromDB = cart.getProducts();
-//                for (Products product : products) {
-//                    if (productsFromDB.contains(product)) {
-//                        for (Products p : productsFromDB) {
-//                            if (p.getId().equals(product.getId())) {
-//                                p.setQuantity(p.getQuantity() + product.getQuantity());
-//                                p.setMaxQuantity(p.getMaxQuantity() - product.getQuantity());
-//                            }
-//                        }
-//                    } else {
-//                        product.setMaxQuantity(product.getMaxQuantity() - product.getQuantity());
-//                        productsFromDB.add(product);
-//                    }
-////                    Products productFromDB = productsRepository.findById(product.getId()).get();
-////                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() - product.getQuantity());
-////                    productsRepository.save(productFromDB);
-//                }
-////                productsFromDB.addAll(products);
-//                cart.setProducts(productsFromDB);
-//                cartService.save(cart);
-//                session.removeAttribute("cart");
+package com.example.demo.controllers;
+
+
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import com.example.demo.service.CartService;
+import com.example.demo.service.OrderProductsService;
+import com.example.demo.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.Cookie;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Controller
+@RequestMapping("/cart")
+@RequiredArgsConstructor
+public class CartController {
+    private final UsersRepository usersRepository;
+    private final OrderRepository orderRepository;
+    private final OrderService orderService;
+    private final OrderProductsService orderProductsService;
+    private final ProductsRepository productRepository;
+    private final HttpSession session;
+    private final CartRepository cartRepository;
+    private final CartService cartService;
+
+
+    private String JSESSIONID;
+
+    @GetMapping
+    public String showCart(Model model, HttpServletRequest request, HttpServletResponse responce) {
+        String referer = request.getHeader("Referer");
+
+        //TODO USER Аутентифицирован
+        if (isUserAuthenticated()) {
+            Users users = getCurrentUser();
+            Users user = usersRepository.findUsersByEmail(users.getEmail());
+            if (user.getCart() == null) {
+                cartService.createCartForUser(user);
+                if (cartService.checkInCockieIfCartExist(request) != null) {
+                    Cart cart = cartService.mergeCarts(user, request);
+                    System.out.println(cart.getId());
+                    cartService.save(cart); // <-- Важно не забыть сохранить корзину после изменений
+                    return showPage(model, request, responce, cart, user);
+                }
+                model.addAttribute("cart", user.getCart());
+                model.addAttribute("orderProducts", user.getCart().getOrderProducts());
+                model.addAttribute("authentication", user.getRole());
+                model.addAttribute("totalPrice", 0);
+                return "cart";
+            } else {
+                Cart cart = user.getCart();
+//                String uuid = cartService.getCookieValue(request, "uuid");
+                //TODO ПРОБЛЕМЫ У 2 ЮЗЕРА ТУТ ПАДАЕТ С ОШИБКОЙ
+                if (cartService.checkInCockieIfCartExist(request) != null) {
+                    cart = cartService.mergeCarts(user, request);
+                    cartService.save(cart); // <-- Важно не забыть сохранить корзину после изменений
+                    return showPage(model, request, responce, cart, user);
+                }
+
+                return showPage(model, request, responce, cart, user);
+
+            }
+        }
+        //TODO USER НЕ Аутентифицирован
+        if (!isUserAuthenticated()) {
+            String uuid = cartService.getCookieValue(request, "uuid");
+            if (cartService.findCartByName(uuid) == null) {
+//                Cart cart = new Cart();
+//                cart.setName(uuid);
+//                cartRepository.save(cart);
 //                model.addAttribute("cart", cart);
-//                double totalPrice = calculateTotalPrice(cart);
-//                model.addAttribute("authentication", user.getRole());
-//                model.addAttribute("totalPrice", totalPrice);
-//            } else if (user.getCart() != null && cartService.findByName(JSESSIONID) == null) {
-//                cart = user.getCart();
-//                model.addAttribute("cart", cart);
-//                double totalPrice = calculateTotalPrice(cart);
-//                model.addAttribute("authentication", user.getRole());
-//                model.addAttribute("totalPrice", totalPrice);
-//            } else {
-//                model.addAttribute("emptyCart", true);
-//            }
-//            JSESSIONID = null;
-//
-//            System.out.println(JSESSIONID);
-//            return "cart";
-//        }
-//        return "cart";
-//    }
-//
-//    private String cookieInstall(HttpServletRequest request) {
-//        String JSESSIONID = null;
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("uuid")) {
-//                    JSESSIONID = cookie.getValue();
-//                    break;
-//                }
-//            }
-//        }
-//        this.JSESSIONID = JSESSIONID;
-//        return JSESSIONID;
-//    }
-//
-//
-//    @PostMapping("/add/{id}")
-//    public String addToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
-//        String JSESSIONID = cookieInstall(request);
-//        String referer = request.getHeader("Referer");
-//        Optional<Products> productOptional = productsRepository.findById(id);
-//        if (!productOptional.isPresent()) {
-//            return "redirect:/";
-//        }
-//        Products product = productOptional.get();
-//        Users user = (Users) getCurrentUser();
-//        Cart cart = null;
-//
-//        if (user == null && cartService.findByName(JSESSIONID) == null) {
-//            cart = new Cart();
-//            cart.setName(JSESSIONID);
-//            Users usersSession = new Users();
-//            usersSession.setEmail(JSESSIONID);
-//            cart.setUsers(usersSession);
-//            Order order = new Order();
-//            order.setUsers(usersSession);
-//            OrderProducts orderProduct = new OrderProducts();
-//            orderProduct.setQuantity(quantity);
-//            orderProduct.setProduct(product);
-//            orderProduct.setOrder(order);
-//            order.getOrderProducts().add(orderProduct); // Add OrderProducts to Order
-//            usersRepository.save(usersSession);
-//            cartService.save(cart);
-//            usersSession.setCart(cart);
-//            return "redirect:" + referer;
-//        }
-//
-//        if (user == null && cartService.findByName(JSESSIONID) != null) {
-//            cart = cartService.findByName(JSESSIONID);
-//            addProductsToCard(quantity, cart, product, referer);
-//            return "redirect:" + referer;
-//        }
-//
-//        if (isUserAuthenticated()) {
-//
-//            if (user.getCart() != null) {
-//                cart = cartService.findByName(user.getCart().getName());
-//            }
-//            if (cart != null) {
-//                addProductsToCard(quantity, cart, product, referer);
-//                return "redirect:" + referer;
-//            } else {
-//                cart = new Cart();
-//                cart.setName(user.getEmail());
-//                cart.setPhone(user.getPhone());
-//                cart.setUsers(user);
-//                usersRepository.save(user);
+//                model.addAttribute("orderProducts", cart.getOrderProducts());
+                model.addAttribute("authentication", "ROLE_ANONYMOUS");
+//                model.addAttribute("totalPrice", 0);
+                return "cart";
+            } else {
+                //TODO SUPER CRITICAL
+                Cart cart = cartService.findCartByName(uuid);
+                Long id = cart.getId();
+                List<OrderProducts> orderProductsByCartId = orderProductsService.findOrderProductsByCartId(id);
+                cart = cartService.convertProductsFromManyOrderProductsToOneForShow(cart);
+
+                model.addAttribute("cart", cart);
+                model.addAttribute("orderProducts", orderProductsByCartId);
+                model.addAttribute("authentication", "GUEST");
+                double totalPrice = cartService.calculateTotalPrice(cart);
+                model.addAttribute("totalPrice", totalPrice);
 //                cartService.save(cart);
-//                user.setCart(cart);
-//                usersRepository.save(user);
-//                addProductsToCard(quantity, cart, product, referer);
-//            }
-//        }
-//
-//        addProductsToCard(quantity, cart, product, referer);
-//        return "redirect:" + referer;
-//    }
-//
-//    private String addProductsToCard(int quantity, Cart cart, Products product, String referer) {
-//        Order order = new Order();
-//        order.setUsers(cart.getUsers());
-//        OrderProducts orderProduct = new OrderProducts();
-//        orderProduct.setQuantity(quantity);
-//        orderProduct.setProduct(product);
-//        orderProduct.setOrder(order);
-//        order.getOrderProducts().add(orderProduct); // Add OrderProducts to Order
-//        cartService.save(cart);
-//        return "redirect:" + referer;
-//    }
-//
-//    @PostMapping("/change/{id}")
-//    public String changeQuantity(@PathVariable Long id, @RequestParam("quantity") int quantity) {
-//        Optional<Products> productOptional = productsRepository.findById(id);
-//        if (!productOptional.isPresent()) {
-//            return "redirect:/";
-//        }
-//        Products product = productOptional.get();
-//        Users user = (Users) getCurrentUser();
-//
-//        if (user == null && cartService.findByName(JSESSIONID) != null) {
-//            Cart cart = cartService.findByName(JSESSIONID);
-//            List<Products> productList = cart.getProducts();
-//            if (productList == null) {
-//                productList = new ArrayList<>();
-//            }
-//            counter(quantity, productList, product);
-//            cart.setProducts(productList);
-//            cartService.save(cart);
-//            return "redirect:/cart";
-//        }
-//        if (user != null) {
-//            Cart cart = cartService.findByName(user.getCart().getName());
-//            List<Products> productList = cart.getProducts();
-//            if (productList == null) {
-//                productList = new ArrayList<>();
-//            }
-//            counter(quantity, productList, product);
-//            cart.setProducts(productList);
-//            cartService.save(cart);
-//            return "redirect:/cart";
-//        }
-//        return "redirect:/cart";
-//    }
-//
-//    @GetMapping("/add")
-//    public String getProductToCart() {
-//        return "redirect:/";
-//    }
-//
+                return "cart";
+            }
+        }
+
+        return "cart";
+    }
+
+    private String showPage(Model model, HttpServletRequest request, HttpServletResponse responce, Cart cart, Users user) {
+        model.addAttribute("cart", cart);
+        model.addAttribute("orderProducts", cart.getOrderProducts());
+        model.addAttribute("authentication", user.getRole());
+        double totalPrice = cartService.calculateTotalPrice(cart);
+        model.addAttribute("totalPrice", totalPrice);
+        cartService.save(cart);
+//        cartService.clearCookie(request, responce,"uuid");
+        return "cart";
+    }
+
+    @PostMapping("/add/{id}")
+    public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+
+        Products product = productRepository.findById(id).get();
+        if (product.getMaxQuantity() < quantity) {
+            // Here you might want to add some error message indicating that there is not enough product in stock
+            return "redirect:/cart";
+        }
+        product.setMaxQuantity(product.getMaxQuantity() - quantity);
+        productRepository.save(product);
+
+        if (isUserAuthenticated()) {
+            Users user = getCurrentUser();
+            OrderProducts orderProducts = new OrderProducts();
+            List<Products> listProducts = new ArrayList<>();
+            listProducts.add(product);
+            orderProducts.setProducts(listProducts);
+            orderProducts.setQuantity(quantity);
+            if (user.getCart() == null) {
+                Cart cart = new Cart();
+                cart.setEmail(user.getEmail());
+                cart.setAddress(user.getAddress());
+                cart.setName(user.getName());
+                cart.setPhone(user.getPhone());
+                cart.setUsers(user);
+                List<OrderProducts> orderProductsList = new ArrayList<>();
+                orderProductsList.add(orderProducts);
+                cart.setOrderProducts(orderProductsList);
+                user.setCart(cart);
+                cartService.save(cart);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+                usersRepository.save(user);
+            } else {
+                Cart cart = user.getCart();
+                cart.getOrderProducts().add(orderProducts);
+                cartRepository.save(cart);
+                user.setCart(cart);
+                usersRepository.save(user);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+            }
+        } else {
+            String uuid = cartService.getCookieValue(request, "uuid");
+            OrderProducts orderProducts = new OrderProducts();
+            List<Products> listProducts = new ArrayList<>();
+            listProducts.add(product);
+            orderProducts.setProducts(listProducts);
+            orderProducts.setQuantity(quantity);
+            List<OrderProducts> orderProductsListForGuest = new ArrayList<>();
+            orderProductsListForGuest.add(orderProducts);
+            Optional<Cart> cartForGuest = Optional.ofNullable(cartService.findCartByName((uuid)));
+            if (cartForGuest.isEmpty()) {
+                cartService.createCartForGuest(uuid, orderProductsListForGuest);
+            }
+            if (cartService.findCartByName(uuid) == null) {
+                Cart cart = new Cart();
+                cart.setName(uuid);
+                cart.setEmail(uuid);
+                List<OrderProducts> orderProductsList = new ArrayList<>();
+                orderProductsList.add(orderProducts);
+                cart.setOrderProducts(orderProductsList);
+                cartRepository.save(cart);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+            } else {
+                Cart cart = cartService.findCartByName(uuid);
+                cart.getOrderProducts().add(orderProducts);
+                cartRepository.save(cart);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+            }
+        }
+        return "redirect:" + referer;
+    }
+    public Users getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            String name = ((UserDetails) principal).getUsername();
+            return usersRepository.findUsersByEmail(name);
+        } else {
+            return null;
+        }
+    }
+
+    public boolean isUserAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails;
+    }
+
+    private String cookieInstall(HttpServletRequest request) {
+        String JSESSIONID = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("uuid")) {
+                    JSESSIONID = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        this.JSESSIONID = JSESSIONID;
+        return JSESSIONID;
+    }
+    @PostMapping("/change/{id}")
+    public String changeQuantity(@PathVariable Long id, @RequestParam int quantity, HttpServletRequest request) {
+        Users user = getCurrentUser();
+        if (isUserAuthenticated()) {
+            Cart cart = user.getCart();
+            List<OrderProducts> orderProducts = cart.getOrderProducts();
+            for (OrderProducts op : orderProducts) {
+                if (op.getId().equals(id)) {
+                    List<Products> products = op.getProducts();
+                    for (Products p : products) {
+                        int difference = op.getQuantity() - quantity;
+                        if (difference >= 0) {
+                            p.setMaxQuantity(p.getMaxQuantity() + difference);
+                        } else {
+                            if (p.getMaxQuantity() >= Math.abs(difference)) {
+                                p.setMaxQuantity(p.getMaxQuantity() + difference);
+                            } else {
+                                // Here you might want to add some error message indicating that there is not enough product in stock
+                                return "redirect:/cart";
+                            }
+                        }
+                        productRepository.save(p);
+                        op.setQuantity(quantity);
+                        orderProductsService.save(op);
+                    }
+                }
+            }
+            cart.setOrderProducts(orderProducts);
+            cartRepository.save(cart);
+        } else {
+            String uuid = cartService.getCookieValue(request, "uuid");
+            //TODO SUPER CRITICAL
+            Cart cart = cartService.findCartByName(uuid);
+            if (cart == null) {
+                // Create a new Cart object if it doesn't exist
+                cart = new Cart();
+                cart.setName(uuid);
+                cartRepository.save(cart);
+            }
+            List<OrderProducts> orderProducts = cart.getOrderProducts();
+            for (OrderProducts op : orderProducts) {
+                if (op.getId().equals(id)) {
+                    List<Products> products = op.getProducts();
+                    for (Products p : products) {
+                        int difference = op.getQuantity() - quantity;
+                        if (difference >= 0) {
+                            p.setMaxQuantity(p.getMaxQuantity() + difference);
+                        } else {
+                            if (p.getMaxQuantity() >= Math.abs(difference)) {
+                                p.setMaxQuantity(p.getMaxQuantity() + difference);
+                            } else {
+                                // Here you might want to add some error message indicating that there is not enough product in stock
+                                return "redirect:/cart";
+                            }
+                        }
+                        productRepository.save(p);
+                        op.setQuantity(quantity);
+                        orderProductsService.save(op);
+                    }
+                }
+            }
+            cart.setOrderProducts(orderProducts);
+            cartRepository.save(cart);
+        }
+
+        return "redirect:/cart";
+    }
+
+// TODO Переделать метод CRITICAL Завтра
 //    @PostMapping("/remove/{id}")
-//    public String removeProductFromCart(@PathVariable Long id) {
-//        Users user = (Users) getCurrentUser();
-//        if (user == null && cartService.findByName(JSESSIONID) != null) {
-//            Cart cart = cartService.findByName(JSESSIONID);
-//            List<Products> products = cart.getProducts();
-//            //перед удалением продукта из корзины, возвращаем его количество на склад
-//            for (Products product : products) {
-//                if (product.getId().equals(id)) {
-//                    Products productFromDB = productsRepository.findById(id).get();
-//                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() + product.getQuantity());
-//                    productsRepository.save(productFromDB);
+//    public String removeProduct(@PathVariable Long id, HttpServletRequest request) {
+//        if (isUserAuthenticated()) {
+//            Users user = getCurrentUser();
+//            Cart cart = user.getCart();
+//            List<OrderProducts> orderProducts = new ArrayList<>(cart.getOrderProducts());
+//            List<OrderProducts> copyOrderProducts = new ArrayList<>(orderProducts);
+//            for (OrderProducts op : copyOrderProducts) {
+//                op.getProducts().removeIf(product -> product.getId().equals(id));
+//                if (op.getProducts().isEmpty()) {
+//                    orderProducts.remove(op);
+//                    orderProductsService.delete(op); // delete from the database
 //                }
 //            }
-//            products.removeIf(product -> product.getId().equals(id));
-//            cart.setProducts(products);
-//            cartService.save(cart);
-//            return "redirect:/cart";
-//        }
-//        if (user != null) {
-//            Long cartId = user.getCart().getId();
-//            Cart cart = cartService.findById(cartId).get();
-//            List<Products> products = cart.getProducts();
-//            //перед удалением продукта из корзины, возвращаем его количество на склад
-//            for (Products product : products) {
-//                if (product.getId().equals(id)) {
-//                    Products productFromDB = productsRepository.findById(id).get();
-//                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() + product.getQuantity());
-//                    productsRepository.save(productFromDB);
+//            cart.setOrderProducts(orderProducts);
+//            cartRepository.save(cart);
+//        } else {
+//            String uuid = cartService.getCookieValue(request, "uuid");
+//            Cart cart = cartService.findCartByName(uuid);
+//            if (cart != null) {
+//                List<OrderProducts> orderProducts = new ArrayList<>(cart.getOrderProducts());
+//                List<OrderProducts> copyOrderProducts = new ArrayList<>(orderProducts);
+//                for (OrderProducts op : copyOrderProducts) {
+//                    op.getProducts().removeIf(product -> product.getId().equals(id));
+//                    if (op.getProducts().isEmpty()) {
+//                        orderProducts.remove(op);
+//                        orderProductsService.delete(op); // delete from the database
+//                    }
 //                }
+//                cart.setOrderProducts(orderProducts);
+//                cartRepository.save(cart);
 //            }
-//            products.removeIf(product -> product.getId().equals(id));
-////            for (Products product : products) {
-////                if (product.getId().equals(id)) {
-////                    Products productFromDB = productsRepository.findById(id).get();
-////                    productFromDB.setMaxQuantity(productFromDB.getMaxQuantity() + product.getQuantity());
-////                    productsRepository.save(productFromDB);
-////                }
-////            }
-//
-//            cart.setProducts(products);
-//            cartService.save(cart);
-//
-//            return "redirect:/cart";
-//
-//
 //        }
 //        return "redirect:/cart";
 //    }
-//
-//    public boolean isUserAuthenticated() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        return authentication.isAuthenticated();
-//    }
-//
-//    public Users getCurrentUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Object principal = authentication.getPrincipal();
-//
-//        if (principal instanceof UserDetails) {
-//            String name = ((UserDetails) principal).getUsername();
-//            return usersRepository.findUsersByEmail(name);
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    public double calculateTotalPrice(Cart cart) {
-//        double totalPrice = 0.0;
-//
-//        for (Products product : cart.getProducts()) {
-//            totalPrice += product.getPrice() * product.getQuantity();
-//        }
-//
-//        return totalPrice;
-//    }
-//
-//    public Users checkUserAndCart(String JSESSIONID) {
-//        Users userCurrent = (Users) getCurrentUser();
-//        Users userFromDB = usersRepository.findUsersByEmail(userCurrent.getEmail());
-//        if (userFromDB.getCart() == null && cartService.findByName(JSESSIONID) != null) {
-//            // here 1
-//            Cart cartFromSession = cartService.findByName(JSESSIONID);
-//            userFromDB.setCart(cartFromSession);
-//            usersRepository.save(userFromDB);
-//            return userFromDB;
-//        } else if (userFromDB.getCart() != null && cartService.findByName(JSESSIONID) != null) {
-//            Cart cartFromSession = cartService.findByName(JSESSIONID);
-//            List<Products> products = cartFromSession.getProducts();
-//            List<Products> productsFromDB = userFromDB.getCart().getProducts();
-//            productsFromDB.addAll(products);
-//            userFromDB.getCart().setProducts(productsFromDB);
-//            usersRepository.save(userFromDB);
-//            session.removeAttribute("cart");
-//            return userFromDB;
-//        } else if (userFromDB.getCart() == null && cartService.findByName(JSESSIONID) == null) {
-//            Cart cart = new Cart();
-//            cart.setName(userCurrent.getEmail());
-//            cartService.save(cart);
-//            userFromDB.setCart(cart);
-//            usersRepository.save(userFromDB);
-//            return userFromDB;
-//        }
-//        return userFromDB;
-//    }
-//
-//    private static void counter(int quantity, List<Products> productList, Products product) {
-//        if (productList.contains(product)) {
-//            for (Products p : productList) {
-//                if (p.getId().equals(product.getId())) {
-//                    int currentQuantity = p.getQuantity();
-//                    if (quantity > currentQuantity) {
-//                        int difference = quantity - currentQuantity;
-//                        if (p.getMaxQuantity() >= difference) {
-//                            p.setMaxQuantity(p.getMaxQuantity() - difference);
-//                            p.setQuantity(quantity);
-//                        } else {
-//                            // Недостаточно товара на складе
-//                        }
-//                    } else if (quantity < currentQuantity) {
-//                        int difference = currentQuantity - quantity;
-//                        p.setMaxQuantity(p.getMaxQuantity() + difference);
-//                        p.setQuantity(quantity);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//}
+
+    @PostMapping("/remove/{id}")
+    public String removeProduct(@PathVariable Long id, HttpServletRequest request) {
+        if (isUserAuthenticated()) {
+            Users user = getCurrentUser();
+            Cart cart = user.getCart();
+            List<OrderProducts> orderProducts = new ArrayList<>(cart.getOrderProducts());
+            List<OrderProducts> copyOrderProducts = new ArrayList<>(orderProducts);
+            for (OrderProducts op : copyOrderProducts) {
+                List<Products> products = op.getProducts();
+                for (Products p : products) {
+                    if (p.getId().equals(id)) {
+                        p.setMaxQuantity(p.getMaxQuantity() + op.getQuantity()); // Increase maxQuantity
+                        productRepository.save(p);
+                        products.remove(p);
+                        break;
+                    }
+                }
+                if (products.isEmpty()) {
+                    orderProducts.remove(op);
+                    orderProductsService.delete(op); // delete from the database
+                }
+            }
+            cart.setOrderProducts(orderProducts);
+            cartRepository.save(cart);
+        } else {
+            String uuid = cartService.getCookieValue(request, "uuid");
+            Cart cart = cartService.findCartByName(uuid);
+            if (cart != null) {
+                List<OrderProducts> orderProducts = new ArrayList<>(cart.getOrderProducts());
+                List<OrderProducts> copyOrderProducts = new ArrayList<>(orderProducts);
+                for (OrderProducts op : copyOrderProducts) {
+                    List<Products> products = op.getProducts();
+                    for (Products p : products) {
+                        if (p.getId().equals(id)) {
+                            p.setMaxQuantity(p.getMaxQuantity() + op.getQuantity()); // Increase maxQuantity
+                            productRepository.save(p);
+                            products.remove(p);
+                            break;
+                        }
+                    }
+                    if (products.isEmpty()) {
+                        orderProducts.remove(op);
+                        orderProductsService.delete(op); // delete from the database
+                    }
+                }
+                cart.setOrderProducts(orderProducts);
+                cartRepository.save(cart);
+            }
+        }
+        return "redirect:/cart";
+    }
+}
+

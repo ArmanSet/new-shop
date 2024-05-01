@@ -16,17 +16,26 @@
 <form th:action="@{/category/create-category}" th:object="${category}" method="post">
     <label for="categoryName">Category Name:</label><br>
     <input type="text" id="categoryName" th:field="*{name}"><br>
-
     <label for="categoryType">Category TYPE:</label><br>
     <input type="text" id="categoryType" th:field="*{type}"><br>
-
     <label for="categoryImage">Category IMAGE:</label><br>
     <input type="text" id="categoryImage" th:field="*{image}"><br>
-
-
-
-
     <input type="submit" value="Create Category">
+</form>
+
+<form th:action="@{/category/create-subcategory}" th:object="${subcategory}" method="post">
+    <label for="subcategoryName">Subcategory Name:</label><br>
+    <input type="text" id="subcategoryName" th:field="*{name}"><br>
+    <label for="subcategoryType">Category TYPE:</label><br>
+    <input type="text" id="subcategoryType" th:field="*{type}"><br>
+    <label for="subcategoryImage">Category IMAGE:</label><br>
+    <input type="text" id="subcategoryImage" th:field="*{image}"><br>
+
+    <label for="categoryID">Product Category:</label><br>
+    <select id="categoryID" th:field="*{category.id}">
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+    </select><br>
+    <input type="submit" value="Create Subcategory">
 </form>
 
 <h1>Create Product</h1>
@@ -55,9 +64,9 @@
 <!--    <label for="categoryID">Product Category ID:</label><br>-->
 <!--    <input type="number" id="categoryID" th:field="*{category.id}"><br>-->
 
-    <label for="categoryID">Product Category:</label><br>
-    <select id="categoryID" th:field="*{category.id}">
-        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+    <label for="subcategoryID">Product Category:</label><br>
+    <select id="subcategoryID" th:field="*{subcategory.id}">
+        <option th:each="subcategory : ${subcategories}" th:value="${subcategory.id}" th:text="${subcategory.name}"></option>
     </select><br>
 
 <!-- TODO   private int quantity;-->

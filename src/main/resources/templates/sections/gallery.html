@@ -9,7 +9,7 @@
 <div class="bodyForGallery" th:fragment="galleries">
     <div class="container-2" th:each="category : ${categories}">
         <div class="card-2">
-            <form th:action="@{/products/list/{id}(id=${category.id})}" method="post">
+            <form th:action="@{/subcategory/list/{id}(id=${category.id})}" method="post">
 
                 <button type="submit" class="product-image">
                     <div class="card-2">

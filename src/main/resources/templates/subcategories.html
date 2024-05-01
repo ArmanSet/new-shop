@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
     <link rel="stylesheet" th:href="@{/menu.css}">
     <style>
         /* Body Styles */
@@ -203,29 +203,29 @@
 <div class="container">
     <a href="/products/list">All Products</a>
     <ul class="product-list">
-        <li th:each="category : ${categories}">
+        <li th:each="subcategory : ${subcategories}">
             <div class="product-card">
-<!--                <a href="/products/list" class="product-image">-->
-<!--                    <img th:src="${category.image}" alt="${product.name}">-->
-<!--                </a>-->
-                <form th:action="@{/subcategory/list/{id}(id=${category.id})}" method="post">
+                <!--                <a href="/products/list" class="product-image">-->
+                <!--                    <img th:src="${category.image}" alt="${product.name}">-->
+                <!--                </a>-->
+                <form th:action="@{/products/list/{id}(id=${subcategory.id})}" method="post">
                     <!--                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
                     <!--                        <img th:src="${category.image}" alt="${product.name}">-->
-                    <button type="submit" class="product-image"><img th:src="${category.image}" alt="${product.name}">
+                    <button type="submit" class="product-image"><img th:src="${subcategory.image}" alt="${product.name}">
                     </button>
                 </form>
                 <div class="product-info">
-                    <h3 th:text="${category.name}"></h3>
-                    <p th:text="${category.type}"></p>
+                    <h3 th:text="${subcategory.name}"></h3>
+                    <p th:text="${subcategory.type}"></p>
                     <div class="product-price">
-                        <span th:text="${category.id}">$${product.price}</span>
+                        <span th:text="${subcategory.id}">$${product.price}</span>
                     </div>
-<!--                    <form th:action="@{/products/list/{id}(id=${category.id})}" method="post">-->
-<!--&lt;!&ndash;                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <img th:src="${category.image}" alt="${product.name}">&ndash;&gt;-->
-<!--                        <button type="submit" class="product-image">Reach Now-->
-<!--                        </button>-->
-<!--                    </form>-->
+                    <!--                    <form th:action="@{/products/list/{id}(id=${category.id})}" method="post">-->
+                    <!--&lt;!&ndash;                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>&ndash;&gt;-->
+                    <!--&lt;!&ndash;                        <img th:src="${category.image}" alt="${product.name}">&ndash;&gt;-->
+                    <!--                        <button type="submit" class="product-image">Reach Now-->
+                    <!--                        </button>-->
+                    <!--                    </form>-->
                 </div>
             </div>
         </li>
@@ -235,27 +235,6 @@
 
 
 </footer>
-
-<!--    <div class="container">-->
-<!--        <h2 class="title">Featured Products</h2>-->
-<!--        <ul class="product-list">-->
-<!--            <li th:each="category : ${categories}">-->
-<!--                <div class="product-card">-->
-<!--                    <a href="/products/list" class="product-image">-->
-<!--                        <img th:src="${category.image}" alt="${product.name}">-->
-<!--                    </a>-->
-<!--                    <div class="product-info">-->
-<!--                        <h3 th:text="${category.name}"></h3>-->
-<!--                        <p th:text="${category.type}"></p>-->
-<!--                        <div class="product-price">-->
-<!--                            <span th:text="${category.id}"></span>-->
-<!--                        </div>-->
-<!--                        <a href="/products/list" class="product-reach-btn">Reach Now</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
 
 </body>
 </html>
