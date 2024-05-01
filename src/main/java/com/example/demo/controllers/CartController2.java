@@ -88,11 +88,14 @@ public class CartController2 {
 //                model.addAttribute("totalPrice", 0);
                 return "cart";
             } else {
+                //TODO SUPER CRITICAL
                 Cart cart = cartService.findCartByName(uuid);
+                Long id = cart.getId();
+                List<OrderProducts> orderProductsByCartId = orderProductsService.findOrderProductsByCartId(id);
                 cart = cartService.convertProductsFromManyOrderProductsToOneForShow(cart);
 
                 model.addAttribute("cart", cart);
-                model.addAttribute("orderProducts", cart.getOrderProducts());
+                model.addAttribute("orderProducts", orderProductsByCartId);
                 model.addAttribute("authentication", "GUEST");
                 double totalPrice = cartService.calculateTotalPrice(cart);
                 model.addAttribute("totalPrice", totalPrice);
@@ -115,187 +118,82 @@ public class CartController2 {
         return "cart";
     }
 
+    @PostMapping("/add/{id}")
+    public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
 
-// TODO Переделать метод CRITICAL Завтра
+        Products product = productRepository.findById(id).get();
+        if (product.getMaxQuantity() < quantity) {
+            // Here you might want to add some error message indicating that there is not enough product in stock
+            return "redirect:/cart";
+        }
+        product.setMaxQuantity(product.getMaxQuantity() - quantity);
+        productRepository.save(product);
 
-//    @PostMapping("/add/{id}")
-//    public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
-//        String referer = request.getHeader("Referer");
-//
-//        if (isUserAuthenticated()) {
-//            Users user = getCurrentUser();
-//            OrderProducts orderProducts = new OrderProducts();
-//            List<Products> listProducts = new ArrayList<>();
-//            listProducts.add(productRepository.findById(id).get());
-//            orderProducts.setProducts(listProducts);
-//            orderProducts.setQuantity(quantity);
-//            if (user.getCart() == null) {
-//                Cart cart = new Cart();
-//                cart.setEmail(user.getEmail());
-//                cart.setAddress(user.getAddress());
-//                cart.setName(user.getName());
-//                cart.setPhone(user.getPhone());
-//                cart.setUsers(user);
-//                List<OrderProducts> orderProductsList = new ArrayList<>();
-//                orderProductsList.add(orderProducts);
-//                cart.setOrderProducts(orderProductsList);
-//                user.setCart(cart);
-//                cartService.save(cart);
-//                orderProducts.setCart(cart);
-//                orderProductsService.save(orderProducts);
-//                usersRepository.save(user);
-//                //return "redirect:" + referer;
-//            } else {
-//                Cart cart = user.getCart();
-//                cart.getOrderProducts().add(orderProducts);
-//                cartRepository.save(cart);
-//                user.setCart(cart);
-//                usersRepository.save(user);
-//                orderProducts.setCart(cart);
-//                orderProductsService.save(orderProducts);
-//                //return "redirect:" + referer;
-//            }
-//
-//
-//            return "redirect:" + referer;
-//        }
-//        if (!isUserAuthenticated()) {
-//            String uuid = cartService.getCookieValue(request, "uuid");
-//
-//            OrderProducts orderProducts = new OrderProducts();
-//            List<Products> listProducts = new ArrayList<>();
-//            listProducts.add(productRepository.findById(id).get());
-//            orderProducts.setProducts(listProducts);
-//            orderProducts.setQuantity(quantity);
-//            List<OrderProducts> orderProductsListForGuest = new ArrayList<>();
-//            orderProductsListForGuest.add(orderProducts);
-//            Optional<Cart> cartForGuest = Optional.ofNullable(cartService.findCartByName((uuid)));
-//            if (cartForGuest.isEmpty()) {
-//                cartService.createCartForGuest(uuid, orderProductsListForGuest);
-//            }
-//            if (cartService.findCartByName(uuid) == null) {
-//                Cart cart = new Cart();
-//                cart.setName(uuid);
-//                List<OrderProducts> orderProductsList = new ArrayList<>();
-//                orderProductsList.add(orderProducts);
-//                cart.setOrderProducts(orderProductsList);
-//                cartRepository.save(cart);
-//                orderProducts.setCart(cart);
-//                orderProductsService.save(orderProducts);
-//                //return "redirect:" + referer;
-//            } else {
-//                Cart cart = cartService.findCartByName(uuid);
-//                cart.getOrderProducts().add(orderProducts);
-//                cartRepository.save(cart);
-//                orderProducts.setCart(cart);
-//                orderProductsService.save(orderProducts);
-//                //return "redirect:" + referer;
-//            }
-//            return "redirect:" + referer;
-//        }
-//        return "redirect:/cart/show";
-//    }
-@PostMapping("/add/{id}")
-public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") int quantity, HttpServletRequest request) {
-    String referer = request.getHeader("Referer");
-
-    Products product = productRepository.findById(id).get();
-    if (product.getMaxQuantity() < quantity) {
-        // Here you might want to add some error message indicating that there is not enough product in stock
-        return "redirect:/cart";
-    }
-    product.setMaxQuantity(product.getMaxQuantity() - quantity);
-    productRepository.save(product);
-
-    if (isUserAuthenticated()) {
-        Users user = getCurrentUser();
-        OrderProducts orderProducts = new OrderProducts();
-        List<Products> listProducts = new ArrayList<>();
-        listProducts.add(product);
-        orderProducts.setProducts(listProducts);
-        orderProducts.setQuantity(quantity);
-        if (user.getCart() == null) {
-            Cart cart = new Cart();
-            cart.setEmail(user.getEmail());
-            cart.setAddress(user.getAddress());
-            cart.setName(user.getName());
-            cart.setPhone(user.getPhone());
-            cart.setUsers(user);
-            List<OrderProducts> orderProductsList = new ArrayList<>();
-            orderProductsList.add(orderProducts);
-            cart.setOrderProducts(orderProductsList);
-            user.setCart(cart);
-            cartService.save(cart);
-            orderProducts.setCart(cart);
-            orderProductsService.save(orderProducts);
-            usersRepository.save(user);
+        if (isUserAuthenticated()) {
+            Users user = getCurrentUser();
+            OrderProducts orderProducts = new OrderProducts();
+            List<Products> listProducts = new ArrayList<>();
+            listProducts.add(product);
+            orderProducts.setProducts(listProducts);
+            orderProducts.setQuantity(quantity);
+            if (user.getCart() == null) {
+                Cart cart = new Cart();
+                cart.setEmail(user.getEmail());
+                cart.setAddress(user.getAddress());
+                cart.setName(user.getName());
+                cart.setPhone(user.getPhone());
+                cart.setUsers(user);
+                List<OrderProducts> orderProductsList = new ArrayList<>();
+                orderProductsList.add(orderProducts);
+                cart.setOrderProducts(orderProductsList);
+                user.setCart(cart);
+                cartService.save(cart);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+                usersRepository.save(user);
+            } else {
+                Cart cart = user.getCart();
+                cart.getOrderProducts().add(orderProducts);
+                cartRepository.save(cart);
+                user.setCart(cart);
+                usersRepository.save(user);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+            }
         } else {
-            Cart cart = user.getCart();
-            cart.getOrderProducts().add(orderProducts);
-            cartRepository.save(cart);
-            user.setCart(cart);
-            usersRepository.save(user);
-            orderProducts.setCart(cart);
-            orderProductsService.save(orderProducts);
+            String uuid = cartService.getCookieValue(request, "uuid");
+            OrderProducts orderProducts = new OrderProducts();
+            List<Products> listProducts = new ArrayList<>();
+            listProducts.add(product);
+            orderProducts.setProducts(listProducts);
+            orderProducts.setQuantity(quantity);
+            List<OrderProducts> orderProductsListForGuest = new ArrayList<>();
+            orderProductsListForGuest.add(orderProducts);
+            Optional<Cart> cartForGuest = Optional.ofNullable(cartService.findCartByName((uuid)));
+            if (cartForGuest.isEmpty()) {
+                cartService.createCartForGuest(uuid, orderProductsListForGuest);
+            }
+            if (cartService.findCartByName(uuid) == null) {
+                Cart cart = new Cart();
+                cart.setName(uuid);
+                cart.setEmail(uuid);
+                List<OrderProducts> orderProductsList = new ArrayList<>();
+                orderProductsList.add(orderProducts);
+                cart.setOrderProducts(orderProductsList);
+                cartRepository.save(cart);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+            } else {
+                Cart cart = cartService.findCartByName(uuid);
+                cart.getOrderProducts().add(orderProducts);
+                cartRepository.save(cart);
+                orderProducts.setCart(cart);
+                orderProductsService.save(orderProducts);
+            }
         }
-    } else {
-        String uuid = cartService.getCookieValue(request, "uuid");
-        OrderProducts orderProducts = new OrderProducts();
-        List<Products> listProducts = new ArrayList<>();
-        listProducts.add(product);
-        orderProducts.setProducts(listProducts);
-        orderProducts.setQuantity(quantity);
-        List<OrderProducts> orderProductsListForGuest = new ArrayList<>();
-        orderProductsListForGuest.add(orderProducts);
-        Optional<Cart> cartForGuest = Optional.ofNullable(cartService.findCartByName((uuid)));
-        if (cartForGuest.isEmpty()) {
-            cartService.createCartForGuest(uuid, orderProductsListForGuest);
-        }
-        if (cartService.findCartByName(uuid) == null) {
-            Cart cart = new Cart();
-            cart.setName(uuid);
-            List<OrderProducts> orderProductsList = new ArrayList<>();
-            orderProductsList.add(orderProducts);
-            cart.setOrderProducts(orderProductsList);
-            cartRepository.save(cart);
-            orderProducts.setCart(cart);
-            orderProductsService.save(orderProducts);
-        } else {
-            Cart cart = cartService.findCartByName(uuid);
-            cart.getOrderProducts().add(orderProducts);
-            cartRepository.save(cart);
-            orderProducts.setCart(cart);
-            orderProductsService.save(orderProducts);
-        }
+        return "redirect:" + referer;
     }
-    return "redirect:" + referer;
-}
-
-
-    //    public String addProductToCart(@PathVariable Long id, HttpServletRequest request) {
-//        Users user = getCurrentUser();
-//        if (isUserAuthenticated()) {
-//            if (user.getCart() == null) {
-//                Cart cart = new Cart();
-//                user.setCart(cart);
-//                usersRepository.save(user);
-//            }
-//            Cart cart = user.getCart();
-//            cart.addProduct(productRepository.findById(id).get());
-//            usersRepository.save(user);
-//        } else {
-//            cookieInstall(request);
-//            Cart cart = (Cart) session.getAttribute(JSESSIONID);
-//            if (cart == null) {
-//                cart = new Cart();
-//                session.setAttribute(JSESSIONID, cart);
-//            }
-//            cart.addProduct(productRepository.findById(id).get());
-//        }
-//        return "redirect:/cart/show";
-//    }
-
-
     public Users getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -327,30 +225,6 @@ public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") 
         this.JSESSIONID = JSESSIONID;
         return JSESSIONID;
     }
-
-//    @PostMapping("/change/{id}")
-//    public String changeQuantity(@PathVariable Long id, @RequestParam int quantity) {
-//        Optional<OrderProducts> orderProductOptional = orderProductsService.findById(id);
-//        if (orderProductOptional.isPresent()) {
-//            OrderProducts oldOrderProduct = orderProductOptional.get();
-//            OrderProducts newOrderProduct = new OrderProducts();
-//            newOrderProduct.setProducts(oldOrderProduct.getProducts());
-//            newOrderProduct.setQuantity(quantity);
-//            orderProductsService.save(newOrderProduct);
-//
-//            Users user = getCurrentUser();
-//            Cart cart = user.getCart();
-//            cart.getOrderProducts().remove(oldOrderProduct);
-//            cart.getOrderProducts().add(newOrderProduct);
-//            cartRepository.save(cart);
-//        }
-//        return "redirect:/cart";
-//    }
-
-
-
-
-//    @Transactional
     @PostMapping("/change/{id}")
     public String changeQuantity(@PathVariable Long id, @RequestParam int quantity, HttpServletRequest request) {
         Users user = getCurrentUser();
@@ -382,6 +256,7 @@ public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") 
             cartRepository.save(cart);
         } else {
             String uuid = cartService.getCookieValue(request, "uuid");
+            //TODO SUPER CRITICAL
             Cart cart = cartService.findCartByName(uuid);
             if (cart == null) {
                 // Create a new Cart object if it doesn't exist
@@ -417,55 +292,7 @@ public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") 
 
         return "redirect:/cart";
     }
-//    @Transactional
-//    @PostMapping("/change/{id}")
-//    public String changeQuantity(@PathVariable Long id, @RequestParam int quantity, HttpServletRequest request) {
-//        Users user = getCurrentUser();
-//        if (isUserAuthenticated()) {
-//            Cart cart = user.getCart();
-//            List<OrderProducts> orderProducts = cart.getOrderProducts();
-//            for (OrderProducts op : orderProducts) {
-//                if (op.getId().equals(id)) {
-//                    List<Products> products = op.getProducts();
-//                    for (Products p : products) {
-//                        if (p.getMaxQuantity() >= quantity) {
-//                            op.setQuantity(quantity);
-//                            orderProductsService.save(op);
-//                        } else {
-//                            // Here you might want to add some error message indicating that there is not enough product in stock
-//                            return "redirect:/cart";
-//                        }
-//                    }
-//                }
-//            }
-//            cart.setOrderProducts(orderProducts);
-//            cartRepository.save(cart);
-//        } else {
-//            String uuid = cartService.getCookieValue(request, "uuid");
-//            Cart cart = cartService.findCartByName(uuid);
-//            if (cart != null) {
-//                List<OrderProducts> orderProducts = cart.getOrderProducts();
-//                for (OrderProducts op : orderProducts) {
-//                    if (op.getId().equals(id)) {
-//                        List<Products> products = op.getProducts();
-//                        for (Products p : products) {
-//                            if (p.getMaxQuantity() >= quantity) {
-//                                op.setQuantity(quantity);
-//                                orderProductsService.save(op);
-//                            } else {
-//                                // Here you might want to add some error message indicating that there is not enough product in stock
-//                                return "redirect:/cart";
-//                            }
-//                        }
-//                    }
-//                }
-//                cart.setOrderProducts(orderProducts);
-//                cartRepository.save(cart);
-//            }
-//        }
-//
-//        return "redirect:/cart";
-//    }
+
 // TODO Переделать метод CRITICAL Завтра
 //    @PostMapping("/remove/{id}")
 //    public String removeProduct(@PathVariable Long id, HttpServletRequest request) {
@@ -502,6 +329,7 @@ public String addProductToCart(@PathVariable Long id, @RequestParam("quantity") 
 //        }
 //        return "redirect:/cart";
 //    }
+
     @PostMapping("/remove/{id}")
     public String removeProduct(@PathVariable Long id, HttpServletRequest request) {
         if (isUserAuthenticated()) {

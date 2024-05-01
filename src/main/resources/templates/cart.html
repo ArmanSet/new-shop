@@ -187,14 +187,25 @@
                         <h3 th:text="${products.name}"></h3>
                         <p>Цена: <span th:text="${products.price}">0</span> руб.</p>
 
-                        <form  th:action="@{/cart/change/{id}(id=${orderProduct.id})}" method="post">
+<!--                        <form  th:action="@{/cart/change/{id}(id=${orderProduct.id})}" method="post">-->
+<!--                            <p>Количество:-->
+<!--                                <label>-->
+<!--                                    <input type="number" name="quantity" th:value="${orderProduct.quantity}" min="1"-->
+<!--                                           th:max="${products.maxQuantity}">-->
+<!--                                </label>-->
+<!--                            </p>-->
+<!--&lt;!&ndash;                            <button th:if="${authentication == 'ROLE_USER' || authentication == 'ROLE_ADMIN'}" type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>&ndash;&gt;-->
+<!--                            <button  type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>-->
+<!--                        </form>-->
+
+                        <form th:action="@{/cart/change/{id}(id=${orderProduct.id})}" method="post">
                             <p>Количество:
                                 <label>
                                     <input type="number" name="quantity" th:value="${orderProduct.quantity}" min="1"
                                            th:max="${products.maxQuantity}">
                                 </label>
                             </p>
-                            <button th:if="${authentication == 'ROLE_USER' || authentication == 'ROLE_ADMIN'}" type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>
+                            <button type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>
                         </form>
 
                         <form th:action="@{/cart/remove/{id}(id=${products.id})}" method="post">

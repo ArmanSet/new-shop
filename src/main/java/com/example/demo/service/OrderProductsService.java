@@ -5,6 +5,7 @@ import com.example.demo.repository.OrderProductsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,5 +27,17 @@ public class OrderProductsService {
 
     public void delete(OrderProducts op) {
         orderProductsRepository.delete(op);
+    }
+
+    public void deleteAll(List<OrderProducts> orderProducts) {
+        orderProductsRepository.deleteAll(orderProducts);
+    }
+
+    public List<OrderProducts> findOrderProductsByCartId(Long id) {
+        return orderProductsRepository.findOrderProductsByCartId(id);
+    }
+
+    public   List<OrderProducts> findByCartId(Long id) {
+       return orderProductsRepository.findOrderProductsByCartId(id);
     }
 }

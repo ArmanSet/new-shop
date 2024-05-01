@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 
 import com.example.demo.entity.*;
+import com.example.demo.repository.ProductsRepository;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.CartService;
 import com.example.demo.service.OrderProductsService;
@@ -33,6 +34,7 @@ public class OrderController {
     private final OrderService orderService;
     private final UsersService usersService;
     private final OrderProductsService orderProductsService;
+    private final ProductsRepository productsRepository;
     private List<Order> orderForSave;
 
     @GetMapping("/")
@@ -42,15 +44,15 @@ public class OrderController {
         List<Order> orders = orderService.findAllOrdersByUsers(users.getEmail());
         List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
         for (OrderProducts orderProduct : orderProducts) {
-           for (Products product : orderProduct.getProducts()) {
-               System.out.println(product.getName());
-               System.out.println(orderProduct.getQuantity());
-               System.out.println(product.getPrice());
-           }
+            for (Products product : orderProduct.getProducts()) {
+                System.out.println(product.getName());
+                System.out.println(orderProduct.getQuantity());
+                System.out.println(product.getPrice());
+            }
         }
 
         System.out.println(users.getId());// Запрашиваем заказы пользователя из базы данных
-         // Запрашиваем заказы пользователя из базы данных
+        // Запрашиваем заказы пользователя из базы данных
         model.addAttribute("orders", orders);
         model.addAttribute("orderProductsSeparate", orderProducts);
         return "orders";
@@ -96,11 +98,16 @@ public class OrderController {
 //    }
 
     @PostMapping("/{id}")
+    @Transactional
     public String showOrders(@PathVariable Long id, Model model) {
         Users userAuth = getCurrentUser();
         if (userAuth == null) {
             return "redirect:/login";
         }
+        if (userAuth.getCart().getOrderProducts().isEmpty()) {
+            return "redirect:/products/list";
+        }
+        // TODO ЛИШНЕЕ Get the cart by id
         Cart cart = cartService.findById(id).get();
         Order order = new Order();
         order.setUsers(userAuth);
@@ -135,7 +142,17 @@ public class OrderController {
         model.addAttribute("orders", orders);
         userAuth.setOrders(orders);
 
-        cartService.delete(cart);
+        //TODO SUPER PUPER CRITICAL Clear the cart
+        userAuth.getCart().getOrderProducts().clear();
+        cartService.save(userAuth.getCart());
+        List<OrderProducts> orderProductsFromDataBase = orderProductsService.findByCartId(cart.getId());
+        orderProductsFromDataBase.forEach(orderProducts ->
+                {   orderProducts.setCart(null);
+//                    orderProducts.setOrder(order);
+                    orderProductsService.save(orderProducts);
+                });
+
+                System.out.println(userAuth.getCart().getId());
         return "orders";
     }
 

@@ -280,6 +280,12 @@ public class CartService {
     }
 
 
+
+    public void deleteById(Long id) {
+        cartRepository.deleteById(id);
+    }
+
+
 //    public Cart convertProductsFromManyOrderProductsToOneForShow(Cart cart) {
 //        if (cart == null || cart.getOrderProducts().isEmpty()) {
 //            return new Cart(); // Return an empty cart if no products exist
