@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -131,18 +132,92 @@ public class CartService {
         return cartRepository.findCartByName(uuid);
     }
     //TODO Переделать метод CRITICAL
+//    @Transactional
+//    public Cart mergeCarts(Users user, HttpServletRequest request) {
+//        Cart cartFromSession = checkInCockieIfCartExist(request);
+//        Cart cartFromDb = user.getCart();
+//        cartFromDb.setId(user.getCart().getId());
+//        cartFromDb.setUsers(user);
+//        cartFromDb.setName(user.getName());
+//        cartFromDb.setAddress(user.getAddress());
+//        cartFromDb.setPhone(user.getPhone());
+//        cartFromDb.setEmail(user.getEmail());
+//        if (cartFromDb.getOrderProducts() == null) {
+//            cartFromDb.setOrderProducts(new ArrayList<>());
+//        }
+//        cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
+//        convertProductsFromManyOrderProductsToOneForShow(cartFromDb);
+//        cartRepository.save(cartFromDb);
+//        return cartFromDb;
+//    }
+//    @Transactional
+//    public Cart mergeCarts(Users user, HttpServletRequest request) {
+//        Cart cartFromSession = checkInCockieIfCartExist(request);
+//
+//        // Check if user has an existing cart in the database
+//        Cart cartFromDb = user.getCart();
+//
+//        // If user doesn't have a cart, create a new one from session cart
+//        if (cartFromDb == null) {
+//            cartFromDb = new Cart();
+//            cartFromDb.setName(user.getName());
+//            cartFromDb.setAddress(user.getAddress());
+//            cartFromDb.setPhone(user.getPhone());
+//            cartFromDb.setEmail(user.getEmail());
+//            cartFromDb.setUsers(user);
+//            cartFromDb.setOrderProducts(cartFromSession.getOrderProducts());
+//        } else {
+//            // User has a cart, merge session cart products into it
+//            cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
+//        }
+//
+//        // After merging, convert products for display (optional)
+//        convertProductsFromManyOrderProductsToOneForShow(cartFromDb);
+//
+//        // Save the merged cart to the database
+//        cartRepository.save(cartFromDb);
+//
+//        return cartFromDb;
+//    }
+    @Transactional
     public Cart mergeCarts(Users user, HttpServletRequest request) {
         Cart cartFromSession = checkInCockieIfCartExist(request);
+
+        // Check if user has an existing cart in the database
         Cart cartFromDb = user.getCart();
-        cartFromDb.setId(user.getCart().getId());
-        if (cartFromDb.getOrderProducts() == null) {
-            cartFromDb.setOrderProducts(new ArrayList<>());
+
+        // If user doesn't have a cart, create a new one from session cart
+        if (cartFromDb == null) {
+            cartFromDb = new Cart();
+            cartFromDb.setName(user.getName());
+            cartFromDb.setAddress(user.getAddress());
+            cartFromDb.setPhone(user.getPhone());
+            cartFromDb.setEmail(user.getEmail());
+            cartFromDb.setUsers(user);
+            cartFromDb.setOrderProducts(cartFromSession.getOrderProducts());
+            cartRepository.save(cartFromDb); // <-- Save the newly created cart
+        } else {
+            // User has a cart, merge session cart products into it
+//            cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
+            List<OrderProducts> orderProducts = cartFromSession.getOrderProducts();
+            for (OrderProducts orderProduct : orderProducts) {
+                orderProduct.setCart(cartFromDb);
+                cartFromDb.setOrderProducts(orderProducts);
+                orderProductsService.save(orderProduct);
+            }
+            cartFromSession.setOrderProducts(new ArrayList<>());
+            cartRepository.save(cartFromDb); // <-- Save the merged cart
         }
-        cartFromDb.getOrderProducts().addAll(cartFromSession.getOrderProducts());
+
+        // After merging, convert products for display (optional)
         convertProductsFromManyOrderProductsToOneForShow(cartFromDb);
-        cartRepository.save(cartFromDb);
+
+        // No need to save the cart here, it was already saved earlier in this method
+        // cartRepository.save(cartFromDb); <-- Not needed
+
         return cartFromDb;
     }
+
 
 
     public Cart checkInCockieIfCartExist(HttpServletRequest request) {

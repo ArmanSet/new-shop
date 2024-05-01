@@ -36,7 +36,7 @@ public class Users {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "users")
     private List<Order> orders;
 
 //    @OneToMany(mappedBy = "users")

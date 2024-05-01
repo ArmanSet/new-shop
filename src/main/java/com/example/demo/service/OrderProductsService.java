@@ -23,4 +23,8 @@ public class OrderProductsService {
     public void deleteById(Long id) {
         orderProductsRepository.deleteById(id);
     }
+
+    public void delete(OrderProducts op) {
+        orderProductsRepository.delete(op);
+    }
 }

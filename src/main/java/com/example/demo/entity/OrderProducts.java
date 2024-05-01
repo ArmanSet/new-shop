@@ -20,6 +20,7 @@ public class OrderProducts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int quantity;
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

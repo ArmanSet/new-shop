@@ -55,8 +55,8 @@ public class Order {
     private Users users;
 
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderProducts> orderProducts = new ArrayList<>();
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private List<OrderProducts> orderProducts;
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")

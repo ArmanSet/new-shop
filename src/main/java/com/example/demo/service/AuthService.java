@@ -3,6 +3,9 @@ package com.example.demo.service;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.security.UserDetailsServiceImpl;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,18 @@ public class AuthService {
     @Autowired
     public void setUsersRepository(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
+    }
+
+    public void clearCookie(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setMaxAge(0);
+                cookie.setValue(null); // set the value to null
+                cookie.setPath(request.getContextPath());
+                response.addCookie(cookie);
+            }
+        }
     }
 
 //    public ResponseEntity<?> userAuthentication(@RequestBody Users authRequest) {

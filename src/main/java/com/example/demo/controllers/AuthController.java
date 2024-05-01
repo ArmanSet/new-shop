@@ -4,6 +4,7 @@ package com.example.demo.controllers;
 import com.example.demo.entity.Users;
 //import com.example.demo.service.AuthService;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.CartService;
 import com.example.demo.service.UsersService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,10 +46,13 @@ public class AuthController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+//        authService.clearCookie(request,response);
+
         return "redirect:/login";
     }
 }

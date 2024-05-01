@@ -32,7 +32,7 @@ public class MainController {
     @GetMapping("/")
     public String home(Model model, HttpServletResponse response) {
         if (uuid != null) {
-            System.out.println("UUID is not null"+uuid.toString());
+            System.out.println(STR."UUID is not null\{uuid.toString()}");
         } else {
             uuid = UUID.randomUUID();
             Cookie cookie = new Cookie("uuid", uuid.toString());

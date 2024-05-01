@@ -172,15 +172,6 @@
 
 <!--    </div>-->
 <!--</main>-->
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <!-- ... -->
-</head>
-<body>
-<header>
-    <!-- ... -->
-</header>
 <h2>Корзина</h2>
 <a href="/products/list">TO PRODUCT LIST</a>
 
@@ -189,21 +180,21 @@
     <div class="cart-items">
         <ul>
             <li th:each="orderProduct : ${orderProducts}">
-                <div class="cart-item" th:each="products : ${orderProduct.products}" >
+                <div class="cart-item" th:each="products : ${orderProduct.products}">
                     <img th:src="${products.image}" alt="${orderProduct.product.name}">
 
                     <div class="cart-item-info">
                         <h3 th:text="${products.name}"></h3>
                         <p>Цена: <span th:text="${products.price}">0</span> руб.</p>
 
-                        <form th:action="@{/cart/change/{id}(id=${products.id})}" method="post">
+                        <form  th:action="@{/cart/change/{id}(id=${orderProduct.id})}" method="post">
                             <p>Количество:
-                                <label >
+                                <label>
                                     <input type="number" name="quantity" th:value="${orderProduct.quantity}" min="1"
                                            th:max="${products.maxQuantity}">
                                 </label>
                             </p>
-                            <button type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>
+                            <button th:if="${authentication == 'ROLE_USER' || authentication == 'ROLE_ADMIN'}" type="submit">ПОМЕНЯТЬ КОЛИЧЕСТВО</button>
                         </form>
 
                         <form th:action="@{/cart/remove/{id}(id=${products.id})}" method="post">
@@ -212,12 +203,24 @@
                     </div>
                 </div>
             </li>
+            <!--            <div class="cart-total">-->
+            <!--                <p>Итого: <span th:text="${totalPrice}">0</span> руб.</p>-->
+            <!--                <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">-->
+            <!--                    <input type="submit" value="Оформить заказ">-->
+            <!--                </form>-->
+            <!--            </div>-->
             <div class="cart-total">
                 <p>Итого: <span th:text="${totalPrice}">0</span> руб.</p>
-                <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">
-                    <input type="submit" value="Оформить заказ">
-                </form>
+                <div th:if="${authentication == 'ROLE_USER' || authentication == 'ROLE_ADMIN'}">
+                    <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">
+                        <input type="submit" value="Оформить заказ">
+                    </form>
+                </div>
+                <div th:if="${authentication != 'ROLE_USER' && authentication != 'ROLE_ADMIN'}">
+                    <a href="/login">Login to Checkout</a>
+                </div>
             </div>
+
         </ul>
     </div>
 </main>
