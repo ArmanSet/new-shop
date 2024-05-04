@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+    <title>Product Card UI Design</title>
+    <link rel="stylesheet" th:href="@{/product-details.css}">
+    <link rel="stylesheet" th:href="@{/menu.css}">
+    <link rel="stylesheet" th:href="@{/catalog.css}">
+
+
+    <!-- Vendor Script -->
+<!--    <script-->
+<!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+<!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+<!--            crossorigin="anonymous"></script>-->
+
+</head>
+
+<body>
+
+    <header style="background-color: #2c2c3b;position: fixed;height: 80px;width: 100%;z-index: 9999; display: flex; justify-content: space-between;">
+        <!--   LOGIN-->
+
+        <div style="display: flex;">
+            <div th:if="${isAuthenticated != null && !(isAuthenticated)}">
+                <button class="button-27" type="button">
+                    <a style="color: #ff4e5b" href="/login">LogIn</a>
+                </button>
+                <button class="button-27" type="button">
+                    <a style="color: #ff4e5b" href="/users/create">SIGN UP</a>
+                </button>
+            </div>
+            <div th:if="${isAuthenticated != null && isAuthenticated}">
+                <button class="button-27" type="button">
+                    <a style="color: #ff4e5b" href="/logout">LogOut</a>
+                </button>
+            </div>
+
+            <div class="dropdown" th:if="${isAdmin}">
+                <button class="button-27 dropdown-toggle" type="button">
+                    Admin Menu
+                </button>
+                <div style="background-color: #0a0506" class="dropdown-menu">
+                    <a href="/users/show">≈ADMIN PANEL≈</a>
+                    <a href="/category/create">Create Products</a>
+                </div>
+            </div>
+
+
+            <div class="dropdown" th:if="${isAuthenticated}">
+                <button class="button-27 dropdown-toggle" type="button">
+                    Profile
+                </button>
+                <div style="background-color: #0a0506" class="dropdown-menu">
+                    <a href="/profile">Account Information</a><br>
+                    <a href="/orders/">Orders</a><br>
+                    <a href="/orders/returns">Returns</a>
+                </div>
+            </div>
+
+
+            <!--        <div  th:if="${isAuthenticated}">-->
+            <!--            <button class="button-27" onclick="window.location.href='/orders/'">MY ORDERS</button>-->
+            <!--        </div>-->
+        </div>
+        <div><a href="/cart">
+            <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"
+                 th:src="@{/images/1.png}"
+                 alt="">
+
+        </a>
+            <br>
+            <div th:replace="/sections/catalog :: catalog"></div>
+            <br>
+
+            <div th:replace="/sections/cartshow :: cartshow"></div>
+
+            <div th:replace="menu :: site-menu"></div>
+        </div>
+    </header>
+
+<main>
+<div class="container">
+    <div class="imgBx">
+        <img th:src="${product.image}" alt="Product Image">
+    </div>
+    <div class="details">
+
+
+        <div class="contents">
+            <h2 th:text="${product.name}">Product Name</h2>
+<!--            <span th:text="${product.quantity}">Product Quantity</span>-->
+            <h2 th:text="${product.description}">
+                Product Description
+            </h2>
+            <h2 th:text="'Rs. ' + ${product.price}">Product Price</h2>
+            <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                <h2>Quantity:
+                    <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
+                </h2>
+                <button style="background-color: #FFFFFFAD" type="submit">ADD TO CART</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<!--<footer>-->
+<!--    <a href="https://stylustechnepal.com" target="_blank">anuzbvbmaniac123@gmail.com</a>-->
+<!--</footer>-->
+
+
+<!--<script>-->
+<!--    // Change The Picture and Associated Element Color when Color Options Are Clicked.-->
+<!--    $(".product-colors span").click(function() {-->
+<!--        $(".product-colors span").removeClass("active");-->
+<!--        $(this).addClass("active");-->
+<!--        $(".active").css("border-color", $(this).attr("data-color-sec"))-->
+<!--        $("body").css("background", $(this).attr("data-color-primary"));-->
+<!--        $(".content h2").css("color", $(this).attr("data-color-sec"));-->
+<!--        $(".content h3").css("color", $(this).attr("data-color-sec"));-->
+<!--        $(".container .imgBx").css("background", $(this).attr("data-color-sec"));-->
+<!--        $(".container .details button").css("background", $(this).attr("data-color-sec"));-->
+<!--        $(".imgBx img").attr('src', $(this).attr("data-pic"));-->
+<!--    });-->
+<!--</script>-->
+</main>
+</body>
+
+</html>

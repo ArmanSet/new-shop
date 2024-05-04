@@ -33,6 +33,7 @@ public class ProductsController {
 
     @GetMapping("/list/{id}")
     public String getProduct(@PathVariable Long id, Model model) {
+
         List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";
@@ -40,6 +41,35 @@ public class ProductsController {
 
     @PostMapping("/list/{id}")
     public String filterProductsByCategoryPost(@PathVariable Long id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("ROLE_USER")) {
+                    isAuthenticated = true;
+                    break;
+                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                    isAuthenticated = true;
+                    break;
+                } else {
+                    isAuthenticated = false;
+                }
+            }
+        }
+
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+        }
+
+        System.out.println(isAuthenticated);
+        model.addAttribute("isAuthenticated", isAuthenticated);
         List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";

@@ -78,7 +78,7 @@ public class MainController {
         model.addAttribute("isAuthenticated", isAuthenticated);
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
-        return "index";
+        return "index2";
     }
 
 

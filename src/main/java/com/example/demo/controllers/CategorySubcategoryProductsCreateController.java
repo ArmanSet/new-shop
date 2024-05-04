@@ -9,10 +9,7 @@ import com.example.demo.service.SubcategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,6 +43,7 @@ public class CategorySubcategoryProductsCreateController {
         productsService.save(products);
         return "redirect:/products/list";
     }
+
     @PostMapping("/create-subcategory")
     public String postSubcategory(@ModelAttribute Subcategory subcategory) {
         Long categoryID = subcategory.getCategory().getId();
@@ -54,12 +52,12 @@ public class CategorySubcategoryProductsCreateController {
         subcategoryService.save(subcategory);
         return "redirect:/products/list";
     }
+
     @PostMapping("/create-category")
     public String postCategory(@ModelAttribute Category category) {
         categoryService.save(category);
         return "redirect:/products/list";
     }
-
 
 
 //    @PostMapping("/create-products")
@@ -77,12 +75,29 @@ public class CategorySubcategoryProductsCreateController {
         model.addAttribute("categories", categories);
         return "categories";
     }
+
     @GetMapping("/subcategory")
     public String getSubcategories(Model model) {
         List<Subcategory> subcategories = subcategoryService.findAll();
         model.addAttribute("subcategories", subcategories);
         return "subcategories";
     }
+
+//    @GetMapping("/subcategory/{id}")
+//    public String getSubcategory(Model model, @PathVariable Long id) {
+//        List<Subcategory> subcategories = categoryService.getSubcategoryByCategoryId(id);
+//        model.addAttribute("subcategories", subcategories);
+//        return "/subcategories";
+//    }
+//
+//    @GetMapping("subcategory/products/{id}")
+//    public String getProducts(Model model, @PathVariable Long id) {
+//        List<Products> products = subcategoryService.getProductsBySubcategoryId(id);
+//        model.addAttribute("products", products);
+//        return "/products";
+//    }
+
+
     @GetMapping("/catalog")
     public String getCatalog(Model model) {
         List<Products> products = productsService.findAll();

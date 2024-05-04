@@ -15,8 +15,9 @@
 
     <!--	   MENU-->
     <link rel="stylesheet" th:href="@{/menu.css}">
-    <link rel="stylesheet" th:href="@{/gallery.css}">
 
+    <link rel="stylesheet" th:href="@{/catalog.css}">
+    <link rel="stylesheet" th:href="@{/gallery.css}">
     <!--	   BUTTON-->
     <!-- HTML !-->
     <!--	   <button class="button-27" role="button">Button 27</button>-->
@@ -181,40 +182,17 @@
              alt="">
 
     </a>
+        <br>
+        <div th:replace="/sections/catalog :: catalog"></div>
+        <br>
+
         <div th:replace="/sections/cartshow :: cartshow"></div>
-<!--        <div th:replace="/sections/catalog :: catalog"></div>-->
+
         <div th:replace="menu :: site-menu"></div>
     </div>
 </header>
 <!-- header section start -->
 <div class="header_section">
-
-
-    <!--		<div class="container">-->
-    <!--			<div class="row">-->
-    <!--				<div class="col-sm-3">-->
-    <!--					<div class="logo"><a href="#"><img th:src="@{/images/logo.png}"></a></div>-->
-    <!--				</div>-->
-    <!--				<div class="col-sm-9">-->
-    <!--					<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-    <!--                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">-->
-    <!--                        <span class="navbar-toggler-icon"></span>-->
-    <!--                        </button>-->
-    <!--                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">-->
-    <!--                        <div class="navbar-nav">-->
-    <!--                           <a class="nav-item nav-link" href="index.html">Home</a>-->
-    <!--                           <a class="nav-item nav-link" href="collection.html">Collection</a>-->
-    <!--                           <a class="nav-item nav-link" href="shoes.html">Shoes</a>-->
-    <!--                           <a class="nav-item nav-link" href="racing boots.html">Racing Boots</a>-->
-    <!--                           <a class="nav-item nav-link" href="contact.html">Contact</a>-->
-    <!--                           <a class="nav-item nav-link last" href="#"><img th:src="@{/images/search_icon.png}"></a>-->
-    <!--                           <a class="nav-item nav-link last" href="contact.html"><img th:src="@{/images/shop_icon.png}"></a>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-    <!--                    </nav>-->
-    <!--				</div>-->
-    <!--			</div>-->
-    <!--		</div>-->
     <div class="banner_section">
         <br>
         <br>
@@ -237,11 +215,6 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
-<!--                                    <div class="col-sm-2 padding_0">-->
-<!--                                        <p class="mens_taital">Men Shoes</p>-->
-<!--                                        <div class="page_no">0/2</div>-->
-<!--                                        <p class="mens_taital_2">Men Shoes</p>-->
-<!--                                    </div>-->
                                     <div class="col-sm-5">
                                         <div class="banner_taital">
                                             <h1 class="banner_text">New Running Shoes </h1>
@@ -260,11 +233,7 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="row">
-<!--                                    <div class="col-sm-2 padding_0">-->
-<!--                                        <p class="mens_taital">Men Shoes</p>-->
-<!--                                        <div class="page_no">0/2</div>-->
-<!--                                        <p class="mens_taital_2">Men Shoes</p>-->
-<!--                                    </div>-->
+
                                     <div class="col-sm-5">
                                         <div class="banner_taital">
                                             <h1 class="banner_text">New Running Shoes </h1>
@@ -282,11 +251,7 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="row">
-<!--                                    <div class="col-sm-2 padding_0">-->
-<!--                                        <p class="mens_taital">Men Shoes</p>-->
-<!--                                        <div class="page_no">0/2</div>-->
-<!--                                        <p class="mens_taital_2">Men Shoes</p>-->
-<!--                                    </div>-->
+
                                     <div class="col-sm-5">
                                         <div class="banner_taital">
                                             <h1 class="banner_text">New Running Shoes </h1>

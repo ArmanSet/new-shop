@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Products;
 import com.example.demo.entity.Subcategory;
 import com.example.demo.repository.SubcategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,9 @@ public class SubcategoryService {
 
     public List<Subcategory> findByCategoryId(Long id) {
         return subcategoryRepository.findByCategoryId(id);
+    }
+
+    public List<Products> getProductsBySubcategoryId(Long id) {
+        return subcategoryRepository.findById(id).get().getProducts();
     }
 }

@@ -1,0 +1,80 @@
+.multilevel-dropdown-menu {
+    font-family: Arial, sans-serif;
+    display: flex; /* Добавлено для горизонтального отображения */
+    position: fixed; /* Добавлено для фиксации позиции */
+    top: 15px; /* Добавлено для позиционирования сверху */
+    left: 50%; /* Добавлено для позиционирования посередине */
+    transform: translateX(-50%); /* Добавлено для корректировки позиции */
+
+}
+
+.parent {
+    position: relative;
+    line-height: 40px;
+    /*border: #0a0506;*/
+    /*background-color: rgb(12, 1, 22);*/
+    /*border-right: #CCC 1px solid;*/
+    /*border-radius: 20px;*/
+}
+
+.parent a {
+    /*margin: 10px 24px;*/
+    /*color: #5d3200;*/
+    /*text-decoration: none;*/
+    font-family: Arial, sans-serif; /* Установка шрифта */
+    font-size: 16px; /* Установка размера шрифта */
+    color: #0d0318; /* Установка цвета текста */
+    text-decoration: none; /* Удаление подчеркивания */
+
+    /* !* */
+    padding: 10px; /* Установка отступов */
+}
+
+.parent:hover > ul {
+    display: block;
+    position: absolute;
+}
+
+.child {
+    display: none;
+}
+
+.child li {
+    background-color: #2c2c3b;
+    line-height: 40px;
+    border-bottom: #b5b5b5 1px solid;
+    border-right: #b5b5b5 1px solid;
+    width: 100%;
+    /*border-radius: 20px;*/
+}
+
+.child li a {
+    color: #ffffff;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0px;
+    min-width: 12em;
+}
+
+ul ul ul {
+    left: 100%;
+    top: 0;
+    margin-left: 1px;
+}
+
+/*li:hover {*/
+/*    background-color: #95B4CA;*/
+/*}*/
+
+.parent li:hover {
+    background-color: #b7b0b0;
+}
+
+.expand {
+    font-size: 12px;
+    float: right;
+    margin-right: 5px;
+}

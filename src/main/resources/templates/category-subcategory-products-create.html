@@ -22,7 +22,8 @@
     <input type="text" id="categoryImage" th:field="*{image}"><br>
     <input type="submit" value="Create Category">
 </form>
-
+<br>
+<h1>Create Subcategory</h1>
 <form th:action="@{/category/create-subcategory}" th:object="${subcategory}" method="post">
     <label for="subcategoryName">Subcategory Name:</label><br>
     <input type="text" id="subcategoryName" th:field="*{name}"><br>
@@ -37,7 +38,7 @@
     </select><br>
     <input type="submit" value="Create Subcategory">
 </form>
-
+<br>
 <h1>Create Product</h1>
 <form th:action="@{/category/create-products}" th:object="${products}" method="post">
     <label for="productName">Product Name:</label><br>

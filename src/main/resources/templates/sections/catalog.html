@@ -1,28 +1,271 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title>Menu</title>-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div th:fragment="catalog">-->
-<!--    <div class="container mt-5">-->
-<!--        <div class="list-group">-->
-<!--            <span class="list-group-item list-group-item-action active">Categories</span>-->
-<!--            <a th:each="category : ${categories}" th:href="@{/category/{id}(id=${category.id})}"-->
-<!--               class="list-group-item list-group-item-action" th:text="${category.name}"></a>-->
-<!--        </div>-->
-<!--        <div class="list-group mt-5">-->
-<!--            <span class="list-group-item list-group-item-action active">Subcategories</span>-->
-<!--            <a th:each="subcategory : ${subcategories}" th:href="@{/subcategory/{id}(id=${subcategory.id})}"-->
-<!--               class="list-group-item list-group-item-action" th:text="${subcategory.name}"></a>-->
-<!--        </div>-->
-<!--        <div class="list-group mt-5">-->
-<!--            <span class="list-group-item list-group-item-action active">Products</span>-->
-<!--            <a th:each="product : ${products}" th:href="@{/product/{id}(id=${product.id})}"-->
-<!--               class="list-group-item list-group-item-action" th:text="${product.name}"></a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+    <link rel="stylesheet" th:href="@{/catalog.css}">
+</head>
+<body>
+<div th:fragment="catalog">
+    <!--    <h1>Multilevel dropdown</h1>-->
+    <ul class="multilevel-dropdown-menu">
+        <!--        <li class="parent" th:each="category : ${categories}">-->
+        <!--            <a href="#" th:text="${category.name}"></a>-->
+        <!--            <ul class="child">-->
+        <!--                <li class="parent" th:each="subcategory : ${subcategories}">-->
+        <!--                    <a href="#" th:text="${subcategory.name} + ' »'"></a>-->
+        <!--                    <ul class="child">-->
+        <!--                        <li th:each="product : ${subcategory.products}">-->
+        <!--                            <a href="#" th:text="${product.name}"></a>-->
+        <!--                        </li>-->
+        <!--                    </ul>-->
+        <!--                </li>-->
+        <!--            </ul>-->
+        <!--        </li>-->
+        <li class="parent"><a href="#">Category</a>
+            <ul class="child">
+                <!--                <li class="parent" th:each="category : ${categories}">-->
+                <!--                    <a href="#" th:text="${category.name}"></a>-->
+                <!--                    <ul class="child">-->
+                <!--                        <li class="parent" th:each="subcategory : ${category.subcategories}">-->
+                <!--                            <a href="#" th:text="${subcategory.name} + ' »'"></a>-->
+                <!--                            <ul class="child">-->
+                <!--                                <li th:each="product : ${subcategory.products}">-->
+                <!--                                    <a href="#" th:text="${product.name}"></a>-->
+                <!--                                </li>-->
+                <!--                            </ul>-->
+                <!--                        </li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+                <li class="parent" th:each="category : ${categories}">
+                    <a href="#" th:href="@{/subcategory/list/{id}(id=${category.id})}"
+                       th:text="${category.name}"></a>
+                    <ul class="child">
+                        <li class="parent" th:each="subcategory : ${category.subcategories}">
+                            <a href="#" th:href="@{/products/list/{id}(id=${subcategory.id})}"
+                               th:text="${subcategory.name} + ' »'"></a>
+                            <ul class="child">
+                                <li th:each="product : ${subcategory.products}">
+                                    <a href="#" th:href="@{/product/details/{id}(id=${product.id})}"
+                                       th:text="${product.name}"></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <!--                <li><a href="#">Barbies</a></li>-->
+                <!--                <li><a href="#">Teddy Bear</a></li>-->
+                <!--                <li class="parent"><a href="#">Level 1 <span class="expand">»</span></a>-->
+                <!--                    <ul class="child">-->
+                <!--                        <li><a href="#">Level 2 - Menu 1</a></li>-->
+                <!--                        <li><a href="#">Level 2 - Menu 2</a></li>-->
+                <!--                        <li class="parent"><a href="#">Level 2 - Menu 3<span class="expand">»</span></a>-->
+                <!--                            <ul class="child">-->
+                <!--                                <li><a href="#">Level 3 - Menu 1</a></li>-->
+                <!--                                <li><a href="#">Level 3 - Menu 2</a></li>-->
+                <!--                            </ul>-->
+                <!--                        </li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+            </ul>
+        </li>
+        <li class="parent"><a href="#">Recent Toys</a>
+            <ul class="child">
+                <li><a href="#">Yoyo</a></li>
+                <li><a href="#">Doctor Kit</a></li>
+                <li class="parent"><a href="#">Fun Puzzle<span class="expand">»</span></a>
+                    <ul class="child">
+                        <li><a href="#" nowrap>Cards</a></li>
+                        <li><a href="#" nowrap>Numbers</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Uno Cards</a></li>
+            </ul>
+        </li>
+        <li class="parent"><a href="#">Toys Category</a>
+            <ul class="child">
+                <li><a href="#">Battery Toys</a></li>
+                <li class="parent"><a href="#">Remote Toys <span class="expand">»</span></a>
+                    <ul class="child">
+                        <li><a href="#">Cars</a></li>
+                        <li class="parent"><a href="#">Aeroplane <span class="expand">»</span></a>
+                            <ul class="child">
+                                <li><a href="#">Passenger</a></li>
+                                <li><a href="#">Fighter</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Helicopter</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Soft Toys</a></li>
+                <li><a href="#">Magnet Toys</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!--        <nav>-->
+<!--            <a href="javascript:void(0);" class="mobile-menu-trigger">Open mobile menu</a>-->
+<!--            <ul class="menu menu-bar">-->
+<!--                <li>-->
+<!--                    <a href="javascript:void(0);" class="menu-link menu-bar-link" aria-haspopup="true">1. Multilevel mega-->
+<!--                        menu</a>-->
+<!--                    <ul class="mega-menu mega-menu&#45;&#45;multiLevel">-->
+<!--                        <li>-->
+<!--                            <a href="javascript:void(0);" class="menu-link mega-menu-link" aria-haspopup="true">1.1 Flyout-->
+<!--                                link</a>-->
+<!--                            <ul class="menu menu-list">-->
+<!--                                <li>-->
+<!--                                    <a href="/page" class="menu-link menu-list-link">1.1.1 Page link</a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="javascript:void(0);" class="menu-link menu-list-link"-->
+<!--                                       aria-haspopup="true">1.1.2 Flyout link</a>-->
+<!--                                    <ul class="menu menu-list">-->
+<!--                                        <li>-->
+<!--                                            <a href="/page" class="menu-link menu-list-link">1.1.2.1 Page link</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="/page" class="menu-link menu-list-link">1.1.2.2 Page link</a>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="/page" class="menu-link menu-list-link">1.1.3 Page link</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="javascript:void(0);" class="menu-link mega-menu-link" aria-haspopup="true">1.2 Flyout-->
+<!--                                link</a>-->
+<!--                            <ul class="menu menu-list">-->
+<!--                                <li>-->
+<!--                                    <a href="/page" class="menu-link menu-list-link">1.2.1 Page link</a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="/page" class="menu-link menu-list-link">1.2.2 Page link</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="javascript:void(0);" class="menu-link mega-menu-link" aria-haspopup="true">1.3 Flyout-->
+<!--                                link</a>-->
+<!--                            <ul class="menu menu-list">-->
+<!--                                <li>-->
+<!--                                    <a href="/page" class="menu-link menu-list-link">1.3.1 Page link</a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="/page" class="menu-link menu-list-link">1.3.2 Page link</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="/page" class="menu-link mega-menu-link">1.4 Page link</a>-->
+<!--                        </li>-->
+<!--                        <li class="mobile-menu-back-item">-->
+<!--                            <a href="javascript:void(0);" class="menu-link mobile-menu-back-link">Back</a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+
+<!--&lt;!&ndash;                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="javascript:void(0);" class="menu-link menu-bar-link" aria-haspopup="true">2. Flat mega menu (3&ndash;&gt;-->
+<!--&lt;!&ndash;                        cols)</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <ul class="mega-menu mega-menu&#45;&#45;flat">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="/page" class="menu-link mega-menu-link mega-menu-header">2.1 Page link header</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ul class="menu menu-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.1.1 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.1.2 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.1.3 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="/page" class="menu-link mega-menu-link mega-menu-header">2.2 Page link header</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ul class="menu menu-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.2.1 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.2.2 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.2.3 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="/page" class="menu-link mega-menu-link mega-menu-header">2.3 Page link header</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ul class="menu menu-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.2.1 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">2.2.2 Page link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li class="mobile-menu-back-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="javascript:void(0);" class="menu-link mobile-menu-back-link">Back</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="javascript:void(0);" class="menu-link menu-bar-link" aria-haspopup="true">3. Flat mega menu (2&ndash;&gt;-->
+<!--&lt;!&ndash;                        cols)</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <ul class="mega-menu mega-menu&#45;&#45;flat">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="#" class="menu-link mega-menu-link mega-menu-header">3.1 Page link header</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ul class="menu menu-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        3.1.1 Page link<br />&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <small>Short decription of link</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        3.1.2 Page link<br />&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <small>Short decription of link</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/page" class="menu-link menu-list-link">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        3.1.2 Page link<br />&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <small>Short decription of link</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li class="mega-menu-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="mega-menu-header">3.2 Page link header</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p>This is just static content. You can add anything here. Images, text, buttons, your grandma's&ndash;&gt;-->
+<!--&lt;!&ndash;                                secrect&ndash;&gt;-->
+<!--&lt;!&ndash;                                recipe.</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <li class="mobile-menu-back-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="javascript:void(0);" class="menu-link mobile-menu-back-link">Back</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="/page" class="menu-link menu-bar-link">Static link</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <li class="mobile-menu-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="/home" class="">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <span>Home</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+<!--            </ul>-->
+<!--        </nav>-->
+</div>
+</div>
+</body>
+</html>
