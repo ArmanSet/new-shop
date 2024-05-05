@@ -30,6 +30,7 @@ public class ProductsController {
 
     private final ProductsService productService;
     private final UsersService usersService;
+    private final CategoryService categoryService;
 
     @GetMapping("/list/{id}")
     public String getProduct(@PathVariable Long id, Model model) {
@@ -126,6 +127,8 @@ public class ProductsController {
         } else {
             // The principal is not an instance of UserDetails, handle this error
         }
+        List<Category> category = categoryService.findAll();
+        model.addAttribute("categories", category);
 
 
         return "products";

@@ -1,9 +1,14 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entity.Category;
+import com.example.demo.entity.Products;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,25 +29,19 @@ public class ProductDetailsController {
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         model.addAttribute("product", productsService.findProductById(id));
-//        Products productById = productsService.findProductById(id);
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        boolean isUser = false;
-//        boolean isAdmin = false;
-//        boolean isGuest = false;
-//        for (GrantedAuthority authority : authorities) {
-//            if (authority.getAuthority().equals("ROLE_USER")) {
-//                isUser = true;
-//                break;
-//            } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
-//                isAdmin = true;
-//                break;
-//            } else {
-//                isGuest = true;
-//            }
-//        }
-//        model.addAttribute("isAdmin", isAdmin);
-//        model.addAttribute("isAuthenticated",  authentication.isAuthenticated());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = !(authentication instanceof AnonymousAuthenticationToken);
+//        boolean authenticated = authentication.isAuthenticated();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        boolean isAdmin = false;
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isAuthenticated",isAuthenticated);
         return "product-details";
     }
 }

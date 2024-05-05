@@ -7,9 +7,49 @@
 <!--    <meta http-equiv="X-UA-Compatible" content="ie=edge">-->
     <title>Product Card UI Design</title>
     <link rel="stylesheet" th:href="@{/product-details.css}">
-    <link rel="stylesheet" th:href="@{/menu.css}">
+<!--    <link rel="stylesheet" th:href="@{/menu.css}">-->
     <link rel="stylesheet" th:href="@{/catalog.css}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lato', sans-serif;
+            font-family: 'Oswald', sans-serif;
 
+        }
+
+        .dropdown {
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: 9999;
+            /* другие стили */
+        }
+
+
+        /*.dropdown:hover  {*/
+        /*    background-color: #020206;*/
+        /*}*/
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #020206;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            color: #ffffff;
+        }
+
+        /*.dropdown:hover .dropdown-menu {*/
+        /*    display: block;*/
+        /*}*/
+        .dropdown-menu a {
+            color: #ffffff; /* белый цвет ссылок */
+        }
+    </style>
 
     <!-- Vendor Script -->
 <!--    <script-->
@@ -25,7 +65,7 @@
         <!--   LOGIN-->
 
         <div style="display: flex;">
-            <div th:if="${isAuthenticated != null && !(isAuthenticated)}">
+            <div th:if="${isAuthenticated.equals(false)}">
                 <button class="button-27" type="button">
                     <a style="color: #ff4e5b" href="/login">LogIn</a>
                 </button>
@@ -66,20 +106,23 @@
             <!--            <button class="button-27" onclick="window.location.href='/orders/'">MY ORDERS</button>-->
             <!--        </div>-->
         </div>
-        <div><a href="/cart">
-            <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"
-                 th:src="@{/images/1.png}"
-                 alt="">
+        <div th:replace="/sections/catalog :: catalog"></div>
+<!--        <div>-->
 
-        </a>
-            <br>
-            <div th:replace="/sections/catalog :: catalog"></div>
-            <br>
+<!--            <a href="/cart">-->
+<!--            <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"-->
+<!--                 th:src="@{/images/1.png}"-->
+<!--                 alt="">-->
 
-            <div th:replace="/sections/cartshow :: cartshow"></div>
+<!--        </a>-->
+<!--            <br>-->
+<!--            -->
+<!--            <br>-->
 
-            <div th:replace="menu :: site-menu"></div>
-        </div>
+<!--            <div th:replace="/sections/cartshow :: cartshow"></div>-->
+
+<!--            <div th:replace="menu :: site-menu"></div>-->
+<!--        </div>-->
     </header>
 
 <main>
@@ -129,6 +172,19 @@
 <!--    });-->
 <!--</script>-->
 </main>
+    <script src="assets/js/theme.js"></script>
+    <script>let toggles = document.querySelectorAll('.dropdown-toggle');
+    toggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+            let menu = this.nextElementSibling;
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>
