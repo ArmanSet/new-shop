@@ -26,6 +26,9 @@ public class Products {
     private String colour;
     private String brand;
     private String image;
+    private String image2;
+    private String image3;
+    private String image4;
     private double price;
     private int quantity;
     private int maxQuantity;

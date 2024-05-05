@@ -10,6 +10,63 @@
 <!--    <link rel="stylesheet" th:href="@{/menu.css}">-->
     <link rel="stylesheet" th:href="@{/catalog.css}">
     <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .imgBx {
+            width: 60%;
+            position: relative;
+        }
+
+        .imgBx img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        .smallImages {
+           ;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .smallImages .smallImage {
+            width: 100px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .details {
+            width: 35%;
+        }
+
+        .details .contents {
+            margin-top: 20px;
+        }
+
+        .details .contents h2 {
+            margin-bottom: 20px;
+        }
+
+        .details .contents button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #FFFFFFAD;
+            cursor: pointer;
+            transition: background-color 0.5s ease;
+        }
+
+        .details .contents button:hover {
+            background-color: #FFFFFF;
+        }
+
+<!--    -->
         * {
             margin: 0;
             padding: 0;
@@ -61,7 +118,7 @@
 
 <body>
 
-    <header style="background-color: #2c2c3b;position: fixed;height: 80px;width: 100%;z-index: 9999; display: flex; justify-content: space-between;">
+    <header style="background-color: #ebebec;position: fixed;height: 80px;width: 100%;z-index: 9999; display: flex; justify-content: space-between;">
         <!--   LOGIN-->
 
         <div style="display: flex;">
@@ -125,32 +182,37 @@
 <!--        </div>-->
     </header>
 
-<main>
-<div class="container">
-    <div class="imgBx">
-        <img th:src="${product.image}" alt="Product Image">
-    </div>
-    <div class="details">
-
-
-        <div class="contents">
-            <h2 th:text="${product.name}">Product Name</h2>
-<!--            <span th:text="${product.quantity}">Product Quantity</span>-->
-            <h2 th:text="${product.description}">
-                Product Description
-            </h2>
-            <h2 th:text="'Rs. ' + ${product.price}">Product Price</h2>
-            <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-                <h2>Quantity:
-                    <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
-                </h2>
-                <button style="background-color: #FFFFFFAD" type="submit">ADD TO CART</button>
-
-            </form>
+    <main>
+        <div class="container">
+            <div class="imgBx">
+                <img id="mainImage" th:src="${product.image}" alt="Product Image">
+            </div>
+            <div class="smallImages">
+                <img class="smallImage" th:src="${product.image2}" alt="Product Image" onclick="changeImage(this)">
+                <img class="smallImage" th:src="${product.image3}" alt="Product Image" onclick="changeImage(this)">
+                <img class="smallImage" th:src="${product.image4}" alt="Product Image" onclick="changeImage(this)">
+                <img class="smallImage" th:src="${product.image}" alt="Product Image" onclick="changeImage(this)">
+            </div>
+            <div class="details">
+                <div class="contents">
+                    <h2 th:text="${product.name}">Product Name</h2>
+                    <h2 th:text="${product.description}">Product Description</h2>
+                    <h2 th:text="'Rs. ' + ${product.price}">Product Price</h2>
+                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                        <h2>Quantity:
+                            <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
+                        </h2>
+                        <button style="background-color: #FFFFFFAD" type="submit">ADD TO CART</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
+    </main>
+    <script>
+        function changeImage(smallImage) {
+            document.getElementById('mainImage').src = smallImage.src;
+        }
+    </script>
 <!-- Footer -->
 <!--<footer>-->
 <!--    <a href="https://stylustechnepal.com" target="_blank">anuzbvbmaniac123@gmail.com</a>-->
@@ -171,7 +233,7 @@
 <!--        $(".imgBx img").attr('src', $(this).attr("data-pic"));-->
 <!--    });-->
 <!--</script>-->
-</main>
+
     <script src="assets/js/theme.js"></script>
     <script>let toggles = document.querySelectorAll('.dropdown-toggle');
     toggles.forEach(function (toggle) {

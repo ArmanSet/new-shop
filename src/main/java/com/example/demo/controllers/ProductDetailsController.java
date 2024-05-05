@@ -29,6 +29,9 @@ public class ProductDetailsController {
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         model.addAttribute("product", productsService.findProductById(id));
+
+        List<Products> products = productsService.findAll();
+        model.addAttribute("products", products);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAuthenticated = !(authentication instanceof AnonymousAuthenticationToken);
 //        boolean authenticated = authentication.isAuthenticated();
