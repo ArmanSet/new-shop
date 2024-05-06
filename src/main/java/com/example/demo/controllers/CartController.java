@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.Cookie;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,35 @@ public class CartController {
     public String showCart(Model model, HttpServletRequest request, HttpServletResponse responce) {
         String referer = request.getHeader("Referer");
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("ROLE_USER")) {
+                    isAuthenticated = true;
+                    break;
+                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                    isAuthenticated = true;
+                    break;
+                } else {
+                    isAuthenticated = false;
+                }
+            }
+        }
+
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+        }
+
+        System.out.println(isAuthenticated);
+        model.addAttribute("isAuthenticated", isAuthenticated);
         //TODO USER Аутентифицирован
         if (isUserAuthenticated()) {
             Users users = getCurrentUser();
@@ -58,7 +89,7 @@ public class CartController {
                 model.addAttribute("orderProducts", user.getCart().getOrderProducts());
                 model.addAttribute("authentication", user.getRole());
                 model.addAttribute("totalPrice", 0);
-                return "cart";
+                return "cart2";
             } else {
                 Cart cart = user.getCart();
 //                String uuid = cartService.getCookieValue(request, "uuid");
@@ -84,7 +115,7 @@ public class CartController {
 //                model.addAttribute("orderProducts", cart.getOrderProducts());
                 model.addAttribute("authentication", "ROLE_ANONYMOUS");
 //                model.addAttribute("totalPrice", 0);
-                return "cart";
+                return "cart2";
             } else {
                 //TODO SUPER CRITICAL
                 Cart cart = cartService.findCartByName(uuid);
@@ -98,11 +129,11 @@ public class CartController {
                 double totalPrice = cartService.calculateTotalPrice(cart);
                 model.addAttribute("totalPrice", totalPrice);
 //                cartService.save(cart);
-                return "cart";
+                return "cart2";
             }
         }
 
-        return "cart";
+        return "cart2";
     }
 
     private String showPage(Model model, HttpServletRequest request, HttpServletResponse responce, Cart cart, Users user) {
@@ -113,7 +144,7 @@ public class CartController {
         model.addAttribute("totalPrice", totalPrice);
         cartService.save(cart);
 //        cartService.clearCookie(request, responce,"uuid");
-        return "cart";
+        return "cart2";
     }
 
     @PostMapping("/add/{id}")

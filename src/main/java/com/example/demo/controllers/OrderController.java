@@ -37,26 +37,47 @@ public class OrderController {
     private final ProductsRepository productsRepository;
     private List<Order> orderForSave;
 
-    @GetMapping("/")
-    @Transactional
-    public String showOrderForCurrentUser(Model model) {
-        Users users = getCurrentUser();
-        List<Order> orders = orderService.findAllOrdersByUsers(users.getEmail());
-        List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
-        for (OrderProducts orderProduct : orderProducts) {
-            for (Products product : orderProduct.getProducts()) {
-                System.out.println(product.getName());
-                System.out.println(orderProduct.getQuantity());
-                System.out.println(product.getPrice());
-            }
-        }
-
-        System.out.println(users.getId());// Запрашиваем заказы пользователя из базы данных
-        // Запрашиваем заказы пользователя из базы данных
-        model.addAttribute("orders", orders);
-        model.addAttribute("orderProductsSeparate", orderProducts);
-        return "orders";
+//    @GetMapping("/")
+//    @Transactional
+//    public String showOrderForCurrentUser(Model model) {
+//        Users users = getCurrentUser();
+//        List<Order> orders = orderService.findAllOrdersByUsers(users.getEmail());
+//        if (users.getCart()==null) {
+//            return "orders";
+//        }
+//        List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
+////        for (OrderProducts orderProduct : orderProducts) {
+////            for (Products product : orderProduct.getProducts()) {
+////                System.out.println(product.getName());
+////                System.out.println(orderProduct.getQuantity());
+////                System.out.println(product.getPrice());
+////            }
+////        }
+//
+//        System.out.println(users.getId());// Запрашиваем заказы пользователя из базы данных
+//        // Запрашиваем заказы пользователя из базы данных
+//        model.addAttribute("orders", orders);
+//        model.addAttribute("orderProductsSeparate", orderProducts);
+//        return "orders";
+//    }
+@GetMapping("/")
+@Transactional
+public String showOrderForCurrentUser(Model model) {
+    Users users = getCurrentUser();
+    if (users == null) {
+        return "redirect:/login";
     }
+
+    List<Order> orders = orderService.findAllOrdersByUsers(users.getEmail());
+    model.addAttribute("orders", orders);
+
+    if (users.getCart() != null) {
+        List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
+        model.addAttribute("orderProductsSeparate", orderProducts);
+    }
+
+    return "orders";
+}
 
 //    @PostMapping("/{id}")
 //    public String showOrders(@PathVariable Long id, Model model) {

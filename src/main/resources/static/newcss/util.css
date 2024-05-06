@@ -3080,7 +3080,11 @@ iframe {border: none;}
 
 .m-l-auto {margin-left: auto;}
 .m-r-auto {margin-right: auto;}
-.m-lr-auto {margin-left: auto; margin-right: auto;}
+.m-lr-auto {
+	margin-left: auto;
+	margin-right: auto;
+
+}
 
 
 

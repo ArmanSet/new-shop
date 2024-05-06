@@ -225,13 +225,13 @@
                 <p>Количество:
                     <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
                 </p>
-                <button style="background-color: #020206;color: white;" type="submit">ADD TO CART</button>
+                <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" style="background-color: #020206;color: white; border-radius: 10px;" type="submit">ADD TO CART</button>
 
             </form>
 
             <div th:if="${isAdmin}">
                 <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post">
-                    <button type="submit">Delete</button>
+                    <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"   type="submit">Delete</button>
                 </form>
             </div>
 

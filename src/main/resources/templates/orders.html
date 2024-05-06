@@ -28,6 +28,7 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
         img {
             width: 50px;
             height: 50px;
@@ -56,104 +57,62 @@
 
 <div th:if="${!orders.isEmpty()}">
 
-<div>
-    <a href="/products/list"> PRODUCT LIST</a>
+    <div>
+        <a href="/products/list"> PRODUCT LIST</a>
 
-</div>
+    </div>
 
-<header>
-    <!-- ... -->
-<!--    <h2>Orders</h2>-->
-<!--    <br>-->
-<!--    <div th:each="order: ${orders}">  <h3>ORDER INFO</h3>-->
-<!--        <p th:text="'Order Id: ' + ${order.id}"></p>-->
-<!--        <p th:text="'Order Date: ' + #temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>-->
-<!--        <p th:text="'Order Amount: ' + ${order.orderAmount}"></p>-->
-<!--        <br>-->
-<!--        <h3>PRODUCTS IN ORDER</h3>-->
-<!--        <table th:each="orderProducts : ${order.orderProducts}">-->
-<!--            <tr>-->
-<!--                <th>Brand</th>-->
-<!--                <th>Price</th>-->
-<!--                <th>Name Product</th>-->
-<!--                <th>Image</th>-->
-<!--                <th>Colour</th>-->
-<!--                <th>Quantity</th>-->
-<!--                <th>Description</th>-->
-<!--                <th>Category</th>-->
-<!--                <th>ID</th>-->
-<!--                <th>TOTAL FOR PRODUCT</th>-->
-<!--            </tr>-->
-<!--            <tr th:each="product : ${orderProducts.products}">-->
-<!--                <td th:text="${product.brand}">Brand</td>-->
-<!--                <td th:text="${product.price}">Price</td>-->
-<!--                <td th:text="${product.name}">Name Product</td>-->
-<!--                <td><img th:src="@{${product.image}}" alt="Product Image"></td>-->
-<!--                <td th:text="${product.colour}">Colour</td>-->
-<!--                <td th:text="${orderProducts.quantity}">Quantity</td>-->
-<!--                <td th:text="${product.description}">Description</td>-->
-<!--                <td th:text="${product.category.name}">Category</td>-->
-<!--                <td th:text="${product.id}">ID</td>-->
-<!--                <td th:text="${orderProducts.quantity * product.price}">TOTAL</td>-->
-<!--            </tr>-->
-<!--            <br>-->
-<!--        </table>-->
-<!--        <table>-->
-<!--            <tr> <th>TOTAL PAYMENT</th></tr>-->
-<!--            <tr>-->
-<!--                <td th:text="${order.orderAmount}"></td></tr>-->
-<!--        </table>-->
-<!--    </div>-->
-
-
-
+    <header>
         <div th:each="order : ${orders}">
-        <h3 >ORDER INFO</h3>
-        <p th:text="'Order Id: ' + ${order.id}"></p>
-<!--        <p th:text="'Order Date: ' + ${#temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>-->
-<!--        <p th:text="'Order Amount: ' + ${order.orderAmount}"></p>-->
-        <p th:text="${'Order Date: ' + #temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>
-        <br>
-        <h3>PRODUCTS IN ORDER</h3>
-<!--        <div th:each="orderProducts : ${order.orderProducts}">-->
+            <h3>ORDER INFO</h3>
+            <p th:text="'Order Id: ' + ${order.id}"></p>
+            <!--        <p th:text="'Order Date: ' + ${#temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>-->
+            <!--        <p th:text="'Order Amount: ' + ${order.orderAmount}"></p>-->
+            <p th:text="${'Order Date: ' + #temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>
+            <br>
+            <h3>PRODUCTS IN ORDER</h3>
+            <!--        <div th:each="orderProducts : ${order.orderProducts}">-->
 
 
-        <table  th:each="orderProducts : ${order.orderProducts}">
-            <tr>
-                <th>Brand</th>
-                <th>Price</th>
-                <th>Name Product</th>
-                <th>Image</th>
-                <th>Colour</th>
-                <th>Quantity</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>ID</th>
-                <th>TOTAL FOR PRODUCT</th>
+            <table th:each="orderProducts : ${order.orderProducts}">
+                <tr>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Name Product</th>
+                    <th>Image</th>
+                    <th>Colour</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>ID</th>
+                    <th>TOTAL FOR PRODUCT</th>
 
-            </tr>
-            <tr th:each="product : ${orderProducts.products}">
-                <td th:text="${product.brand}">Brand</td>
-                <td th:text="${product.price}">Price</td>
-                <td th:text="${product.name}">Name Product</td>
-                <td><img th:src="@{${product.image}}" alt="Product Image"></td>
-                <td th:text="${product.colour}">Colour</td>
-                <td th:text="${orderProducts.quantity}">Quantity</td>
-                <td th:text="${product.description}">Description</td>
-                <td th:text="${product.subcategory.name}">Category</td>
-                <td th:text="${product.id}">ID</td>
-                <td th:text="${orderProducts.quantity*product.price}">TOTAL</td>
+                </tr>
+                <tr th:each="product : ${orderProducts.products}">
+                    <td th:text="${product.brand}">Brand</td>
+                    <td th:text="${product.price}">Price</td>
+                    <td th:text="${product.name}">Name Product</td>
+                    <td><img th:src="@{${product.image}}" alt="Product Image"></td>
+                    <td th:text="${product.colour}">Colour</td>
+                    <td th:text="${orderProducts.quantity}">Quantity</td>
+                    <td th:text="${product.description}">Description</td>
+                    <td th:text="${product.subcategory.name}">Category</td>
+                    <td th:text="${product.id}">ID</td>
+                    <td th:text="${orderProducts.quantity*product.price}">TOTAL</td>
 
-            </tr>
-        </table>
-        <table>
-        <tr> <th>TOTAL PAYMENT</th></tr>
-        <tr>
-            <td th:text="${order.orderAmount}"></td></tr>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th>TOTAL PAYMENT</th>
+                </tr>
+                <tr>
+                    <td th:text="${order.orderAmount}"></td>
+                </tr>
 
-        </table>
+            </table>
         </div>
-</header>
+    </header>
 </div>
 <!--<footer>-->
 <!--    &lt;!&ndash; ... &ndash;&gt;-->

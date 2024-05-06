@@ -166,7 +166,10 @@ public void deleteUser(Long userId) {
         }
 
         // Удалить Cart
-        cartRepository.delete(user.getCart());
+        if (user.getCart() != null){
+            cartRepository.delete(user.getCart());
+        }
+
 
         // Удалить Users
         usersRepository.delete(user);
