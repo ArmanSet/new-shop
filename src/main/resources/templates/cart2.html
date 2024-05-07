@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="stylesheet" th:href="@{/menu.css}">
+
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
@@ -55,8 +57,8 @@
 
         .dropdown {
             position: fixed;
-            right: 70px;
-            margin-top: 8px;
+            right: 120px;
+            margin-top: 18px;
             z-index: 9999;
             /* другие стили */
         }
@@ -175,10 +177,10 @@
         </div>
     </a>
     </div>
-
+    <br>
     <!--        <div style="z-index: 9999" th:replace="/sections/catalog :: catalog"></div>-->
 </nav>
-
+<main style="z-index: 9999" th:replace="menu :: site-menu"></main>
 <!-- Cart -->
 <br>
 <br>

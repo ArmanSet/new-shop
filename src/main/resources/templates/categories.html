@@ -6,6 +6,7 @@
     <!--    <link rel="stylesheet" th:href="@{/menu.css}">-->
     <link rel="stylesheet" th:href="@{/catalog.css}">
     <link rel="stylesheet" th:href="@{/assets/css/theme.css}">
+    <link rel="stylesheet" th:href="@{/menu.css}">
     <style>
 
 
@@ -35,9 +36,9 @@
 
         .dropdown {
             position: fixed;
-            right: 70px;
-            top: 0;
-            z-index: 9999;
+            right: 120px;
+            top: 10px;
+            z-index: 9989;
             /* другие стили */
         }
 
@@ -255,10 +256,10 @@
         </a>
         </div>
 
-
+        <br>
         <!--        <div style="z-index: 9999" th:replace="/sections/catalog :: catalog"></div>-->
     </nav>
-
+    <main style="z-index: 9999" th:replace="menu :: site-menu"></main>
 </header>
 <br>
 <br>

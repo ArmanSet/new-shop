@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <!--    <link rel="stylesheet" th:href="@{/menu.css}">-->
+    <link rel="stylesheet" th:href="@{/menu.css}">
     <link rel="stylesheet" th:href="@{/catalog.css}">
     <link rel="stylesheet" th:href="@{/assets/css/theme.css}">
     <style>
+
         /* Body Styles */
         /*body {*/
         /*    font-family: Arial, sans-serif;*/
@@ -102,11 +103,12 @@
         .product-reach-btn:hover {
             background-color: #111;
         }
+
         .dropdown {
             position: fixed;
-            right: 70px;
-            top: 0;
-            z-index: 9999;
+            right: 150px;
+            top: 10px;
+            z-index: 9989;
             /* другие стили */
         }
 
@@ -140,7 +142,7 @@
 <body>
 <header>
     <div style="position: absolute; top: 0; right: 0;">
-        <div  class="dropdown">
+        <div class="dropdown">
             <div th:if="${isAuthenticated}">
                 <!--                TODO PRODILE BUTTON-->
                 <button style="border:none;" class="button-27 dropdown-toggle" type="button">
@@ -186,7 +188,7 @@
             </button>
             <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
 
-<!--                TODO z-index:9999-->
+                <!--                TODO z-index:9999-->
                 <div th:replace="/sections/catalog :: catalog"></div>
                 <!--                <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
                 <!--                    &lt;!&ndash;                    <li class="nav-item px-2"><a class="nav-link fw-medium active" aria-current="page"&ndash;&gt;-->
@@ -237,18 +239,19 @@
                 </form>
             </div>
         </a>
+<!--            HERE-->
         </div>
 
-
+        <br>
         <!--        <div style="z-index: 9999" th:replace="/sections/catalog :: catalog"></div>-->
     </nav>
-
+    <main style="z-index: 9999;" th:replace="menu :: site-menu"></main>
 </header>
 <br>
 <br>
-
+<br>
 <div class="container2">
-<!--    <a href="/products/list">All Products</a>-->
+    <!--    <a href="/products/list">All Products</a>-->
     <ul class="product-list">
         <li th:each="subcategory : ${subcategories}">
             <div class="product-card">
@@ -258,8 +261,9 @@
                 <form th:action="@{/products/list/{id}(id=${subcategory.id})}" method="post">
                     <!--                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
                     <!--                        <img th:src="${category.image}" alt="${product.name}">-->
-                    <button style="border: none;background-color: white" type="submit" class="product-image"><img  th:src="${subcategory.image}"
-                                                                                                                    alt="${product.name}">
+                    <button style="border: none;background-color: white" type="submit" class="product-image"><img
+                            th:src="${subcategory.image}"
+                            alt="${product.name}">
                     </button>
                 </form>
                 <div class="product-info">

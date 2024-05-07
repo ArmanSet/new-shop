@@ -3,13 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--    <meta http-equiv="X-UA-Compatible" content="ie=edge">-->
     <title>Product Card UI Design</title>
     <link rel="stylesheet" th:href="@{/product-details.css}">
-<!--    <link rel="stylesheet" th:href="@{/menu.css}">-->
+    <link rel="stylesheet" th:href="@{/menu.css}">
     <link rel="stylesheet" th:href="@{/catalog.css}">
     <style>
+        .button-27.dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+        }
+        .button-27.dropdown-toggle::after {
+            content: "▾";
+            margin-left: 5px;
+            /*font-size: 55%;*/
+            /*transform: scaleY(1.15);*/
+            background-color: transparent;
+
+        }
         .container {
             display: flex;
             justify-content: space-between;
@@ -25,11 +39,10 @@
             width: 100%;
             height: auto;
             cursor: pointer;
-            transition: transform 0.5s ease;
+
         }
 
-        .smallImages {
-           ;
+        .smallImages {;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -66,7 +79,8 @@
             background-color: #FFFFFF;
         }
 
-<!--    -->
+        <!--
+        -->
         * {
             margin: 0;
             padding: 0;
@@ -78,9 +92,9 @@
 
         .dropdown {
             position: fixed;
-            right: 0;
-            top: 0;
-            z-index: 9999;
+            right: 150px;
+            top: 20px;
+            z-index: 9989;
             /* другие стили */
         }
 
@@ -106,113 +120,186 @@
         .dropdown-menu a {
             color: #ffffff; /* белый цвет ссылок */
         }
+
+        /*.dropdown:hover .dropdown-menu {*/
+        /*    display: block;*/
+        /*}*/
     </style>
 
     <!-- Vendor Script -->
-<!--    <script-->
-<!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
-<!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
-<!--            crossorigin="anonymous"></script>-->
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
 
 </head>
 
 <body>
 
-    <header style="background-color: #ebebec;position: fixed;height: 80px;width: 100%;z-index: 9999; display: flex; justify-content: space-between;">
-        <!--   LOGIN-->
+<header style="background-color: rgb(244,244,245, 0.5);position: fixed;height: 80px;width: 100%;z-index: 9999; display: flex; justify-content: space-between;">
+    <a class="navbar-brand d-inline-flex" href="/">
+        <!--            TODO LOGO-->
+        <img style="padding-left: 131px;padding-top: 20px" class="d-inline-block"
+             src="/assets/img/gallery/logo.png"
+             alt="logo"/>
+        <!--                 TODO CART HERE-->
+        <form class="d-flex">
+            <a class="text-1000" href="#!">
+            <!--                    <svg class="feather feather-phone me-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+<!--            </svg>-->
+            </a>
+            <a style="position: absolute; left: 210px;top: 26px;color: black;" class="text-1000" href="/cart">
+            <svg class="feather feather-shopping-cart me-3" xmlns="http://www.w3.org/2000/svg" width="16"
+                 height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+        </a>
+            <a class="text-1000" href="#!"></a>
+            <!--                    <svg class="feather feather-search me-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+            <!--                        <circle cx="11" cy="11" r="8"></circle>-->
+            <!--                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>-->
+            <!--                    TODO LOGIN   -->
+            </svg>
 
-        <div style="display: flex;">
-            <div th:if="${isAuthenticated.equals(false)}">
-                <button class="button-27" type="button">
-                    <a style="color: #ff4e5b" href="/login">LogIn</a>
-                </button>
-                <button class="button-27" type="button">
-                    <a style="color: #ff4e5b" href="/users/create">SIGN UP</a>
-                </button>
-            </div>
-            <div th:if="${isAuthenticated != null && isAuthenticated}">
-                <button class="button-27" type="button">
-                    <a style="color: #ff4e5b" href="/logout">LogOut</a>
-                </button>
-            </div>
+            <div th:if="${isAuthenticated != null && !isAuthenticated}">
+                <a style="position: absolute; left: 241px;top: 26px;color: black;" class="text-1000" th:if="${!isAuthenticated}" href="/login">
+                    <svg class="feather feather-user me-3" xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="16"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
 
-            <div class="dropdown" th:if="${isAdmin}">
-                <button class="button-27 dropdown-toggle" type="button">
-                    Admin Menu
+            </div>
+            <a style="color: #212121;text-decoration: none;position: absolute; left: 241px;top: 26px;" th:if="${isAuthenticated}" href="/logout">Logout</a>
+<!--            <a th:if="${isAuthenticated}" href="/logout">Logout</a>-->
+            <!--                    <a class="text-1000" href="#!">-->
+            <!--                    <svg class="feather feather-heart me-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
+            <!--                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>-->
+            <!--                    </svg>
+            </a>-->
+        </form>
+        <!--            <span class="text-1000 fs-0 fw-bold ms-2">Majestic</span></a>-->
+        <!--        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"-->
+        <!--                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"-->
+        <!--                aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>-->
+        <!--        </button>-->
+        <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+
+            <!--                TODO z-index:9999-->
+            <div th:replace="/sections/catalog :: catalog"></div>
+            <!--                <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+            <!--                    &lt;!&ndash;                    <li class="nav-item px-2"><a class="nav-link fw-medium active" aria-current="page"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                                                 href="#categoryWomen">Women</a></li>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    <li class="nav-item px-2"><a class="nav-link fw-medium" href="#header">Men</a></li>&ndash;&gt;-->
+            <!--                    <li class="nav-item px-2"><a class="nav-link fw-medium" href="#collection">Collection</a></li>-->
+            <!--                    <li class="nav-item px-2"><a class="nav-link fw-medium" href="#outlet">Outlet</a></li>-->
+            <!--                </ul>-->
+
+        </div>
+    </a>
+    <!--            <div th:if="${isAuthenticated != null && isAuthenticated}">-->
+    <!--                <button class="button-27" type="button">-->
+    <!--                    <a style="color: #ff4e5b" href="/logout">LogOut</a>-->
+    <!--                </button>-->
+    <!--            </div>-->
+
+
+    <div style="position: absolute; top: 0; right: 0;">
+        <div class="dropdown">
+            <div th:if="${isAuthenticated}">
+                <!--                TODO PRODILE BUTTON-->
+                <button style="border:none;" class="button-27 dropdown-toggle" type="button">
+                    <img style="height: 20px;width: 20px;"
+                         src="data:image/png;base64,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"
+                         alt="">
+
                 </button>
                 <div style="background-color: #0a0506" class="dropdown-menu">
-                    <a href="/users/show">≈ADMIN PANEL≈</a>
-                    <a href="/category/create">Create Products</a>
+                    <a style="color: white;" href="/profile">Account Information</a><br>
+                    <a style="color: white;" href="/orders/">Orders</a><br>
+                    <a style="color: white;" href="/orders/returns">Returns</a>
                 </div>
             </div>
+            <div th:if="${isAdmin}">
+                <!--                TODO ADMIN BUTTON-->
+                <button style="border:none;" class="button-27 dropdown-toggle" type="button">
+                    <img style="height: 20px;width: 20px;"
+                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMMu2Uocn5HtTLQCnktNvSwq89GCX9Xszapg&s"
+                         alt="">
 
-
-            <div class="dropdown" th:if="${isAuthenticated}">
-                <button class="button-27 dropdown-toggle" type="button">
-                    Profile
                 </button>
                 <div style="background-color: #0a0506" class="dropdown-menu">
-                    <a href="/profile">Account Information</a><br>
-                    <a href="/orders/">Orders</a><br>
-                    <a href="/orders/returns">Returns</a>
-                </div>
-            </div>
-
-
-            <!--        <div  th:if="${isAuthenticated}">-->
-            <!--            <button class="button-27" onclick="window.location.href='/orders/'">MY ORDERS</button>-->
-            <!--        </div>-->
-        </div>
-        <div th:replace="/sections/catalog :: catalog"></div>
-<!--        <div>-->
-
-<!--            <a href="/cart">-->
-<!--            <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"-->
-<!--                 th:src="@{/images/1.png}"-->
-<!--                 alt="">-->
-
-<!--        </a>-->
-<!--            <br>-->
-<!--            -->
-<!--            <br>-->
-
-<!--            <div th:replace="/sections/cartshow :: cartshow"></div>-->
-
-<!--            <div th:replace="menu :: site-menu"></div>-->
-<!--        </div>-->
-    </header>
-
-    <main>
-        <div class="container">
-            <div class="imgBx">
-                <img id="mainImage" th:src="${product.image}" alt="Product Image">
-            </div>
-            <div class="smallImages">
-                <img class="smallImage" th:src="${product.image2}" alt="Product Image" onclick="changeImage(this)">
-                <img class="smallImage" th:src="${product.image3}" alt="Product Image" onclick="changeImage(this)">
-                <img class="smallImage" th:src="${product.image4}" alt="Product Image" onclick="changeImage(this)">
-                <img class="smallImage" th:src="${product.image}" alt="Product Image" onclick="changeImage(this)">
-            </div>
-            <div class="details">
-                <div class="contents">
-                    <h2 th:text="${product.name}">Product Name</h2>
-                    <h2 th:text="${product.description}">Product Description</h2>
-                    <h2 th:text="'Rs. ' + ${product.price}">Product Price</h2>
-                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-                        <h2>Quantity:
-                            <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
-                        </h2>
-                        <button style="background-color: #FFFFFFAD" type="submit">ADD TO CART</button>
-                    </form>
+                    <a style="color: white;" href="/users/show">≈ADMIN PANEL≈</a>
+                    <a style="color: white;" href="/category/create">Create Products</a>
                 </div>
             </div>
         </div>
-    </main>
-    <script>
-        function changeImage(smallImage) {
-            document.getElementById('mainImage').src = smallImage.src;
-        }
-    </script>
+    </div>
+
+
+    <!--        <div  th:if="${isAuthenticated}">-->
+    <!--            <button class="button-27" onclick="window.location.href='/orders/'">MY ORDERS</button>-->
+    <!--        </div>-->
+    </div>
+    <!--    <div th:replace="/sections/catalog :: catalog"></div>-->
+    <main style="z-index: 9999;" th:replace="menu :: site-menu"></main>
+    <!--        <div>-->
+
+    <!--            <a href="/cart">-->
+    <!--            <img style="height: 50px;width:50px;position: fixed;top:16px;right: 80px;"-->
+    <!--                 th:src="@{/images/1.png}"-->
+    <!--                 alt="">-->
+
+    <!--        </a>-->
+    <!--            <br>-->
+    <!--            -->
+    <!--            <br>-->
+
+    <!--            <div th:replace="/sections/cartshow :: cartshow"></div>-->
+
+    <!--            <div th:replace="menu :: site-menu"></div>-->
+    <!--        </div>-->
+</header>
+
+<main>
+    <div class="container">
+        <div class="imgBx">
+            <img id="mainImage" th:src="${product.image}" alt="Product Image">
+        </div>
+        <div class="smallImages">
+            <img class="smallImage" th:src="${product.image2}" alt="Product Image" onclick="changeImage(this)">
+            <img class="smallImage" th:src="${product.image3}" alt="Product Image" onclick="changeImage(this)">
+            <img class="smallImage" th:src="${product.image4}" alt="Product Image" onclick="changeImage(this)">
+            <img class="smallImage" th:src="${product.image}" alt="Product Image" onclick="changeImage(this)">
+        </div>
+        <div class="details">
+            <div class="contents">
+                <h2 th:text="${product.name}">Product Name</h2>
+                <h2 th:text="${product.description}">Product Description</h2>
+                <h2 th:text="'Rs. ' + ${product.price}">Product Price</h2>
+                <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                    <h2>Quantity:
+                        <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
+                    </h2>
+                    <button style="background-color: #FFFFFFAD" type="submit">ADD TO CART</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    function changeImage(smallImage) {
+        document.getElementById('mainImage').src = smallImage.src;
+    }
+</script>
 <!-- Footer -->
 <!--<footer>-->
 <!--    <a href="https://stylustechnepal.com" target="_blank">anuzbvbmaniac123@gmail.com</a>-->
@@ -234,19 +321,19 @@
 <!--    });-->
 <!--</script>-->
 
-    <script src="assets/js/theme.js"></script>
-    <script>let toggles = document.querySelectorAll('.dropdown-toggle');
-    toggles.forEach(function (toggle) {
-        toggle.addEventListener('click', function () {
-            let menu = this.nextElementSibling;
-            if (menu.style.display === 'none' || menu.style.display === '') {
-                menu.style.display = 'block';
-            } else {
-                menu.style.display = 'none';
-            }
-        });
+<script src="assets/js/theme.js"></script>
+<script>let toggles = document.querySelectorAll('.dropdown-toggle');
+toggles.forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+        let menu = this.nextElementSibling;
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
     });
-    </script>
+});
+</script>
 </body>
 
 </html>

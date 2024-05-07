@@ -1,14 +1,14 @@
 /*       Menu*/
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Lato', sans-serif;
-    font-family: 'Oswald', sans-serif;
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    box-sizing: border-box;*/
+/*    font-family: 'Lato', sans-serif;*/
+/*    font-family: 'Oswald', sans-serif;*/
 
-}
+/*}*/
 
-.wrapper {
+.wrappers {
     position: fixed;
     top: 0;
     left: 0;
@@ -24,7 +24,7 @@
     z-index: 9990;
 }
 
-#active:checked ~ .wrapper {
+#active:checked ~ .wrappers {
     clip-path: circle(75%);
 }
 
@@ -60,7 +60,7 @@
     content: "\f00d";
 }
 
-.wrapper ul {
+.wrappers ul {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -69,11 +69,11 @@
     text-align: center;
 }
 
-.wrapper ul li {
+.wrappers ul li {
     margin: 15px 0;
 }
 
-.wrapper ul li a {
+.wrappers ul li a {
     color: #f0c14b;
     text-decoration: none;
     font-size: 30px;
@@ -87,7 +87,7 @@
     transition: all 0.3s ease;
 }
 
-.wrapper ul li a:after {
+.wrappers ul li a:after {
     position: absolute;
     content: "";
     background: #fff;
@@ -104,11 +104,11 @@
     transition: transform 0.3s ease;
 }
 
-.wrapper ul li a:hover:after {
+.wrappers ul li a:hover:after {
     transform: scaleY(1);
 }
 
-.wrapper ul li a:hover {
+.wrappers ul li a:hover {
     color: #fff;
 }
 

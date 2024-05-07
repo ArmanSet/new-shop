@@ -13,9 +13,9 @@
         }
         .dropdown {
             position: fixed;
-            right: 70px;
-            top: 0;
-            z-index: 9999;
+            right: 120px;
+            top: 10px;
+            z-index: 9989;
             border:none;
             /* другие стили */
         }
@@ -202,11 +202,11 @@
             </div>
         </a>
         </div>
-
+        <br>
 
         <!--        <div style="z-index: 9999" th:replace="/sections/catalog :: catalog"></div>-->
     </nav>
-
+    <main style="z-index: 9999;" th:replace="menu :: site-menu"></main>
 </header>
 <br><br><br><br>
 
@@ -225,6 +225,7 @@
                 <p>Количество:
                     <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
                 </p>
+
                 <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" style="background-color: #020206;color: white; border-radius: 10px;" type="submit">ADD TO CART</button>
 
             </form>

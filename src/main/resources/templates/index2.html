@@ -13,6 +13,7 @@
     <title>majestic | Landing, Ecommerce &amp; Business Templatee</title>
 
 
+    <link rel="stylesheet" th:href="@{/menu.css}">
     <!--    TODO DANGEROUS-->
 
     <link rel="icon" type="image/png" href="/images/icons/favicon.png"/>
@@ -84,9 +85,9 @@
 
         .dropdown {
             position: fixed;
-            right: 70px;
-            margin-top: 8px;
-            z-index: 9999;
+            right: 120px;
+            margin-top: 18px;
+            z-index: 9989;
             /* другие стили */
         }
 
@@ -208,9 +209,10 @@
             </div>
         </a>
         </div>
-
+        <br>
         <!--        <div style="z-index: 9999" th:replace="/sections/catalog :: catalog"></div>-->
     </nav>
+    <main style="z-index: 9999" th:replace="menu :: site-menu"></main>
     <!-- TODO Slider -->
     <section class="section-slide">
         <div class="wrap-slick1">
