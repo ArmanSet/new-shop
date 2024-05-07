@@ -167,7 +167,9 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </a>
-                <a th:if="${isAuthenticated}" href="/logout"><h7 style="color: #0a0506">Logout</h7></a>
+                <a th:if="${isAuthenticated}" href="/logout">
+                    <h7 style="color: #0a0506">Logout</h7>
+                </a>
                 <!--                    <a class="text-1000" href="#!">-->
                 <!--                    <svg class="feather feather-heart me-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">-->
                 <!--                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>-->
@@ -293,7 +295,7 @@
                                         <input style="  margin-left: 40px;"
                                                class="mtext-104 cl3 txt-center num-product" type="number"
                                                name="quantity" th:value="${orderProduct.quantity}" min="1"
-                                               th:max="${product.maxQuantity}">
+                                               th:max="${product.maxQuantity} ">
                                     </label>
 
                                     <button class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10"
@@ -367,23 +369,29 @@
             </div>
 
             <div class="size-209 p-t-1">
-								<span class="mtext-110 cl2" th:text="'€'+${totalPrice}">
-									$79.65
-								</span>
+                <!--								<span class="mtext-110 cl2" th:text="'€'+${totalPrice}">-->
+                <!--									$79.65-->
+                <!--								</span>-->
+                <span class="mtext-110 cl2"
+                      th:text="${#numbers.formatDecimal(totalPrice, 1, 'COMMA', 2, 'POINT') != null && totalPrice != 0 ? '€' + #numbers.formatDecimal(totalPrice, 1, 'COMMA', 2, 'POINT') : '€0'}">
+	$79.65
+</span>
             </div>
         </div>
 
 
-            <div class="cart-total">
-                <div th:if="${authentication == 'ROLE_USER' || authentication == 'ROLE_ADMIN'}">
-                    <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">
-                        <input class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" type="submit" value="Оформить заказ">
-                    </form>
-                </div>
-                <div th:if="${authentication != 'ROLE_USER' && authentication != 'ROLE_ADMIN'}">
-                    <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" href="/login">Login to Checkout</a>
-                </div>
+        <div class="cart-total">
+            <div th:if="${authentication == 'ROLE_USER' || authentication == 'ROLE_ADMIN'}">
+                <form th:action="@{/orders/{id}(id=${cart.id})}" method="post">
+                    <input class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+                           type="submit" value="Оформить заказ">
+                </form>
             </div>
+            <div th:if="${authentication != 'ROLE_USER' && authentication != 'ROLE_ADMIN'}">
+                <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" href="/login">Login
+                    to Checkout</a>
+            </div>
+        </div>
     </div>
 </div>
 <br>
@@ -467,23 +475,23 @@ z-index: 1000;background-color: #eaeaec">
                 </div>
             </div>
             <div class="border-bottom border-3"></div>
-<!--            <div class="row flex-center my-3">-->
-<!--                <div class="col-md-6 order-1 order-md-0">-->
-<!--                    <p class="my-2 text-1000 text-center text-md-start"> Made with&nbsp;-->
-<!--                        <svg class="bi bi-suit-heart-fill" xmlns="http://www.w3.org/2000/svg" width="15" height="15"-->
-<!--                             fill="#EB6453" viewBox="0 0 16 16">-->
-<!--                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>-->
-<!--                        </svg>&nbsp;by&nbsp;<a class="text-800" href="https://themewagon.com/" target="_blank">ThemeWagon </a>-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--                <div class="col-md-6">-->
-<!--                    <div class="text-center text-md-end"><a href="#!"><span class="me-4" data-feather="facebook"></span></a><a-->
-<!--                            href="#!"> <span class="me-4" data-feather="instagram"></span></a><a href="#!"> <span-->
-<!--                            class="me-4" data-feather="youtube"></span></a><a href="#!"> <span class="me-4"-->
-<!--                                                                                               data-feather="twitter"></span></a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="row flex-center my-3">-->
+            <!--                <div class="col-md-6 order-1 order-md-0">-->
+            <!--                    <p class="my-2 text-1000 text-center text-md-start"> Made with&nbsp;-->
+            <!--                        <svg class="bi bi-suit-heart-fill" xmlns="http://www.w3.org/2000/svg" width="15" height="15"-->
+            <!--                             fill="#EB6453" viewBox="0 0 16 16">-->
+            <!--                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>-->
+            <!--                        </svg>&nbsp;by&nbsp;<a class="text-800" href="https://themewagon.com/" target="_blank">ThemeWagon </a>-->
+            <!--                    </p>-->
+            <!--                </div>-->
+            <!--                <div class="col-md-6">-->
+            <!--                    <div class="text-center text-md-end"><a href="#!"><span class="me-4" data-feather="facebook"></span></a><a-->
+            <!--                            href="#!"> <span class="me-4" data-feather="instagram"></span></a><a href="#!"> <span-->
+            <!--                            class="me-4" data-feather="youtube"></span></a><a href="#!"> <span class="me-4"-->
+            <!--                                                                                               data-feather="twitter"></span></a>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
         </div>
         <!-- end of .container-->
 

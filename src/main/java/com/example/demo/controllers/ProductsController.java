@@ -34,7 +34,8 @@ public class ProductsController {
 
     @GetMapping("/list/{id}")
     public String getProduct(@PathVariable Long id, Model model) {
-
+        List<Category> category = categoryService.findAll();
+        model.addAttribute("categories", category);
         List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";

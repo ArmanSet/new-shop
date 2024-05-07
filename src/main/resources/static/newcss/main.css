@@ -1810,11 +1810,11 @@ input.num-product {
   -webkit-appearance: none;
 }
 
-input.num-product::-webkit-outer-spin-button,
-input.num-product::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0; 
-}
+/*input.num-product::-webkit-outer-spin-button,*/
+/*input.num-product::-webkit-inner-spin-button {*/
+/*  -webkit-appearance: none;*/
+/*  margin: 0; */
+/*}*/
 
 /*//////////////////////////////////////////////////////////////////
 [ Tolltip100 ]*/
