@@ -219,8 +219,9 @@
         <div class="product-info">
             <h2 th:text="${product.name}">Product Title</h2>
 <!--            <p th:text="${product.description}">Product Description</p>-->
-            <div class="product-price" th:text="${product.price}">Product Price</div>
-            <div class="product-quantity" th:text="${product.maxQuantity}">Product Max Quantity</div>
+<!--            <div class="product-price" th:text="${product.price}">Product Price</div>-->
+            <div class="product-price" th:text="'€' + ${product.price}">Product Price</div>
+            <div class="product-quantity" th:text="'In stock ' +${product.maxQuantity}">Product Max Quantity</div>
             <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
                 <p>Quantity:
                     <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
