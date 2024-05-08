@@ -27,13 +27,13 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/products")
 public class ProductsController {
-
     private final ProductsService productService;
     private final UsersService usersService;
     private final CategoryService categoryService;
 
     @GetMapping("/list/{id}")
     public String getProduct(@PathVariable Long id, Model model) {
+        isAuthIsAdmin(model);
         List<Category> category = categoryService.findAll();
         model.addAttribute("categories", category);
         List<Products> products = productService.findBySubcategoryId(id);
@@ -43,35 +43,7 @@ public class ProductsController {
 
     @PostMapping("/list/{id}")
     public String filterProductsByCategoryPost(@PathVariable Long id, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAuthenticated = false;
-        if (authentication != null) {
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            for (GrantedAuthority authority : authorities) {
-                if (authority.getAuthority().equals("ROLE_USER")) {
-                    isAuthenticated = true;
-                    break;
-                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                    isAuthenticated = true;
-                    break;
-                } else {
-                    isAuthenticated = false;
-                }
-            }
-        }
-
-        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
-        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
-            if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                model.addAttribute("isAdmin", true);
-                break;
-            } else {
-                model.addAttribute("isAdmin", false);
-            }
-        }
-
-        System.out.println(isAuthenticated);
-        model.addAttribute("isAuthenticated", isAuthenticated);
+        isAuthIsAdmin(model);
         List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";
@@ -140,6 +112,36 @@ public class ProductsController {
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);
         return "redirect:/products/list";
+    }
+
+    public static void isAuthIsAdmin(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("ROLE_USER")) {
+                    isAuthenticated = true;
+                    break;
+                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                    isAuthenticated = true;
+                    break;
+                } else {
+                    isAuthenticated = false;
+                }
+            }
+        }
+
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+        }
+        model.addAttribute("isAuthenticated", isAuthenticated);
     }
 
 

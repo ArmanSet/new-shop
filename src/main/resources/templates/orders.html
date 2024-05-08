@@ -12,12 +12,16 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed; /* This ensures that all columns take up the same width */
         }
 
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+            overflow: hidden; /* This will ensure that the content is not spilling over */
+            text-overflow: ellipsis; /* This will add '...' for overflow content */
+            white-space: nowrap; /* This will prevent the text inside the cell from wrapping */
         }
 
         th {
@@ -50,6 +54,8 @@
     </style>
 </head>
 <body>
+<!--<main class="main" id="top">-->
+
 <main th:replace="menu :: site-menu"></main>
 <div th:if="${orders.isEmpty()}">
     <h1>Нет заказов</h1>
@@ -117,6 +123,5 @@
 <!--<footer>-->
 <!--    &lt;!&ndash; ... &ndash;&gt;-->
 <!--</footer>-->
-
 </body>
 </html>

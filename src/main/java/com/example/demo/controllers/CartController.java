@@ -89,7 +89,7 @@ public class CartController {
                 model.addAttribute("orderProducts", user.getCart().getOrderProducts());
                 model.addAttribute("authentication", user.getRole());
                 model.addAttribute("totalPrice", 0);
-                return "cart2";
+                return "cart";
             } else {
                 Cart cart = user.getCart();
 //                String uuid = cartService.getCookieValue(request, "uuid");
@@ -115,7 +115,7 @@ public class CartController {
 //                model.addAttribute("orderProducts", cart.getOrderProducts());
                 model.addAttribute("authentication", "ROLE_ANONYMOUS");
 //                model.addAttribute("totalPrice", 0);
-                return "cart2";
+                return "cart";
             } else {
                 //TODO SUPER CRITICAL
                 Cart cart = cartService.findCartByName(uuid);
@@ -129,11 +129,11 @@ public class CartController {
                 double totalPrice = cartService.calculateTotalPrice(cart);
                 model.addAttribute("totalPrice", totalPrice);
 //                cartService.save(cart);
-                return "cart2";
+                return "cart";
             }
         }
 
-        return "cart2";
+        return "cart";
     }
 
     private String showPage(Model model, HttpServletRequest request, HttpServletResponse responce, Cart cart, Users user) {
@@ -144,7 +144,7 @@ public class CartController {
         model.addAttribute("totalPrice", totalPrice);
         cartService.save(cart);
 //        cartService.clearCookie(request, responce,"uuid");
-        return "cart2";
+        return "cart";
     }
 
     @PostMapping("/add/{id}")

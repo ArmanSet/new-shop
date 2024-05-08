@@ -11,6 +11,7 @@ import com.example.demo.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -63,6 +61,33 @@ public class OrderController {
 @GetMapping("/")
 @Transactional
 public String showOrderForCurrentUser(Model model) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    boolean isAuthenticated = false;
+    if (authentication != null) {
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals("ROLE_USER")) {
+                isAuthenticated = true;
+                break;
+            } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                isAuthenticated = true;
+                break;
+            } else {
+                isAuthenticated = false;
+            }
+        }
+    }
+
+    Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+    for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+        if (authority.getAuthority().equals("ROLE_ADMIN")) {
+            model.addAttribute("isAdmin", true);
+            break;
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
+    }
+    model.addAttribute("isAuthenticated", isAuthenticated);
     Users users = getCurrentUser();
     if (users == null) {
         return "redirect:/login";
@@ -121,6 +146,34 @@ public String showOrderForCurrentUser(Model model) {
     @PostMapping("/{id}")
     @Transactional
     public String showOrders(@PathVariable Long id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("ROLE_USER")) {
+                    isAuthenticated = true;
+                    break;
+                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                    isAuthenticated = true;
+                    break;
+                } else {
+                    isAuthenticated = false;
+                }
+            }
+        }
+
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+        }
+        model.addAttribute("isAuthenticated", isAuthenticated);
+
         Users userAuth = getCurrentUser();
         if (userAuth == null) {
             return "redirect:/login";

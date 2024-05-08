@@ -34,7 +34,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests()
                 .requestMatchers(HttpMethod.POST, "/cart/change/**").permitAll()
-
                 .requestMatchers("/users/show").hasRole("ADMIN")
 //                .requestMatchers("/users/show").authenticated()
 //                .requestMatchers("/**").authenticated()
