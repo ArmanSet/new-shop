@@ -89,7 +89,7 @@
         }
 
         footer {
-            position: fixed;
+            /*position: fixed;*/
             left: 0;
             bottom: 0;
             width: 100%;
@@ -111,7 +111,7 @@
 </head>
 <body>
 
-<header>
+<header >
     <div>
         <div class="dropdown">
             <div th:if="${isAuthenticated}">
@@ -138,7 +138,7 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block"
+    <nav style="background-color: white" class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block"
          data-navbar-on-scroll="data-navbar-on-scroll">
         <div class="container"><a class="navbar-brand d-inline-flex" href="/">
             <!--            TODO LOGO-->
@@ -214,7 +214,7 @@
     <div th:each="product : ${products}" class="product">
         <div class="product-image">
             <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>
-            <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>
+<!--            <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>-->
         </div>
         <div class="product-info">
             <h2 th:text="${product.name}">Product Title</h2>
@@ -256,8 +256,8 @@
 
 
 </main>
-<footer>
-    <footer>
+
+    <footer style="background-color: white">
         <section class="py-0 pt-7">
 
             <div class="container">
@@ -343,7 +343,6 @@
 
         </section>
     </footer>
-</footer>
 <script>let toggles = document.querySelectorAll('.dropdown-toggle');
 toggles.forEach(function (toggle) {
     toggle.addEventListener('click', function () {
