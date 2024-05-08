@@ -128,7 +128,7 @@
         /*}*/
 
 
-    /*    TODO FOOTER*/
+        /*    TODO FOOTER*/
 
         /*#custom-footer {*/
         /*    background-color: #f8f9fa;*/
@@ -460,7 +460,10 @@
                     <h2>Quantity:
                         <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
                     </h2>
-                    <button style="background-color: #FFFFFFAD" type="submit">ADD TO CART</button>
+                    <button style="background-color: #FFFFFFAD; display: block;
+    margin-left: auto;
+    margin-right: auto;" type="submit">ADD TO CART
+                    </button>
                 </form>
             </div>
         </div>
@@ -471,7 +474,6 @@
         document.getElementById('mainImage').src = smallImage.src;
     }
 </script>
-
 
 
 <!--    <section id="custom-footer" class="footer-section py-0 pt-7">-->
@@ -566,27 +568,38 @@
                 <div class="col-lg-3 mb-3">
                     <h5 class="footer-heading lh-lg fw-bold text-1000">Company Info</h5>
                     <ul class="footer-list list-unstyled mb-md-4 mb-lg-0">
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">About Us</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Affiliate</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Fashion Blogger</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">About
+                            Us</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Affiliate</a>
+                        </li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Fashion
+                            Blogger</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-3">
                     <h5 class="footer-heading lh-lg fw-bold text-1000">Help &amp; Support</h5>
                     <ul class="footer-list list-unstyled mb-md-4 mb-lg-0">
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Shipping Info</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Refunds</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">How to Order</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">How to Track</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Size Guides</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Shipping
+                            Info</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Refunds</a>
+                        </li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">How
+                            to Order</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">How
+                            to Track</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Size
+                            Guides</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 mb-3">
                     <h5 class="footer-heading lh-lg fw-bold text-1000">Customer Care</h5>
                     <ul class="footer-list list-unstyled mb-md-4 mb-lg-0">
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Contact Us</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Payment Methods</a></li>
-                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Bonus Point</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Contact
+                            Us</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Payment
+                            Methods</a></li>
+                        <li class="footer-item lh-lg"><a class="footer-link text-800 text-decoration-none" href="#!">Bonus
+                            Point</a></li>
                     </ul>
                 </div>
 
@@ -594,7 +607,8 @@
                     <h5 class="footer-heading lh-lg fw-bold text-1000">Signup For The Latest News</h5>
                     <div class="row input-group-icon mb-5">
                         <div class="col-12">
-                            <input id="email-input" class="form-control input-box" type="email" placeholder="Enter Email"
+                            <input id="email-input" class="form-control input-box" type="email"
+                                   placeholder="Enter Email"
                                    aria-label="email"/>
                             <svg class="bi bi-arrow-right-short input-box-icon" xmlns="http://www.w3.org/2000/svg"
                                  width="23" height="23" fill="#424242" viewBox="0 0 16 16">
@@ -634,14 +648,15 @@
                 </div>
                 <div class="col-md-6">
                     <div class="text-center text-md-end"><a href="#!"><span class="me-4" data-feather="facebook"></span></a><a
-                            href="#!"> <span class="me-4" data-feather="instagram"></span></a><a href="#!"> <span class="me-4" data-feather="youtube"></span></a><a href="#!"> <span class="me-4" data-feather="twitter"></span></a>
+                            href="#!"> <span class="me-4" data-feather="instagram"></span></a><a href="#!"> <span
+                            class="me-4" data-feather="youtube"></span></a><a href="#!"> <span class="me-4"
+                                                                                               data-feather="twitter"></span></a>
                     </div>
                 </div>
             </div>
         </div>
         <!-- end of .custom-container-->
     </section>
-
 
 
 </footer>
