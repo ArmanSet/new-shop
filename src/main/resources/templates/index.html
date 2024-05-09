@@ -113,6 +113,163 @@
         .dropdown-menu a {
             color: #ffffff; /* белый цвет ссылок */
         }
+
+    /*    TODO STYLE */
+
+        .search {
+            position: absolute;
+            top: 50%;
+            left: 80%;
+            transform: translateX(-50%) translateY(-50%);
+            /*background-color: #ebebec;*/
+        }
+
+        .search * {
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .search__wrapper {
+            position: relative;
+        }
+
+        .search__field {
+            /*width: 50px;*/
+            /*height: 50px;*/
+            /*!*background-color: #ebebec;*!*/
+            /*background-color: transparent;*/
+            /*color: transparent;*/
+            /*font-family: Lato, sans-serif;*/
+            /*font-size: 1.35em;*/
+            /*padding: .35em 50px .35em 0;*/
+            /*border: 1px solid transparent;*/
+            /*border-radius: 0;*/
+            /*cursor: pointer;*/
+            /*transition: all 0.3s ease-in-out;*/
+            width: 200px; /* Измененная длина */
+            color: #2b2b2b;
+            background-color: white;
+            border-bottom-color: #ccc;
+            font-family: Lato, sans-serif;
+            font-size: 1.35em;
+            padding: .35em 50px .35em 0;
+            border: 1px solid transparent;
+            border-radius: 0;
+            cursor: default;
+            transition: all 0.3s ease-in-out;
+            height: 40px;
+        }
+
+        .search__field:focus {
+            border-bottom-color: #ccc;
+            width: 200px; /* Измененная длина */
+            color: #2b2b2b;
+            background-color: white;
+            cursor: default;
+        }
+
+        .search__field:focus ~ .search__icon {
+            background-color: transparent;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .search__icon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            /*background-color: #ebebec;*/
+            width: 50px;
+            height: 50px;
+            font-size: 1.35em;
+            text-align: center;
+            border-color: transparent;
+            border-radius: 50%;
+            pointer-events: none;
+            display: inline-block;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .search__field::-webkit-input-placeholder {
+            position: relative;
+            top: 0;
+            left: 0;
+            transition-property: top, color;
+            transition-duration: .1s;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000;
+        }
+
+        .search__field:-moz-placeholder {
+            position: relative;
+            top: 0;
+            left: 0;
+            transition-property: top, color;
+            transition-duration: .1s;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000;
+        }
+
+        .search__field::-moz-placeholder {
+            position: relative;
+            top: 0;
+            left: 0;
+            transition-property: top, color;
+            transition-duration: .1s;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000;
+        }
+
+        .search__field:-ms-input-placeholder {
+            position: relative;
+            top: 0;
+            left: 0;
+            transition-property: top, color;
+            transition-duration: .1s;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000;
+        }
+
+        .search__field::-webkit-input-placeholder[style*=hidden] {
+            color: #b3c3c9;
+            font-size: .65em;
+            font-weight: normal;
+            top: -20px;
+            opacity: 1;
+            visibility: visible !important;
+        }
+
+        .search__field:-moz-placeholder[style*=hidden] {
+            color: #b3c3c9;
+            font-size: .65em;
+            font-weight: normal;
+            top: -20px;
+            opacity: 1;
+            visibility: visible !important;
+        }
+
+        .search__field::-moz-placeholder[style*=hidden] {
+            color: #b3c3c9;
+            font-size: .65em;
+            font-weight: normal;
+            top: -20px;
+            opacity: 1;
+            visibility: visible !important;
+        }
+
+        .search__field:-ms-input-placeholder[style*=hidden] {
+            color: #b3c3c9;
+            font-size: .65em;
+            font-weight: normal;
+            top: -20px;
+            opacity: 1;
+            visibility: visible !important;
+        }
+    /*TODO  End*/
     </style>
 </head>
 
@@ -122,6 +279,7 @@
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
+
 <main class="main" id="top">
     <div class="dropdown">
         <div th:if="${isAuthenticated}">
@@ -209,9 +367,22 @@
             </div>
         </a>
         </div>
+
+        <form class="search" th:action="@{/products/find}" method="POST">
+            <div class="search__wrapper">
+                <input type="text" name="name" placeholder="Search for..." class="search__field">
+<!--                <button type="submit" class="fa fa-search search__icon"></button>-->
+            </div>
+            <!--        <input type="submit" value="Поиск">-->
+        </form>
+
         <br>
         <!--        <div style="z-index: 9999" th:replace="/sections/catalog :: catalog"></div>-->
     </nav>
+
+
+
+
     <main style="z-index: 9999" th:replace="menu :: site-menu"></main>
     <!-- TODO Slider -->
     <section class="section-slide">
@@ -298,6 +469,9 @@
         </div>
     </section>
     <!--    TODO PRODUCTS NEW DANGEROUS-->
+
+
+
     <div class="row">
         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" th:each="product : ${products}">
             <!-- Block2 -->

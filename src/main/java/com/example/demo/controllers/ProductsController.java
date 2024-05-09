@@ -144,5 +144,41 @@ public class ProductsController {
         model.addAttribute("isAuthenticated", isAuthenticated);
     }
 
+    @PostMapping("/find")
+    public String findProduct(@RequestParam String name, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("ROLE_USER")) {
+                    isAuthenticated = true;
+                    break;
+                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                    isAuthenticated = true;
+                    break;
+                } else {
+                    isAuthenticated = false;
+                }
+            }
+        }
+
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+        }
+
+        System.out.println(isAuthenticated);
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        List<Products> products = productService.findAllByNameContaining(name);
+        model.addAttribute("products", products);
+        return "found-products";
+    }
+
 
 }
