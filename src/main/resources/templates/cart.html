@@ -335,7 +335,7 @@
     </div>
 </div>
 <!--</form>-->
-<div style="position: fixed; top: 138px; right: 0; width: 450px;z-index: 9999"
+<div style="position: fixed; top: 138px; right: 0; width: 450px;"
      class="col-sm-10 col-lg-7 col-xl-5 m-b-50">
     <div style="height: 335px" class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
 
@@ -544,6 +544,19 @@ z-index: 1000;background-color: #eaeaec">
 </script>
 <!--===============================================================================================-->
 <script src="/js/main.js"></script>
+
+<script>let toggles = document.querySelectorAll('.dropdown-toggle');
+toggles.forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+        let menu = this.nextElementSibling;
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
+    });
+});
+</script>
 
 </body>
 </html>
