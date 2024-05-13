@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import com.example.demo.service.AuthService;
 import com.example.demo.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+  private final  UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
