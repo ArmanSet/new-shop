@@ -47,4 +47,16 @@ public class ProductsService {
     public List<Products> findAllByNameContaining(String name) {
         return productsRepository.findAllByNameContainingIgnoreCase(name);
     }
+
+    public void disableProduct(Long id) {
+        Products product = productsRepository.findById(id).get();
+        product.setActive(0);
+        productsRepository.save(product);
+    }
+
+    public void enableProduct(Long id) {
+        Products product = productsRepository.findById(id).get();
+        product.setActive(1);
+        productsRepository.save(product);
+    }
 }

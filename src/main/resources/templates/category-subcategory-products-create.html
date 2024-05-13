@@ -69,10 +69,18 @@
     <label for="productmaxQuantity">Product MaxQuantity:</label><br>
     <input type="text" id="productmaxQuantity" th:field="*{maxQuantity}"><br>
 
+
+
+    <label for="productActive">Product Visibility:</label><br>
+    <select id="productActive" th:field="*{active}">
+        <option value="1">Active</option>
+        <option value="0">Inactive</option>
+    </select><br>
+
 <!--    <label for="categoryID">Product Category ID:</label><br>-->
 <!--    <input type="number" id="categoryID" th:field="*{category.id}"><br>-->
 
-    <label for="subcategoryID">Product Category:</label><br>
+    <label for="subcategoryID">Product Subcategory:</label><br>
     <select id="subcategoryID" th:field="*{subcategory.id}">
         <option th:each="subcategory : ${subcategories}" th:value="${subcategory.id}" th:text="${subcategory.name}"></option>
     </select><br>

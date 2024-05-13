@@ -45,7 +45,7 @@
                             <a href="#" th:href="@{/products/list/{id}(id=${subcategory.id})}"
                                th:text="${subcategory.name} + ' »'"></a>
                             <ul class="child">
-                                <li th:each="product : ${subcategory.products}">
+                                <li th:each="product : ${subcategory.products}" th:if="${isAdmin || product.active == 1}">
                                     <a href="#" th:href="@{/product/details/{id}(id=${product.id})}"
                                        th:text="${product.name}"></a>
                                 </li>

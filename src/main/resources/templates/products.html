@@ -211,50 +211,33 @@
 <br><br><br><br>
 
 <main class="container2">
-    <div th:each="product : ${products}" class="product">
+    <div th:each="product : ${products}" th:if="${isAdmin || product.active == 1}" class="product">
         <div class="product-image">
             <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>
-<!--            <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>-->
         </div>
         <div class="product-info">
             <h2 th:text="${product.name}">Product Title</h2>
-<!--            <p th:text="${product.description}">Product Description</p>-->
-<!--            <div class="product-price" th:text="${product.price}">Product Price</div>-->
             <div class="product-price" th:text="'€' + ${product.price}">Product Price</div>
             <div class="product-quantity" th:text="'In stock ' +${product.maxQuantity}">Product Max Quantity</div>
             <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
                 <p>Quantity:
                     <input type="number" name="quantity" th:value="1" min="1" th:max="${product.maxQuantity}">
                 </p>
-
                 <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" style="background-color: #020206;color: white; border-radius: 10px;" type="submit">ADD TO CART</button>
-
             </form>
-
             <div th:if="${isAdmin}">
-                <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post">
-                    <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"   type="submit">Delete</button>
+                <form th:action="@{/products/disable/{id}(id=${product.id})}" method="post">
+                    <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" type="submit">Disable</button>
+                </form>
+            </div>
+            <div th:if="${isAdmin}">
+                <form th:action="@{/products/enable/{id}(id=${product.id})}" method="post">
+                    <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" type="submit">Enable</button>
                 </form>
             </div>
 
-
-            <!--            <a th:href="@{/cart/add/{id}(id=${product.id})}">-->
-            <!--                <button type="button">ADD TO CART</button>-->
-            <!--            </a>-->
-
         </div>
-        <!--        <div class="product-action">-->
-        <!--            <button type="button">Buy Now</button>-->
-        <!--        </div>-->
     </div>
-    <!--        private String name;+-->
-    <!--        private String description;+-->
-    <!--        private String colour;+-->
-    <!--        private String brand;+-->
-    <!--        private String image;+-->
-    <!--        private double price;+-->
-    <!--        private int quantity;+-->
-
 </main>
     <footer style="background-color: white;margin-top: 190px;">
         <section class="py-0 pt-7">

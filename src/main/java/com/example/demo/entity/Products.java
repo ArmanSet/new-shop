@@ -32,6 +32,7 @@ public class Products {
     private double price;
     private int quantity;
     private int maxQuantity;
+    private int active;
 
 //    @ManyToOne()
 //    @JoinColumn(name = "users_id")

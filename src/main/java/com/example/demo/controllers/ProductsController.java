@@ -108,9 +108,15 @@ public class ProductsController {
     }
 
 
-    @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.deleteById(id);
+    @PostMapping("/disable/{id}")
+    public String disableProduct(@PathVariable Long id) {
+        productService.disableProduct(id);
+        return "redirect:/products/list";
+    }
+
+    @PostMapping("/enable/{id}")
+    public String enableProduct(@PathVariable Long id) {
+        productService.enableProduct(id);
         return "redirect:/products/list";
     }
 
