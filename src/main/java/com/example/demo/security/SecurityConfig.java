@@ -60,7 +60,7 @@ public class SecurityConfig {
                             .successForwardUrl("/")
 //                            .successForwardUrl("/admin")
                             .failureUrl("/login?error=true")
-                            .defaultSuccessUrl("/", false);
+                            .defaultSuccessUrl("/", true);
 
                 })
                 .logout(logout -> {
