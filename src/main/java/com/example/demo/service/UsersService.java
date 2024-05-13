@@ -4,7 +4,6 @@ import com.example.demo.entity.Order;
 import com.example.demo.entity.OrderProducts;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.CartRepository;
-import com.example.demo.repository.FactoryRepository;
 import com.example.demo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsersService {
     private final UsersRepository usersRepository;
-    private final FactoryRepository factoryRepository;
     private final OrderService orderService;
     private final OrderProductsService orderProductsService;
     private final CartRepository cartRepository;
@@ -46,7 +44,7 @@ public class UsersService {
         newUsers.setAddress(users.getAddress());
         newUsers.setPhone(users.getPhone());
 //        Factory factoryFromDB = factoryService.findFactoryByName(factory.getName());
-        newUsers.setFactory(factoryRepository.findByName(factoryName));
+//        newUsers.setFactory(factoryRepository.findByName(factoryName));
 
         usersRepository.save(newUsers);
 

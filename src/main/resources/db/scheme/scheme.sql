@@ -38,31 +38,31 @@ default_table_access_method = heap;
 -- Name: accountant; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.accountant
-(
-    factory_id bigint,
-    id         bigint NOT NULL,
-    address    character varying(255),
-    name       character varying(255),
-    phone      character varying(255)
-);
+-- CREATE TABLE public.accountant
+-- (
+--     factory_id bigint,
+--     id         bigint NOT NULL,
+--     address    character varying(255),
+--     name       character varying(255),
+--     phone      character varying(255)
+-- );
 
 
-ALTER TABLE public.accountant OWNER TO postgres;
+-- ALTER TABLE public.accountant OWNER TO postgres;
 
 --
 -- TOC entry 216 (class 1259 OID 83050)
 -- Name: accountant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.accountant_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE CACHE 1;
-
-
-ALTER SEQUENCE public.accountant_id_seq OWNER TO postgres;
+-- CREATE SEQUENCE public.accountant_id_seq
+--     START WITH 1
+--     INCREMENT BY 1
+--     NO MINVALUE
+--     NO MAXVALUE CACHE 1;
+--
+--
+-- ALTER SEQUENCE public.accountant_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 3709 (class 0 OID 0)
@@ -70,7 +70,7 @@ ALTER SEQUENCE public.accountant_id_seq OWNER TO postgres;
 -- Name: accountant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.accountant_id_seq OWNED BY public.accountant.id;
+-- ALTER SEQUENCE public.accountant_id_seq OWNED BY public.accountant.id;
 
 
 --
@@ -171,29 +171,29 @@ ALTER SEQUENCE public.category_id_seq OWNED BY public.category.id;
 -- Name: factory; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.factory
-(
-    id      bigint NOT NULL,
-    address character varying(255),
-    name    character varying(255)
-);
+-- CREATE TABLE public.factory
+-- (
+--     id      bigint NOT NULL,
+--     address character varying(255),
+--     name    character varying(255)
+-- );
 
 
-ALTER TABLE public.factory OWNER TO postgres;
+-- ALTER TABLE public.factory OWNER TO postgres;
 
 --
 -- TOC entry 223 (class 1259 OID 83080)
 -- Name: factory_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
+--
+-- CREATE SEQUENCE public.factory_id_seq
+--     START WITH 1
+--     INCREMENT BY 1
+--     NO MINVALUE
+--     NO MAXVALUE CACHE 1;
 
-CREATE SEQUENCE public.factory_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE CACHE 1;
 
-
-ALTER SEQUENCE public.factory_id_seq OWNER TO postgres;
+-- ALTER SEQUENCE public.factory_id_seq OWNER TO postgres;
 
 --
 -- TOC entry 3712 (class 0 OID 0)
@@ -201,7 +201,7 @@ ALTER SEQUENCE public.factory_id_seq OWNER TO postgres;
 -- Name: factory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.factory_id_seq OWNED BY public.factory.id;
+-- ALTER SEQUENCE public.factory_id_seq OWNED BY public.factory.id;
 
 
 --
@@ -415,7 +415,7 @@ ALTER SEQUENCE public.subcategory_id_seq OWNED BY public.subcategory.id;
 CREATE TABLE public.users
 (
     cart_id    bigint,
-    factory_id bigint,
+--     factory_id bigint,
     id         bigint NOT NULL,
     address    character varying(255),
     email      character varying(255),
@@ -456,7 +456,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 -- Name: accountant id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.accountant ALTER COLUMN id SET DEFAULT nextval('public.accountant_id_seq'::regclass);
+-- ALTER TABLE ONLY public.accountant ALTER COLUMN id SET DEFAULT nextval('public.accountant_id_seq'::regclass);
 
 
 --
@@ -480,7 +480,7 @@ ALTER TABLE ONLY public.category ALTER COLUMN id SET DEFAULT nextval('public.cat
 -- Name: factory id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.factory ALTER COLUMN id SET DEFAULT nextval('public.factory_id_seq'::regclass);
+-- ALTER TABLE ONLY public.factory ALTER COLUMN id SET DEFAULT nextval('public.factory_id_seq'::regclass);
 
 
 --
@@ -531,10 +531,10 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 -- Inserting data into the public.accountant table
 -- Inserting data into the public.accountant table
-INSERT INTO public.accountant (factory_id, id, address, name, phone)
-VALUES (1, 1, 'address_value_1', 'name_value_1', 'phone_value_1'),
-       (2, 2, 'address_value_2', 'name_value_2', 'phone_value_2'),
-       (3, 3, 'address_value_3', 'name_value_3', 'phone_value_3');
+-- INSERT INTO public.accountant (factory_id, id, address, name, phone)
+-- VALUES (1, 1, 'address_value_1', 'name_value_1', 'phone_value_1'),
+--        (2, 2, 'address_value_2', 'name_value_2', 'phone_value_2'),
+--        (3, 3, 'address_value_3', 'name_value_3', 'phone_value_3');
 
 -- Inserting data into the public.cart table
 -- Inserting data into the public.cart table
@@ -545,13 +545,13 @@ VALUES (1, 'Onderwijslaan 51- 2', 'arman.setoian@gmail.com', 'Arman Setoian', '0
 -- Repeat the above INSERT statement for each row in the public.cart table
 ;
 -- Similarly, create INSERT statements for other tables like public.cart_products, public.category, public.factory, public.order, public.order-products_product, public.order_product, public.order_products, and public.products
-INSERT INTO public.factory (id, name, address)
-VALUES (2, 'Factory Name', 'Factory Address');
+-- INSERT INTO public.factory (id, name, address)
+-- VALUES (2, 'Factory Name', 'Factory Address');
 
-INSERT INTO public.factory (id, name, address)
-VALUES (1, 'Factory', 'Address');
-INSERT INTO public.factory (id, name, address)
-VALUES (3, 'Name', 'Factory');
+-- INSERT INTO public.factory (id, name, address)
+-- VALUES (1, 'Factory', 'Address');
+-- INSERT INTO public.factory (id, name, address)
+-- VALUES (3, 'Name', 'Factory');
 
 -- Добавление записей в таблицу category
 INSERT INTO public.category (id, name, type, image)
@@ -723,7 +723,7 @@ Breathable', 'Blue', 'Polo',
 -- Name: accountant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.accountant_id_seq', 1, false);
+-- SELECT pg_catalog.setval('public.accountant_id_seq', 1, false);
 
 
 --
@@ -750,7 +750,7 @@ SELECT pg_catalog.setval('public.category_id_seq', 6, true);
 -- Name: factory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.factory_id_seq', 1, false);
+-- SELECT pg_catalog.setval('public.factory_id_seq', 1, false);
 
 
 --
@@ -803,8 +803,8 @@ SELECT pg_catalog.setval('public.users_id_seq', 7, true);
 -- Name: accountant accountant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.accountant
-    ADD CONSTRAINT accountant_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY public.accountant
+--     ADD CONSTRAINT accountant_pkey PRIMARY KEY (id);
 
 
 --
@@ -830,8 +830,8 @@ ALTER TABLE ONLY public.category
 -- Name: factory factory_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.factory
-    ADD CONSTRAINT factory_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY public.factory
+--     ADD CONSTRAINT factory_pkey PRIMARY KEY (id);
 
 
 --
@@ -929,8 +929,8 @@ ALTER TABLE ONLY public.cart_products
 -- Name: accountant fkb5s61bljil1bm78y19uubasb6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.accountant
-    ADD CONSTRAINT fkb5s61bljil1bm78y19uubasb6 FOREIGN KEY (factory_id) REFERENCES public.factory(id);
+-- ALTER TABLE ONLY public.accountant
+--     ADD CONSTRAINT fkb5s61bljil1bm78y19uubasb6 FOREIGN KEY (factory_id) REFERENCES public.factory(id);
 
 
 --
@@ -938,8 +938,8 @@ ALTER TABLE ONLY public.accountant
 -- Name: users fkcrnexpe5i83hs95bywleo3efe; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT fkcrnexpe5i83hs95bywleo3efe FOREIGN KEY (factory_id) REFERENCES public.factory(id);
+-- ALTER TABLE ONLY public.users
+--     ADD CONSTRAINT fkcrnexpe5i83hs95bywleo3efe FOREIGN KEY (factory_id) REFERENCES public.factory(id);
 
 
 --

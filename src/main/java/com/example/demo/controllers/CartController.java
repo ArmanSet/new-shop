@@ -89,7 +89,7 @@ public class CartController {
                 model.addAttribute("orderProducts", user.getCart().getOrderProducts());
                 model.addAttribute("authentication", user.getRole());
                 model.addAttribute("totalPrice", 0);
-                return "cart";
+                return "redirect:/cart";
             } else {
                 Cart cart = user.getCart();
 //                String uuid = cartService.getCookieValue(request, "uuid");

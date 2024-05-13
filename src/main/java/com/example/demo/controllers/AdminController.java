@@ -1,8 +1,8 @@
 package com.example.demo.controllers;
 
-import com.example.demo.entity.Factory;
+//import com.example.demo.entity.Factory;
 import com.example.demo.entity.Users;
-import com.example.demo.service.FactoryService;
+//import com.example.demo.service.FactoryService;
 import com.example.demo.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
     private final UsersService usersService;
-    private final FactoryService factoryService;
+//    private final FactoryService factoryService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     static String factoryName;
@@ -28,7 +28,7 @@ public class AdminController {
     @GetMapping("/admin")
     public String getAdmin(Model model) {
         model.addAttribute("user", new Users());
-        model.addAttribute("factory", new Factory());
+//        model.addAttribute("factory", new Factory());
         return "signup";
     }
 
@@ -41,12 +41,12 @@ public class AdminController {
         return "redirect:/create/list"; // Redirect to the list of admins after creating a new one
     }
 
-    @PostMapping("/factory")
-    public String postFactory(@ModelAttribute Factory factory) {
-        factoryName = factory.getName();
-        factoryService.save(factory);
-        return "redirect:/create/list"; // Redirect to the list of admins after creating a new one
-    }
+//    @PostMapping("/factory")
+//    public String postFactory(@ModelAttribute Factory factory) {
+//        factoryName = factory.getName();
+//        factoryService.save(factory);
+//        return "redirect:/create/list"; // Redirect to the list of admins after creating a new one
+//    }
 
     @GetMapping("/list")
     public String getAdmins(Model model) {

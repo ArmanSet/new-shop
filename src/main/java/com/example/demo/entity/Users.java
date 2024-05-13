@@ -28,9 +28,9 @@ public class Users {
     private String address;
     private String role;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "factory_id")
-    private Factory factory;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "factory_id")
+//    private Factory factory;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
