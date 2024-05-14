@@ -249,7 +249,7 @@
                 </form>
             </div>
 
-            <div th:if="${isAdmin && product.active == 0}">
+            <div th:if="${isAdmin && (product.active == 0 || product.maxQuantity==0)}">
                 <div style="width: 20px;
                 height: 20px;
                 background-color: red;
