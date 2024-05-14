@@ -218,7 +218,7 @@
 <br><br><br><br>
 
 <main class="container2">
-    <div th:each="product : ${products}" class="product">
+    <div th:each="product : ${products}" th:if="${product.active == 1 && product.maxQuantity > 1}" class="product">
         <div class="product-image">
             <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>
             <!--            <a th:href="@{/product/details/{id}(id=${product.id})}"><img th:src="${product.image}" alt="Product Image"></a>-->
