@@ -289,15 +289,25 @@
                                 <br>
                                 <br>
                                 <br>
+<!--                                <form th:action="@{/cart/change/{id}(id=${orderProduct.id})}" method="post">-->
+
+<!--                                    <label>-->
+<!--                                        <input style="  margin-left: 40px;"-->
+<!--                                               class="mtext-104 cl3 txt-center num-product" type="number"-->
+<!--                                               name="quantity" th:value="${orderProduct.quantity}" min="1"-->
+<!--                                               th:max="${product.maxQuantity} ">-->
+<!--                                    </label>-->
+
+<!--                                    <button class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10"-->
+<!--                                            type="submit">Change-->
+<!--                                    </button>-->
+<!--                                </form>-->
                                 <form th:action="@{/cart/change/{id}(id=${orderProduct.id})}" method="post">
-
                                     <label>
-                                        <input style="  margin-left: 40px;"
+                                        <input style="margin-left: 40px;"
                                                class="mtext-104 cl3 txt-center num-product" type="number"
-                                               name="quantity" th:value="${orderProduct.quantity}" min="1"
-                                               th:max="${product.maxQuantity} ">
+                                               name="quantity" th:value="${orderProduct.quantity}" min="1" th:max="${product.maxQuantity+orderProduct.quantity}">
                                     </label>
-
                                     <button class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10"
                                             type="submit">Change
                                     </button>

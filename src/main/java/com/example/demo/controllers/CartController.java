@@ -254,6 +254,7 @@ public class CartController {
         this.JSESSIONID = JSESSIONID;
         return JSESSIONID;
     }
+
     @PostMapping("/change/{id}")
     public String changeQuantity(@PathVariable Long id, @RequestParam int quantity, HttpServletRequest request) {
         Users user = getCurrentUser();
@@ -264,16 +265,16 @@ public class CartController {
                 if (op.getId().equals(id)) {
                     List<Products> products = op.getProducts();
                     for (Products p : products) {
-                        int difference = op.getQuantity() - quantity;
-                        if (difference >= 0) {
-                            p.setMaxQuantity(p.getMaxQuantity() + difference);
-                        } else {
-                            if (p.getMaxQuantity() >= Math.abs(difference)) {
-                                p.setMaxQuantity(p.getMaxQuantity() + difference);
+                        int difference = quantity - op.getQuantity();
+                        if (difference > 0) {
+                            if (p.getMaxQuantity() + op.getQuantity() >= quantity) {
+                                p.setMaxQuantity(p.getMaxQuantity() - difference);
                             } else {
                                 // Here you might want to add some error message indicating that there is not enough product in stock
                                 return "redirect:/cart";
                             }
+                        } else {
+                            p.setMaxQuantity(p.getMaxQuantity() - difference);
                         }
                         productRepository.save(p);
                         op.setQuantity(quantity);
@@ -285,7 +286,6 @@ public class CartController {
             cartRepository.save(cart);
         } else {
             String uuid = cartService.getCookieValue(request, "uuid");
-            //TODO SUPER CRITICAL
             Cart cart = cartService.findCartByName(uuid);
             if (cart == null) {
                 // Create a new Cart object if it doesn't exist
@@ -298,16 +298,16 @@ public class CartController {
                 if (op.getId().equals(id)) {
                     List<Products> products = op.getProducts();
                     for (Products p : products) {
-                        int difference = op.getQuantity() - quantity;
-                        if (difference >= 0) {
-                            p.setMaxQuantity(p.getMaxQuantity() + difference);
-                        } else {
-                            if (p.getMaxQuantity() >= Math.abs(difference)) {
-                                p.setMaxQuantity(p.getMaxQuantity() + difference);
+                        int difference = quantity - op.getQuantity();
+                        if (difference > 0) {
+                            if (p.getMaxQuantity() + op.getQuantity() >= quantity) {
+                                p.setMaxQuantity(p.getMaxQuantity() - difference);
                             } else {
                                 // Here you might want to add some error message indicating that there is not enough product in stock
                                 return "redirect:/cart";
                             }
+                        } else {
+                            p.setMaxQuantity(p.getMaxQuantity() - difference);
                         }
                         productRepository.save(p);
                         op.setQuantity(quantity);
@@ -321,6 +321,73 @@ public class CartController {
 
         return "redirect:/cart";
     }
+//    @PostMapping("/change/{id}")
+//    public String changeQuantity(@PathVariable Long id, @RequestParam int quantity, HttpServletRequest request) {
+//        Users user = getCurrentUser();
+//        if (isUserAuthenticated()) {
+//            Cart cart = user.getCart();
+//            List<OrderProducts> orderProducts = cart.getOrderProducts();
+//            for (OrderProducts op : orderProducts) {
+//                if (op.getId().equals(id)) {
+//                    List<Products> products = op.getProducts();
+//                    for (Products p : products) {
+//                        int difference = op.getQuantity() - quantity;
+//                        if (difference >= 0) {
+//                            p.setMaxQuantity(p.getMaxQuantity() + difference);
+//                        } else {
+//                            if (p.getMaxQuantity() >= Math.abs(difference)) {
+//                                p.setMaxQuantity(p.getMaxQuantity() + difference);
+//                            } else {
+//                                // Here you might want to add some error message indicating that there is not enough product in stock
+//                                return "redirect:/cart";
+//                            }
+//                        }
+//                        productRepository.save(p);
+//                        op.setQuantity(quantity);
+//                        orderProductsService.save(op);
+//                    }
+//                }
+//            }
+//            cart.setOrderProducts(orderProducts);
+//            cartRepository.save(cart);
+//        } else {
+//            String uuid = cartService.getCookieValue(request, "uuid");
+//            //TODO SUPER CRITICAL
+//            Cart cart = cartService.findCartByName(uuid);
+//            if (cart == null) {
+//                // Create a new Cart object if it doesn't exist
+//                cart = new Cart();
+//                cart.setName(uuid);
+//                cartRepository.save(cart);
+//            }
+//            List<OrderProducts> orderProducts = cart.getOrderProducts();
+//            for (OrderProducts op : orderProducts) {
+//                if (op.getId().equals(id)) {
+//                    List<Products> products = op.getProducts();
+//                    for (Products p : products) {
+//                        int difference = op.getQuantity() - quantity;
+//                        if (difference >= 0) {
+//                            p.setMaxQuantity(p.getMaxQuantity() + difference);
+//                        } else {
+//                            if (p.getMaxQuantity() >= Math.abs(difference)) {
+//                                p.setMaxQuantity(p.getMaxQuantity() + difference);
+//                            } else {
+//                                // Here you might want to add some error message indicating that there is not enough product in stock
+//                                return "redirect:/cart";
+//                            }
+//                        }
+//                        productRepository.save(p);
+//                        op.setQuantity(quantity);
+//                        orderProductsService.save(op);
+//                    }
+//                }
+//            }
+//            cart.setOrderProducts(orderProducts);
+//            cartRepository.save(cart);
+//        }
+//
+//        return "redirect:/cart";
+//    }
 
 // TODO Переделать метод CRITICAL Завтра
 //    @PostMapping("/remove/{id}")
