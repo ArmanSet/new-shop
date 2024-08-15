@@ -221,6 +221,9 @@ public class CartController {
                 orderProductsService.save(orderProducts);
             }
         }
+        if (referer == null || referer.isEmpty() ||referer.equals("http://localhost:8081/products/find")) {
+            return "redirect:/cart";
+        }
         return "redirect:" + referer;
     }
     public Users getCurrentUser() {
