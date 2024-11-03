@@ -35,7 +35,7 @@ public class OrderController {
     private final ProductsRepository productsRepository;
     private List<Order> orderForSave;
 
-//    @GetMapping("/")
+    //    @GetMapping("/")
 //    @Transactional
 //    public String showOrderForCurrentUser(Model model) {
 //        Users users = getCurrentUser();
@@ -58,51 +58,62 @@ public class OrderController {
 //        model.addAttribute("orderProductsSeparate", orderProducts);
 //        return "orders";
 //    }
-@GetMapping("/")
-@Transactional
-public String showOrderForCurrentUser(Model model) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    boolean isAuthenticated = false;
-    if (authentication != null) {
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        for (GrantedAuthority authority : authorities) {
-            if (authority.getAuthority().equals("ROLE_USER")) {
-                isAuthenticated = true;
-                break;
-            } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                isAuthenticated = true;
-                break;
-            } else {
-                isAuthenticated = false;
+    @GetMapping("/")
+    @Transactional
+    public String showOrderForCurrentUser(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("ROLE_USER")) {
+                    isAuthenticated = true;
+                    break;
+                } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                    isAuthenticated = true;
+                    break;
+                } else {
+                    isAuthenticated = false;
+                }
             }
         }
-    }
 
-    Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
-    for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
-        if (authority.getAuthority().equals("ROLE_ADMIN")) {
-            model.addAttribute("isAdmin", true);
-            break;
-        } else {
-            model.addAttribute("isAdmin", false);
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
         }
-    }
-    model.addAttribute("isAuthenticated", isAuthenticated);
-    Users users = getCurrentUser();
-    if (users == null) {
-        return "redirect:/login";
-    }
+        model.addAttribute("isAuthenticated", isAuthenticated);
+        Users users = getCurrentUser();
+        if (users == null) {
+            return "redirect:/login";
+        }
 
-    List<Order> orders = orderService.findAllOrdersByUsers(users.getEmail());
-    model.addAttribute("orders", orders);
+        List<Order> orders = orderService.findAllOrdersByUsers(users.getEmail());
+        model.addAttribute("orders", orders);
 
-    if (users.getCart() != null) {
-        List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
-        model.addAttribute("orderProductsSeparate", orderProducts);
+//        if (users.getCart() != null) {
+//            List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
+//            model.addAttribute("orderProductsSeparate", orderProducts);
+//        }
+        //TODO LOOK AT HERE ALL ORDERS FOR ADMIN
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                List<Order> orderProductsForAdmin = orderService.getAllOrders();
+                model.addAttribute("isAdmin", true);
+                model.addAttribute("orderProductsForAdmin", orderProductsForAdmin);
+            } else if (users.getCart() != null) {
+                List<OrderProducts> orderProducts = users.getCart().getOrderProducts();
+                model.addAttribute("orderProductsSeparate", orderProducts);
+            }
+        }
+
+        return "orders";
     }
-
-    return "orders";
-}
 
 //    @PostMapping("/{id}")
 //    public String showOrders(@PathVariable Long id, Model model) {
@@ -221,12 +232,13 @@ public String showOrderForCurrentUser(Model model) {
         cartService.save(userAuth.getCart());
         List<OrderProducts> orderProductsFromDataBase = orderProductsService.findByCartId(cart.getId());
         orderProductsFromDataBase.forEach(orderProducts ->
-                {   orderProducts.setCart(null);
+        {
+            orderProducts.setCart(null);
 //                    orderProducts.setOrder(order);
-                    orderProductsService.save(orderProducts);
-                });
+            orderProductsService.save(orderProducts);
+        });
 
-                System.out.println(userAuth.getCart().getId());
+        System.out.println(userAuth.getCart().getId());
         return "orders";
     }
 
