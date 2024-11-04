@@ -1,0 +1,281 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>Admin Product Editor</title>-->
+<!--  <link rel="stylesheet" th:href="@{/menu.css}">-->
+<!--  <link rel="stylesheet" th:href="@{/catalog.css}">-->
+<!--  <link rel="stylesheet" th:href="@{/assets/css/theme.css}">-->
+<!--  <style>-->
+<!--    .product-editor {-->
+<!--      margin: 20px;-->
+<!--      padding: 20px;-->
+<!--      border: 1px solid #ddd;-->
+<!--      background-color: #fff;-->
+<!--      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);-->
+<!--    }-->
+
+<!--    .form-group {-->
+<!--      margin-bottom: 15px;-->
+<!--    }-->
+
+<!--    label {-->
+<!--      font-weight: bold;-->
+<!--    }-->
+
+<!--    input[type="text"],-->
+<!--    input[type="number"],-->
+<!--    input[type="file"],-->
+<!--    select,-->
+<!--    textarea {-->
+<!--      width: 100%;-->
+<!--      padding: 8px;-->
+<!--      margin-top: 5px;-->
+<!--      border: 1px solid #ccc;-->
+<!--      border-radius: 4px;-->
+<!--    }-->
+
+<!--    button {-->
+<!--      background-color: #f0c14b;-->
+<!--      border: 1px solid #a88734;-->
+<!--      color: #111;-->
+<!--      padding: 10px;-->
+<!--      cursor: pointer;-->
+<!--      border-radius: 4px;-->
+<!--      width: 100%;-->
+<!--    }-->
+
+<!--    button:hover {-->
+<!--      background-color: #f5d078;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<header>-->
+<!--  <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3">-->
+<!--    <div class="container">-->
+<!--      <a class="navbar-brand d-inline-flex" href="/">-->
+<!--        <img class="d-inline-block" src="/assets/img/gallery/logo.png" alt="logo"/>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--  </nav>-->
+<!--</header>-->
+<!--<br><br><br><br>-->
+
+
+<!--<main class="container">-->
+<!--  <div class="product-selector">-->
+<!--    <h2>Select Product to Edit</h2>-->
+<!--    <form th:action="@{/admin/products/select}" method="get">-->
+<!--      <div class="form-group">-->
+<!--        <label for="productSelect">Product Name:</label>-->
+<!--        <select id="productSelect" name="productId" required>-->
+<!--          <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--      <button type="submit">Select Product</button>-->
+<!--    </form>-->
+<!--  </div>-->
+
+
+
+<!--  <br>-->
+<!--  <div class="product-editor" th:if="${selectedProduct != null}">-->
+<!--    <h2>Edit Product</h2>-->
+<!--    <form th:action="@{/admin/products/edit/{id}(id=${selectedProduct.id})}" method="post" enctype="multipart/form-data">-->
+<!--      <div class="form-group">-->
+<!--        <label for="productName">Product Name:</label>-->
+<!--        <input type="text" id="productName" name="name" th:value="${selectedProduct.name}" required>-->
+<!--      </div>-->
+
+<!--      <div class="form-group">-->
+<!--        <label for="productPrice">Price (€):</label>-->
+<!--        <input type="number" id="productPrice" name="price" th:value="${selectedProduct.price}" min="0" step="0.01" required>-->
+<!--      </div>-->
+
+<!--      <div class="form-group">-->
+<!--        <label for="productQuantity">Max Quantity:</label>-->
+<!--        <input type="number" id="productQuantity" name="maxQuantity" th:value="${selectedProduct.maxQuantity}" min="0" required>-->
+<!--      </div>-->
+
+<!--      <div class="form-group">-->
+<!--        <label for="productBrand">Brand:</label>-->
+<!--        <input type="text" id="productBrand" name="brand" th:value="${selectedProduct.brand}" required>-->
+<!--      </div>-->
+
+
+
+<!--        <label for="productImage">Product Image:</label><br>-->
+<!--        <input type="text" id="productImage" th:field="*{selectedProduct.image}"><br>-->
+<!--        <label for="productImage2">Product Image 2:</label><br>-->
+<!--        <input type="text" id="productImage2" th:field="*{selectedProduct.image2}"><br>-->
+<!--        <label for="productImage3">Product Image 3:</label><br>-->
+<!--        <input type="text" id="productImage3" th:field="*{selectedProduct.image3}"><br>-->
+<!--        <label for="productImage4">Product Image 4:</label><br>-->
+<!--        <input type="text" id="productImage4" th:field="*{selectedProduct.image4}"><br>-->
+
+
+<!--      <div class="form-group">-->
+<!--        <label for="productDescription">Description:</label>-->
+<!--        <textarea id="productDescription" name="description" rows="5" required th:text="${selectedProduct.description}"></textarea>-->
+<!--      </div>-->
+
+<!--      <div class="form-group">-->
+<!--        <label for="productActive">Status:</label>-->
+<!--        <select id="productActive" name="active">-->
+<!--          <option th:value="1" th:selected="${selectedProduct.active == 1}">Active</option>-->
+<!--          <option th:value="0" th:selected="${selectedProduct.active == 0}">Inactive</option>-->
+<!--        </select>-->
+<!--      </div>-->
+
+<!--      <button type="submit">Save Changes</button>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</main>-->
+<!--<script>-->
+<!--  // Add any JavaScript you may need for form validation or interaction-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Product Editor</title>
+  <link rel="stylesheet" th:href="@{/menu.css}">
+  <link rel="stylesheet" th:href="@{/catalog.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/theme.css}">
+  <style>
+    .product-editor {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #f0c14b;
+      border: 1px solid #a88734;
+      color: #111;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #f5d078;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3">
+    <div class="container">
+      <a class="navbar-brand d-inline-flex" href="/">
+        <img class="d-inline-block" src="/assets/img/gallery/logo.png" alt="logo"/>
+      </a>
+    </div>
+  </nav>
+</header>
+<br><br><br><br>
+<main class="container">
+  <div class="product-selector">
+    <h2>Select Product to Edit</h2>
+    <form th:action="@{/admin/products/select}" method="get">
+      <div class="form-group">
+        <label for="productSelect">Product Name:</label>
+        <select id="productSelect" name="productId" required onchange="this.form.submit()">
+          <option value="" disabled selected>Select a product</option>
+          <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}" th:selected="${selectedProduct != null and product.id == selectedProduct.id}"></option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <br>
+  <div id="productEditor" class="product-editor" th:if="${selectedProduct != null}">
+    <h2>Edit Product</h2>
+    <img style=" height: 150px; width: 150px;" th:src="${selectedProduct.image}" alt="product image">
+    <form th:action="@{/admin/products/edit/{id}(id=${selectedProduct.id})}" method="post">
+      <div class="form-group">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="name" th:value="${selectedProduct.name}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productPrice">Price (€):</label>
+        <input type="number" id="productPrice" name="price" th:value="${selectedProduct.price}" min="0" step="0.01" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productQuantity">Max Quantity:</label>
+        <input type="number" id="productQuantity" name="maxQuantity" th:value="${selectedProduct.maxQuantity}" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productBrand">Brand:</label>
+        <input type="text" id="productBrand" name="brand" th:value="${selectedProduct.brand}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productImage1">Product Image 1 URL:</label>
+        <input type="text" id="productImage1" name="image1" th:value="${selectedProduct.image}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productImage2">Product Image 2 URL:</label>
+        <input type="text" id="productImage2" name="image2" th:value="${selectedProduct.image2}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productImage3">Product Image 3 URL:</label>
+        <input type="text" id="productImage3" name="image3" th:value="${selectedProduct.image3}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productImage4">Product Image 4 URL:</label>
+        <input type="text" id="productImage4" name="image4" th:value="${selectedProduct.image4}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productDescription">Description:</label>
+        <textarea id="productDescription" name="description" rows="5" required th:text="${selectedProduct.description}"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="productActive">Status:</label>
+        <select id="productActive" name="active">
+          <option th:value="1" th:selected="${selectedProduct.active == 1}">Active</option>
+          <option th:value="0" th:selected="${selectedProduct.active == 0}">Inactive</option>
+        </select>
+      </div>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</main>
+<script>
+  // Add any JavaScript you may need for form validation or interaction
+</script>
+</body>
+</html>

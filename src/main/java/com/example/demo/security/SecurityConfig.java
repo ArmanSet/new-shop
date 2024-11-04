@@ -36,6 +36,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(HttpMethod.POST, "/cart/change/**").permitAll()
                 .requestMatchers("/users/show").hasRole("ADMIN")
+                .requestMatchers("/admin/products/select").hasRole("ADMIN")
+                .requestMatchers("/category/create").hasRole("ADMIN")
 //                .requestMatchers("/users/show").authenticated()
 //                .requestMatchers("/**").authenticated()
                 .requestMatchers("/create/list").hasRole("ADMIN")

@@ -105,23 +105,24 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div style="width: 400px;height: 400px" class="container">
     <h1>LOGIN FORM</h1>
-
+    <br>
     <form th:action="@{/login}" method="post">
-        <input type="email" name="username" placeholder="email">
-        <input type="password" name="password" placeholder="Пароль">
+        <input style="width: 250px"  type="email" name="username" placeholder="email">
+        <input style="width: 250px" type="password" name="password" placeholder="Пароль">
         <br>
-        <button id="login"  type="submit">LOGIN</button>
+        <br>
+        <button style="width: 250px" id="login"  type="submit">LOGIN</button>
     </form>
     <br>
     <div>
-        <button class="btn" onclick="window.location.href='/users/create'">SIGN UP FOR USERS</button>
+        <button style="width: 250px" class="btn" onclick="window.location.href='/users/create'">SIGN UP FOR USERS</button>
     </div>
     <br>
 
     <div>
-        <button  class="btn" onclick="window.location.href='/create/admin'">SIGN UP ADMIN</button>
+        <button style="width: 250px" class="btn" onclick="window.location.href='/create/admin'">SIGN UP ADMIN</button>
     </div>
 </div>
 </body>

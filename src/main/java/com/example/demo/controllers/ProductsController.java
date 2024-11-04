@@ -47,8 +47,6 @@ public class ProductsController {
         List<Products> products = productService.findBySubcategoryId(id);
         model.addAttribute("products", products);
         return "products";
-
-
     }
 
 
