@@ -6,15 +6,9 @@ import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductsRepository;
 import com.example.demo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +53,7 @@ public class OrderService {
 //    }
 
     public List<Order> getOrders(String usersEmail) {
-        List<Order> orders = orderRepository.findAllByBuyerEmail(usersEmail);
+        List<Order> orders = orderRepository.findAllByBuyerEmailContaining(usersEmail);
         for (Order order : orders) {
             System.out.println(order.getBuyerEmail());
             System.out.println(order.getBuyerName());
@@ -85,7 +79,7 @@ public class OrderService {
 
 
     public List<Order> findByUserEmail(String name) {
-        return orderRepository.findAllByBuyerEmail(name);
+        return orderRepository.findAllByBuyerEmailContaining(name);
     }
 
     public BigDecimal calculateTotalPrice(Cart cart) {
@@ -117,7 +111,7 @@ public class OrderService {
 //        return orders;
 //    }
     public List<Order> findAllOrdersByUsers(String email) {
-        List<Order> orders = orderRepository.findAllByBuyerEmail(email);
+        List<Order> orders = orderRepository.findAllByBuyerEmailContaining(email);
 
         for (Order order : orders) {
             List<OrderProducts> orderProducts = order.getOrderProducts();
@@ -143,4 +137,25 @@ public class OrderService {
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+    public List<Order> findAllByEmailContain(String email,String name) {
+     return   orderRepository.findByBuyerEmailOrBuyerName(email,name);
+    }
+
+//    public List<Order> findAllByEmailAndName(String email, String name) {
+//       return orderRepository.findAllByEmailAndName(email,name);
+//    }
+
+    public List<Order> findAllByEmailContaining(String email) {
+        return orderRepository.findAllByBuyerEmailContaining(email);
+    }
+
+    public List<Order> findAllByNameContaining(String name) {
+        return orderRepository.findAllByNameContaining(name);
+    }
+
+    public List<Order> findAllByBuyerEmailContaining(String email) {
+        return orderRepository.findAllByBuyerEmailContaining(email);
+    }
+    
 }

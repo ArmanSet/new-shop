@@ -36,7 +36,7 @@ public class AdminController {
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String postAdmin(@ModelAttribute Users users) {
         users.setRole("ROLE_ADMIN");
-        usersService.save(users, factoryName);
+        usersService.save(users);
 
         return "redirect:/create/list"; // Redirect to the list of admins after creating a new one
     }

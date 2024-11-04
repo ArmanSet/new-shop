@@ -3,13 +3,11 @@ package com.example.demo.controllers;
 
 import com.example.demo.entity.*;
 import com.example.demo.repository.ProductsRepository;
-import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.CartService;
 import com.example.demo.service.OrderProductsService;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.UsersService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Controller
 @RequestMapping("/orders")
@@ -114,6 +110,51 @@ public class OrderController {
 
         return "orders";
     }
+
+// TODO CHANGES HERE
+    @PostMapping("/find")
+    public String findOrdersByEmail(@RequestParam( value ="email", required = false) String email,@RequestParam(value = "name", required = false) String name, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> authoritiesForProductPageDeleteItems = authentication.getAuthorities();
+        for (GrantedAuthority authority : authoritiesForProductPageDeleteItems) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                model.addAttribute("isAdmin", true);
+                List<Order> ordersFounded = orderService.findAllByEmailContain(email,name);
+                model.addAttribute("ordersFounded", ordersFounded);
+                break;
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+        }
+        return "found_orders";
+    }
+
+//    @PostMapping("/find")
+//    public String findOrdersByEmail(@RequestParam(value = "email", required = false) String email,
+//                                    @RequestParam(value = "name", required = false) String name,
+//                                    Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//
+//        boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+//        model.addAttribute("isAdmin", isAdmin);
+//
+//        List<Order> ordersFounded = new ArrayList<>();
+//        if (isAdmin) {
+//            if (email != null && !email.isEmpty() && name != null && !name.isEmpty()) {
+//                ordersFounded = orderService.findAllByBuyerEmailContainingAndNameContaining(email, name);
+//            } else if (email != null && !email.isEmpty()) {
+//                ordersFounded = orderService.findAllByBuyerEmailContaining(email);
+//            } else if (name != null && !name.isEmpty()) {
+//                ordersFounded = orderService.findAllByNameContaining(name);
+//            } else {
+////                ordersFounded = orderService.findAll(); // Опционально, если нужно вернуть все заказы
+//            }
+//        }
+//
+//        model.addAttribute("ordersFounded", ordersFounded);
+//        return "found_orders";
+//    }
 
 //    @PostMapping("/{id}")
 //    public String showOrders(@PathVariable Long id, Model model) {

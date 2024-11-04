@@ -57,6 +57,14 @@
 <!--<main class="main" id="top">-->
 
 <main th:replace="menu :: site-menu"></main>
+<div th:if="${isAdmin}">
+    <form action="/orders/find" method="post">
+        <input type="text" name="email" placeholder="Enter your email" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+
 <div th:if="${orders.isEmpty() && !isAdmin}">
     <h1>No Orders</h1>
 </div>
@@ -127,13 +135,13 @@
 <header>
 
     <div th:each="order : ${orderProductsForAdmin}">
-<!--        <hr style="border: 1px solid #000; margin: 20px 0;">-->
+        <!--        <hr style="border: 1px solid #000; margin: 20px 0;">-->
 
         <h1 th:text="'Email: ' + ${order.buyerEmail}"></h1>
         <h1 th:text="'Name: ' + ${order.buyerName}"></h1>
         <h1 th:text="'Order ID: ' + ${order.id}"></h1>
-<!--        <h3>ORDER INFO</h3>-->
-<!--        <p th:text="'Order Id: ' + ${order.id}"></p>-->
+        <!--        <h3>ORDER INFO</h3>-->
+        <!--        <p th:text="'Order Id: ' + ${order.id}"></p>-->
         <!--        <p th:text="'Order Date: ' + ${#temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>-->
         <!--        <p th:text="'Order Amount: ' + ${order.orderAmount}"></p>-->
         <h1 th:text="${'Order Date: ' + #temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></h1>

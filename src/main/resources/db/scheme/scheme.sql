@@ -605,7 +605,7 @@ VALUES (1111, 'T-Shirts', 'Premium T-shirts',
         'https://img01.ztat.net/article/spp-media-p1/a97843a5296440c3b3210cb1e996d409/410b206f5f4743ec9e8f97cd6e221ae8.jpg?imwidth=1800',
         6666),
        (13133, 'Jeans', 'Jeans',
-        'https://www.dior.com/couture/ecommerce/media/catalog/product/K/7/1694594817_F_23_4_LOOK_702_E01_GHC.jpg?imwidth=3000',
+        'https://images.jackjones.com/12252646/4437679/003/jackjones-jjieddiejjoriginalsq738noos-blauw.jpg?v=e2c7247b2ab9986dd6b8898c61d7f5e6&format=webp&width=1280&quality=90&key=25-0-3',
         1111);
 
 

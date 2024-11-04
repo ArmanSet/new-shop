@@ -33,7 +33,7 @@ public class UsersService {
         return usersRepository.findAll();
     }
 
-    public void save(Users users, String factoryName) {
+    public void save(Users users) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         Users newUsers = new Users();
