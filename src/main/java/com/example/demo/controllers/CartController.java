@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.Cookie;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -126,7 +127,7 @@ public class CartController {
                 model.addAttribute("cart", cart);
                 model.addAttribute("orderProducts", orderProductsByCartId);
                 model.addAttribute("authentication", "GUEST");
-                double totalPrice = cartService.calculateTotalPrice(cart);
+                BigDecimal totalPrice = cartService.calculateTotalPrice(cart);
                 model.addAttribute("totalPrice", totalPrice);
 //                cartService.save(cart);
                 return "cart";
@@ -140,7 +141,7 @@ public class CartController {
         model.addAttribute("cart", cart);
         model.addAttribute("orderProducts", cart.getOrderProducts());
         model.addAttribute("authentication", user.getRole());
-        double totalPrice = cartService.calculateTotalPrice(cart);
+        BigDecimal totalPrice = cartService.calculateTotalPrice(cart);
         model.addAttribute("totalPrice", totalPrice);
         cartService.save(cart);
 //        cartService.clearCookie(request, responce,"uuid");

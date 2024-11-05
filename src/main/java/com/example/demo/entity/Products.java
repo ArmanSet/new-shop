@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ public class Products {
     private String image2;
     private String image3;
     private String image4;
-    private double price;
+    private BigDecimal price;
     private int quantity;
     private int maxQuantity;
     private int active;

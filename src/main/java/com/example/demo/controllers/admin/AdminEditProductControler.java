@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
         import org.springframework.beans.factory.annotation.Autowired;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -33,7 +35,7 @@ public class AdminEditProductControler {
     @PostMapping("/edit/{id}")
     public String editProduct(@PathVariable Long id,
                               @RequestParam String name,
-                              @RequestParam double price,
+                              @RequestParam BigDecimal price,
                               @RequestParam int maxQuantity,
                               @RequestParam String brand,
                               @RequestParam String description,

@@ -85,9 +85,10 @@ public class OrderService {
     public BigDecimal calculateTotalPrice(Cart cart) {
         return cart.getOrderProducts().stream()
                 .flatMap(orderProduct -> orderProduct.getProducts().stream()
-                        .map(product -> BigDecimal.valueOf(product.getPrice()).multiply(BigDecimal.valueOf(orderProduct.getQuantity()))))
+                        .map(product -> product.getPrice().multiply(BigDecimal.valueOf(orderProduct.getQuantity()))))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 
     public void save(Order order) {
         orderRepository.save(order);

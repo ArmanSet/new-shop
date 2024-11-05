@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -65,13 +66,12 @@ public class CartService {
     }
 
 
-    public double calculateTotalPrice(Cart cart) {
+    public BigDecimal calculateTotalPrice(Cart cart) {
         return cart.getOrderProducts().stream()
                 .filter(orderProduct -> orderProduct.getProducts() != null)
                 .flatMap(orderProduct -> orderProduct.getProducts().stream()
-                        .map(product -> product.getPrice() * orderProduct.getQuantity()))
-                .mapToDouble(Double::doubleValue)
-                .sum();
+                        .map(product -> product.getPrice().multiply(BigDecimal.valueOf(orderProduct.getQuantity()))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 
