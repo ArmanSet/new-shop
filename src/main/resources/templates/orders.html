@@ -69,7 +69,7 @@
     <h1>No Orders</h1>
 </div>
 
-<div th:if="${!orders.isEmpty()}">
+<div th:if="${!orders.isEmpty() && !isAdmin}">
 
     <div>
         <a href="/products/list"> PRODUCT LIST</a>
@@ -132,7 +132,7 @@
 
 <!--TODO FOR ADMIN -->
 
-<header>
+<header th:if="${isAdmin}">
 
     <div th:each="order : ${orderProductsForAdmin}">
         <!--        <hr style="border: 1px solid #000; margin: 20px 0;">-->
