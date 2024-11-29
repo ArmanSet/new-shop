@@ -69,7 +69,7 @@
     <h1>No Orders</h1>
 </div>
 
-<div th:if="${!orders.isEmpty() && !isAdmin}">
+<div th:if="${!orders.isEmpty()}">
 
     <div>
         <a href="/products/list"> PRODUCT LIST</a>
