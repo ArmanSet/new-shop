@@ -64,7 +64,9 @@
 <!--  </label>-->
 <!--  <button type="submit">Submit</button>-->
 <!--</form>-->
-<a href="/orders/">BACK TO ALL ORDERS</a>
+<a href="/orders/admin">BACK TO ALL USERS ORDERS</a>
+<br>
+<a href="/orders/">BACK TO MY ORDERS</a>
 
 <div th:if="${ordersFounded.isEmpty() && !isAdmin}">
   <h1>No Orders</h1>

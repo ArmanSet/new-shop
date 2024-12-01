@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Users Orders</title>
+    <link rel="stylesheet" th:href="@{/menu.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* This ensures that all columns take up the same width */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            overflow: hidden; /* This will ensure that the content is not spilling over */
+            text-overflow: ellipsis; /* This will add '...' for overflow content */
+            white-space: nowrap; /* This will prevent the text inside the cell from wrapping */
+        }
+
+        th {
+            background-color: #434353;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /*#tableUser {*/
+        /*    height: 200px;*/
+        /*    width: 200px;*/
+        /*}*/
+
+        /*#tableUser2 {*/
+        /*    height: 200px;*/
+        /*    width: 200px;*/
+        /*}*/
+        /*#tableUser3 {*/
+        /*    height: 50px;*/
+        /*    width: 50px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<div th:if="${isAdmin}">
+    <form action="/orders/find" method="post">
+        <input type="text" name="email" placeholder="Enter your email" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<!--TODO FOR ADMIN -->
+
+<header th:if="${isAdmin}">
+    <a href="/orders/">GO TO YOUR ORDERS</a>
+    <div th:each="order : ${orderProductsForAdmin}">
+        <!--        <hr style="border: 1px solid #000; margin: 20px 0;">-->
+        <h1>OTHER USERS ORDERS</h1>
+        <h1 th:text="'Email: ' + ${order.buyerEmail}"></h1>
+        <h1 th:text="'Name: ' + ${order.buyerName}"></h1>
+        <h1 th:text="'Order ID: ' + ${order.id}"></h1>
+        <!--        <h3>ORDER INFO</h3>-->
+        <!--        <p th:text="'Order Id: ' + ${order.id}"></p>-->
+        <!--        <p th:text="'Order Date: ' + ${#temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></p>-->
+        <!--        <p th:text="'Order Amount: ' + ${order.orderAmount}"></p>-->
+        <h1 th:text="${'Order Date: ' + #temporals.format(order.createTime, 'dd/MM/yyyy HH:mm')}"></h1>
+        <br>
+        <h3>PRODUCTS IN ORDER</h3>
+        <!--        <div th:each="orderProducts : ${order.orderProducts}">-->
+
+
+        <table th:each="orderProducts : ${order.orderProducts}">
+            <tr>
+                <th>Brand</th>
+                <th>Price</th>
+                <th>Name Product</th>
+                <th>Image</th>
+                <th>Colour</th>
+                <th>Quantity</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>ID</th>
+                <th>TOTAL FOR PRODUCT</th>
+
+            </tr>
+            <tr th:each="product : ${orderProducts.products}">
+                <td th:text="${product.brand}">Brand</td>
+                <td th:text="${product.price}">Price</td>
+                <td th:text="${product.name}">Name Product</td>
+                <td><img th:src="@{${product.image}}" alt="Product Image"></td>
+                <td th:text="${product.colour}">Colour</td>
+                <td th:text="${orderProducts.quantity}">Quantity</td>
+                <td th:text="${product.description}">Description</td>
+                <td th:text="${product.subcategory.name}">Category</td>
+                <td th:text="${product.id}">ID</td>
+                <td th:text="${orderProducts.quantity*product.price}">TOTAL</td>
+
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>TOTAL PAYMENT</th>
+            </tr>
+            <tr>
+                <td th:text="${order.orderAmount}"></td>
+            </tr>
+
+        </table>
+        <hr style="border: 1px solid #000; margin: 20px 0;">
+    </div>
+
+</header>
+</body>
+</html>
