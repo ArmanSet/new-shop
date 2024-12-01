@@ -462,9 +462,9 @@
     <!--    TODO PRODUCTS NEW DANGEROUS-->
 
 
-
+<!--th:if="${isAdmin || (product.active == 1 && product.maxQuantity > 0)}-->
     <div class="row">
-        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" th:each="product : ${products}" th:if="${isAdmin || (product.active == 1 && product.maxQuantity > 0)}">
+        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" th:each="product : ${products}" th:if="${product.active == 1 && product.maxQuantity > 0}">
             <!-- Block2 -->
             <div class="block2">
                 <div class="block2-pic hov-img0">
